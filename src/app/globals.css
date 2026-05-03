@@ -1,26 +1,69 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --bg-base: #050505;        
+  --bg-surface: #0a0a0a;     
+  --text-main: #ffffff;      
+  --text-muted: #64748b;     
+  --accent-cyan: #22d3ee;    
+  --accent-violet: #8b5cf6;  
+  --grid-line: rgba(255, 255, 255, 0.03);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+@layer components {
+  .hover-letter {
+    display: inline-block;
+    transition: all 0.4s ease-in-out;
+    cursor: crosshair;
+    color: var(--text-main);
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Manual Hover: Kills the animation and forces the White Glow */
+  .hover-letter:hover {
+    animation: none !important; /* Force stops the scan */
+    color: #ffffff !important; 
+    text-shadow: 0 0 45px rgba(255, 255, 255, 0.6);
+    transform: translateY(-4px);
+    z-index: 10;
+  }
+
+  @keyframes ghost-scan {
+    0%, 30%, 100% {
+      color: var(--text-main);
+      text-shadow: none;
+      transform: translateY(0);
+    }
+    10% {
+      color: #ffffff;
+      text-shadow: 0 0 15px var(--accent-cyan), 0 0 30px var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+    15% {
+      color: #ffffff;
+      text-shadow: 0 0 15px var(--accent-violet), 0 0 30px var(--accent-violet);
+      transform: translateY(-2px);
+    }
+  }
+
+  .animate-scan {
+    animation: ghost-scan 4s infinite;
+  }
+}
+
+@layer utilities {
+  .bg-premium-grid {
+    background-size: 60px 60px;
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-color: var(--bg-base);
+  }
 }
