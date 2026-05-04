@@ -8,14 +8,14 @@ import { useRouter } from "next/navigation";
 const resumeData = {
   header: {
     name: "Oladele Magbadelo",
-    title: "EXPLORER // SYSTEMS_ENGINEER",
-    status: "STATUS: BSc. CS @ Western University '28",
+    title: "EXPLORER // DEVELOPER",
+    status: "BSc. CS, Minor Data Sci @ Western University '28",
   },
   skills: [
-    { category: "LANGUAGES_&_FRAMEWORKS", items: ["Python", "JavaScript", "PostgreSQL", "Java", "C", "React.js", "Express.js", "Flask"] },
-    { category: "DEVELOPER_TOOLS", items: ["Git", "Docker", "Nginx", "Oracle Cloud", "Figma", "Notion"] },
-    { category: "DATA_LIBRARIES", items: ["NumPy", "Matplotlib", "Seaborn"] },
-    { category: "OTHER_CAPABILITIES", items: ["Sound Engineering", "Event Management", "Arabic"] }
+    { category: "LANGUAGES & FRAMEWORKS", items: ["Python", "JavaScript", "PostgreSQL", "Java", "C", "React.js", "Express.js", "Flask"] },
+    { category: "DEVELOPER TOOLS", items: ["Git", "Docker", "Nginx", "Oracle Cloud", "Figma", "Notion"] },
+    { category: "DATA LIBRARIES", items: ["NumPy", "Matplotlib", "Seaborn"] },
+    { category: "OTHER CAPABILITIES", items: ["Sound Engineering", "Event Management", "Arabic"] }
   ],
   experience: [
     {
@@ -190,7 +190,7 @@ export default function ResumePage() {
             {/* Skills Engine */}
             <div>
               <div className="flex items-center gap-4 mb-6">
-                <span className="font-mono text-[10px] text-[var(--text-muted)]">SYS_CAPABILITIES</span>
+                <span className="font-mono text-[10px] text-[var(--text-muted)]">SKILLS</span>
                 <div className="h-[1px] flex-1 bg-white/5" />
               </div>
               
@@ -221,7 +221,7 @@ export default function ResumePage() {
             <div>
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-2 h-2 rounded-full bg-[var(--accent-cyan)] shadow-[0_0_10px_var(--accent-cyan)]" />
-                <h2 className="font-mono text-sm tracking-[0.2em] text-white">EXECUTION_LOGS</h2>
+                <h2 className="font-mono text-sm tracking-[0.2em] text-white">EXPERIENCE</h2>
               </div>
 
               <div className="space-y-12 relative border-l border-white/10 ml-1">
@@ -255,7 +255,7 @@ export default function ResumePage() {
             <div>
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-2 h-2 rounded-full bg-[var(--accent-cyan)] shadow-[0_0_10px_var(--accent-cyan)]" />
-                <h2 className="font-mono text-sm tracking-[0.2em] text-white">SYS_PROJECTS</h2>
+                <h2 className="font-mono text-sm tracking-[0.2em] text-white">PROJECTS</h2>
               </div>
 
               <div className="space-y-12 relative border-l border-white/10 ml-1">
