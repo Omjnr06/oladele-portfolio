@@ -13,7 +13,7 @@ const resumeData = {
   },
   skills: [
     { category: "LANGUAGES & FRAMEWORKS", items: ["Python", "JavaScript", "PostgreSQL", "Java", "C", "React.js", "Express.js", "Flask"] },
-    { category: "DEVELOPER TOOLS", items: ["Git", "Docker", "Nginx", "Oracle Cloud", "Figma", "Notion"] },
+    { category: "DEVELOPER TOOLS", items: ["Git", "Docker", "Nginx", "Figma", "Notion"] },
     { category: "DATA LIBRARIES", items: ["NumPy", "Matplotlib", "Seaborn"] },
     { category: "OTHER CAPABILITIES", items: ["Sound Engineering", "Event Management", "Arabic"] }
   ],
@@ -66,7 +66,7 @@ const resumeData = {
     {
       id: "PRJ_01",
       title: "Distributed URL Shortener (MLH Hackathon)",
-      stack: "Flask, Docker, Nginx, Oracle Cloud, Neon",
+      stack: "Flask, Docker, Nginx, Redis, Neon",
       date: "Apr. 2026",
       points: [
         "Architected a highly available web application on DigitalOcean, containerizing an Nginx reverse proxy, Redis cache, and Python backend with Docker to ensure clean separation of concerns.",
@@ -182,7 +182,7 @@ export default function ResumePage() {
             >
               <span className="relative z-10 flex items-center justify-between">
                 <span>{`> EXPORT_PDF`}</span>
-                <span className="text-[var(--text-muted)] text-xs">142_KB</span>
+                <span className="text-[var(--text-muted)] text-xs">102_KB</span>
               </span>
               <div className="absolute top-0 left-0 h-full bg-[var(--accent-cyan)] w-0 group-hover:w-full transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] opacity-10" />
             </a>
@@ -289,7 +289,7 @@ export default function ResumePage() {
             <div>
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-2 h-2 rounded-full bg-[var(--accent-violet)] shadow-[0_0_10px_var(--accent-violet)]" />
-                <h2 className="font-mono text-sm tracking-[0.2em] text-white">BASE_ARCHITECTURE</h2>
+                <h2 className="font-mono text-sm tracking-[0.2em] text-white">EDUCATION</h2>
               </div>
 
               <div className="space-y-10 relative border-l border-white/10 ml-1">
