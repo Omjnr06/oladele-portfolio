@@ -1,9 +1,11 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link"; 
+import { motion, AnimatePresence } from "framer-motion";
 
 // ==============================================================================
-// DATA LAYER: Update this object when your resume changes.
+// DATA LAYER
 // ==============================================================================
 const resumeData = {
   header: {
@@ -112,44 +114,78 @@ const resumeData = {
 };
 
 // ==============================================================================
-// PRESENTATION LAYER: The UI / Blueprint Engine
+// PRESENTATION LAYER
 // ==============================================================================
 export default function ResumePage() {
-  const router = useRouter();
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  // Scroll Tracking for Back to Top Button
+  useEffect(() => {
+    const handleScrollEvent = () => {
+      if (window.scrollY > 300) setShowScrollTop(true);
+      else setShowScrollTop(false);
+    };
+
+    window.addEventListener('scroll', handleScrollEvent);
+    handleScrollEvent();
+    return () => window.removeEventListener('scroll', handleScrollEvent);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <main className="min-h-screen w-full flex bg-[var(--bg-base)] font-sans selection:bg-[var(--accent-cyan)] selection:text-black">
+    <main className="min-h-screen w-full flex flex-row bg-[var(--bg-base)] font-sans selection:bg-[var(--accent-cyan)] selection:text-black relative">
       
-      {/* Sidebar Nav*/}
-      <nav className="hidden lg:flex w-20 flex-col items-center justify-center bg-[var(--bg-surface)] perforation-line z-20 fixed h-screen top-0 left-0">
+      {/* ALWAYS VISIBLE Sidebar Nav (Sticky avoids layout transform bugs) */}
+      <nav className="sticky top-0 h-screen w-12 md:w-20 shrink-0 flex flex-col items-center justify-center bg-[var(--bg-surface)] border-r border-white/5 z-50">
         <div className="flex flex-col items-center gap-16 text-[10px] font-mono font-bold tracking-[0.3em] text-[var(--text-muted)]">
-          <button 
-            onClick={() => router.push('/')} 
-            className="hover:text-white transition-colors uppercase cursor-pointer rotate-180" 
+          
+          <Link 
+            href="/#home"
+            className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" 
+            style={{ writingMode: 'vertical-rl' }}
+          >
+            Home
+          </Link>
+
+          <Link 
+            href="/#projects"
+            className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" 
             style={{ writingMode: 'vertical-rl' }}
           >
             Projects
-          </button>
+          </Link>
           
           <button 
-            className="hover:text-white transition-colors uppercase cursor-pointer rotate-180" 
+            className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" 
             style={{ writingMode: 'vertical-rl' }}
           >
             Music
           </button>
           
-          <button 
-            onClick={() => router.push('/resume')} 
-            className="text-[var(--accent-cyan)] uppercase cursor-pointer border-l-2 border-[var(--accent-cyan)] pr-2 rotate-180" 
+          <Link 
+            href="/resume" 
+            className="text-[var(--accent-cyan)] uppercase cursor-pointer border-l-2 border-[var(--accent-cyan)] pr-2 rotate-180 block" 
             style={{ writingMode: 'vertical-rl' }}
           >
             Resume
-          </button>
+          </Link>
+
+          <Link 
+            href="/#contact"
+            className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" 
+            style={{ writingMode: 'vertical-rl' }}
+          >
+            Contact
+          </Link>
+
         </div>
       </nav>
 
-      {/* Main Canvas - Offset by lg:ml-20 to account for fixed sidebar */}
-      <div className="flex-1 bg-journal-dots relative overflow-y-auto overflow-x-hidden ml-0 lg:ml-20">
+      {/* Main Canvas */}
+      <div className="flex-1 min-w-0 bg-journal-dots relative overflow-x-hidden">
         
         {/* Ambient Glows */}
         <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-[var(--accent-violet)] opacity-[0.02] rounded-full blur-[120px] pointer-events-none fixed" />
@@ -215,7 +251,7 @@ export default function ResumePage() {
           </div>
 
           {/* RIGHT COLUMN: Execution Logs */}
-          <div className="w-full lg:w-2/3 lg:pl-10 lg:border-l border-white/5 space-y-16 pb-24">
+          <div className="w-full lg:w-2/3 lg:pl-10 lg:border-l border-white/5 space-y-16 pb-12">
             
             {/* Experience Section */}
             <div>
@@ -317,6 +353,26 @@ export default function ResumePage() {
           </div>
         </div>
       </div>
+
+      {/* Floating Back to Top Button (With Hover Expansion) */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            onClick={scrollToTop}
+            className="group fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex items-center justify-center p-3 md:p-4 rounded-full bg-black/60 border border-white/10 text-[var(--accent-cyan)] shadow-lg backdrop-blur-md hover:bg-black hover:border-[var(--accent-cyan)] transition-all overflow-hidden"
+            aria-label="Back to top"
+          >
+            <svg className="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+            <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-[max-width,opacity,margin] duration-500 ease-in-out font-mono text-[10px] uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 group-hover:ml-2">
+              Back to Top
+            </span>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
     </main>
   );
 }
