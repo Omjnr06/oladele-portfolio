@@ -41,7 +41,8 @@ export default function Home() {
       liveUrl: "", 
       githubUrl: "https://github.com/tudor-filimon/mustangs-wrapped",
       videoUrl: "/mustang-demo.mp4",
-      imageUrl: "" 
+      imageUrl: "",
+      imageDisplay: "cover"
     },
     {
       id: "PROJECT 01",
@@ -52,7 +53,8 @@ export default function Home() {
       liveUrl: "http://short.urlshortener-mlh.xyz/",
       githubUrl: "https://github.com/kathyjydong/PE-Hackathon-Template-2026", 
       videoUrl: "", 
-      imageUrl: "/images/distributed-shortener-diagram.jpg" 
+      imageUrl: "/images/distributed-shortener-diagram.jpg",
+      imageDisplay: "contain" 
     },
     {
       id: "PROJECT 02",
@@ -63,7 +65,20 @@ export default function Home() {
       liveUrl: "https://devpost.com/software/phygital-4exqp8",
       githubUrl: "https://github.com/h3692/flowlytics", 
       videoUrl: "",
-      imageUrl: "/images/flowlytics-ui.png" 
+      imageUrl: "/images/flowlytics-ui.png",
+      imageDisplay: "cover" 
+    },
+    {
+      id: "PROJECT 03",
+      title: "SpaceFinder AI",
+      category: "MACHINE LEARNING",
+      stack: ["YOLOv8", "Flask", "OpenCV", "Bootstrap", "Python"],
+      description: "A full-stack web application developed in a team of 4 that detects parking space availability from uploaded images. Key contributions included fine-tuning a custom YOLOv8 model using test-time augmentation for maximum detection recall, designing the responsive Bootstrap UI, and building the Flask backend with OpenCV for real-time inference and server-side image processing.",
+      liveUrl: "",
+      githubUrl: "https://github.com/Omjnr06/SpaceFinder",
+      videoUrl: "",
+      imageUrl: "/images/SpacefinderAI-output.jpg",
+      imageDisplay: "cover" 
     }
   ];
 
@@ -299,7 +314,7 @@ export default function Home() {
                   )}
                 </div>
 
-                {/* Main Content Area */}
+                {/* Main Content Area - Reverted to items-center! */}
                 <div className="flex-1 p-6 pt-16 md:p-10 md:pt-10 relative z-10 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/20">
                   <AnimatePresence mode="wait">
                     {filteredProjects.length > 0 && (
@@ -323,6 +338,7 @@ export default function Home() {
                             {filteredProjects[currentProjectIndex].title}
                           </h3>
                           
+                          {/* Reverted back to max-w-xl so your tags stay in the grid! */}
                           <p className="text-white/70 text-sm md:text-base leading-relaxed max-w-xl font-light mb-6">
                             {filteredProjects[currentProjectIndex].description}
                           </p>
@@ -336,7 +352,7 @@ export default function Home() {
                           </div>
                         </div>
 
-                        {/* Media Terminal */}
+                        {/* Media Terminal - Reverted to proper width lg:w-[45%] xl:w-[50%] */}
                         <div className="w-full lg:w-[45%] xl:w-[50%] aspect-video rounded-xl overflow-hidden border border-[var(--accent-cyan)]/20 shadow-[0_0_40px_rgba(34,211,238,0.1)] relative group shrink-0 bg-[#050505] transition-all duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.2)] hover:border-[var(--accent-cyan)]/40">
                           
                           {filteredProjects[currentProjectIndex].videoUrl ? (
@@ -348,7 +364,7 @@ export default function Home() {
                             />
                           ) : filteredProjects[currentProjectIndex].imageUrl ? (
                             <div 
-                              className="absolute inset-0 w-full h-full bg-contain bg-no-repeat bg-center z-10 p-2"
+                              className={`absolute inset-0 w-full h-full bg-center bg-no-repeat z-10 ${filteredProjects[currentProjectIndex].imageDisplay === 'contain' ? 'bg-contain p-2' : 'bg-cover'}`}
                               style={{ backgroundImage: `url('${filteredProjects[currentProjectIndex].imageUrl}')` }}
                             />
                           ) : (
@@ -401,7 +417,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* (Contact Section using clean SVGs) */}
+        {/* SECURE COMMUNICATIONS CHANNEL (Contact Section) */}
         <div id="contact" className="w-full flex flex-col items-center justify-center pb-32 pt-20 border-t border-white/5 scroll-mt-24 relative">
            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-cyan)] to-transparent opacity-50" />
            
@@ -445,7 +461,7 @@ export default function Home() {
                <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">GitHub</span>
              </a>
 
-             {/* DEVPOST (Using Hexagon to match branding) */}
+             {/* DEVPOST */}
              <a href="https://devpost.com/oj-magbadelo" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
                <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
                  <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
