@@ -6,16 +6,12 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function Home() {
   const myName = "Oladele Magbadelo";
   
-  // ==============================================================================
-  // STATE MANAGEMENT
-  // ==============================================================================
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
   const [activeCategory, setActiveCategory] = useState("ALL"); 
 
-  // Navigation state
   const [activeSection, setActiveSection] = useState("home");
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -30,7 +26,8 @@ export default function Home() {
     { src: "/images/junior-soccer.JPG" },
   ];
 
-  // Project Data 
+  // Project Data
+  // AS projects come just add more objects of this
   const projects = [
     {
       id: "PROJECT 00",
@@ -82,18 +79,18 @@ export default function Home() {
     }
   ];
 
+  // Porject Filters
   const categories = ["ALL", ...new Set(projects.map((p) => p.category))];
   const filteredProjects = activeCategory === "ALL" 
     ? projects 
     : projects.filter((p) => p.category === activeCategory);
   
-  // ==============================================================================
-  // LOGIC & MATH FUNCTIONS
-  // ==============================================================================
+
+  // Math controls for gallery length
   const handlePrevPhoto = () => setCurrentPhotoIndex((prev) => prev === 0 ? galleryImages.length - 1 : prev - 1);
   const handleNextPhoto = () => setCurrentPhotoIndex((prev) => (prev + 1) % galleryImages.length);
 
-  // Photo Carousel Timer
+  // Automatic Scroll math for pictures
   useEffect(() => {
     if (isPaused) return; 
     const timer = setInterval(() => {
@@ -108,6 +105,7 @@ export default function Home() {
       if (window.scrollY > 300) setShowScrollTop(true);
       else setShowScrollTop(false);
 
+// For a href linking
       const projectsSection = document.getElementById('projects');
       const contactSection = document.getElementById('contact');
       
@@ -125,7 +123,7 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScrollEvent);
   }, []);
 
-  // Smooth Scroll Helper
+// Smooth Scroll Helper to go from section to section within same page
   const handleScroll = (e, targetId) => {
     e.preventDefault();
     const elem = document.getElementById(targetId);
@@ -146,7 +144,7 @@ export default function Home() {
   return (
     <main className="min-h-screen w-full flex flex-row bg-[var(--bg-base)] font-sans selection:bg-[var(--accent-cyan)] selection:text-black relative">
       
-      {/* ALWAYS VISIBLE Sidebar Navigation */}
+      {/* Always visibile Sidebar Nav */}
       <nav className="sticky top-0 h-screen w-12 md:w-20 shrink-0 flex flex-col items-center justify-center bg-[var(--bg-surface)] border-r border-white/5 z-50">
         <div className="flex flex-col items-center gap-16 text-[10px] font-mono font-bold tracking-[0.3em] text-[var(--text-muted)]">
           
@@ -188,17 +186,17 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Main Content Area */}
+      {/* Main Content Area DIV*/}
       <div className="flex-1 min-w-0 bg-journal-dots bg-[#050505] relative overflow-x-hidden">
         
-        {/* Ambient Glows */}
+        {/* Ambient Glows LINES */}
         <div className="absolute left-10 h-full w-[1px] bg-[var(--accent-cyan)] opacity-20 pointer-events-none hidden md:block z-0" />
         <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-[var(--accent-violet)] opacity-[0.03] rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-[10%] left-[-5%] w-[400px] h-[400px] bg-[var(--accent-cyan)] opacity-[0.03] rounded-full blur-[120px] pointer-events-none" />
 
         <div className="px-6 md:px-16 lg:px-24 w-full z-10 py-16 md:py-24 max-w-7xl mx-auto flex flex-col">
           
-          {/* SECTION 1: HERO & BIO */}
+          {/* Top Section: STATEMENT & BIO */}
           <div id="home" className="mb-16 scroll-mt-24">
             <h1 className="text-4xl md:text-6xl lg:text-[5.5rem] xl:text-[7rem] font-extrabold mb-10 tracking-tight flex whitespace-nowrap overflow-visible pl-2">
               {myName.split("").map((letter, index) => (
@@ -217,7 +215,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* SECTION 2: CINEMATIC VIEWFINDER (PHOTOS) */}
+          {/* Section #2: THIS is the code for the Photo Gallery */}
           <div 
             className="mb-32 relative w-full h-[450px] md:h-[550px] border border-white/10 bg-[#050505] rounded-xl overflow-hidden group shadow-2xl"
             onMouseEnter={() => setIsPaused(true)}
@@ -250,19 +248,19 @@ export default function Home() {
             </div>
           </div>
 
-          {/* SECTION DIVIDER */}
+          {/* Section Divider Lines */}
           <div className="flex items-center gap-4 mb-8 md:mb-12">
             <div className="w-2 h-2 rounded-full bg-[var(--accent-cyan)] shadow-[0_0_10px_var(--accent-cyan)]" />
             <h1 className="font-mono text-xl md:text-2xl tracking-[0.3em] text-white uppercase">PROJECTS AND HACKATHONS</h1>
             <div className="h-[1px] flex-1 bg-white/5" />
           </div>
 
-          {/* DASHBOARD LAYOUT */}
-          <div id="projects" className="flex flex-col lg:flex-row items-start gap-8 lg:gap-12 w-full pb-20 scroll-mt-6">
+          {/* Dashboard Layout */}
+          <div id="projects" className="flex flex-col items-start gap-6 w-full pb-20 scroll-mt-6">
             
-            {/* LEFT COLUMN: Vertical Category Filter */}
-            <div className="flex flex-row lg:flex-col gap-2 w-full lg:w-56 shrink-0 overflow-x-auto lg:overflow-x-hidden pb-4 lg:pb-0 pt-2 scrollbar-hide border-b lg:border-b-0 border-white/5 lg:border-l lg:pl-6">
-              <span className="hidden lg:block font-mono text-[9px] text-[var(--text-muted)] tracking-widest mb-4 uppercase">
+            {/* Filtering Map based on category*/}
+            <div className="flex flex-row items-center gap-3 w-full overflow-x-auto pb-4 scrollbar-hide border-b border-white/5">
+              <span className="hidden md:block font-mono text-[13px] text-[var(--text-muted)] tracking-widest uppercase mr-2">
                 // Filter Projects
               </span>
               {categories.map((category) => (
@@ -273,10 +271,10 @@ export default function Home() {
                     setActiveCategory(category);
                     setCurrentProjectIndex(0); 
                   }}
-                  className={`px-4 py-3 font-mono text-[10px] md:text-xs uppercase tracking-widest transition-all duration-300 text-left truncate rounded-r-lg ${
+                  className={`shrink-0 px-5 py-2 font-mono text-[10px] md:text-xs uppercase tracking-widest transition-all duration-300 rounded-full border ${
                     activeCategory === category
-                      ? 'bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] border-l-2 border-[var(--accent-cyan)] shadow-[inset_15px_0_15px_-15px_rgba(34,211,238,0.2)]'
-                      : 'bg-transparent text-[var(--text-muted)] border-l-2 border-transparent hover:text-white hover:bg-white/5 hover:border-white/20'
+                      ? 'bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] border-[var(--accent-cyan)] shadow-[0_0_15px_rgba(34,211,238,0.2)]'
+                      : 'bg-transparent text-[var(--text-muted)] border-white/10 hover:text-white hover:bg-white/5 hover:border-white/30'
                   }`}
                 >
                   {category}
@@ -284,140 +282,135 @@ export default function Home() {
               ))}
             </div>
 
-            {/* RIGHT COLUMN: Terminal Container */}
-            <div className="flex-1 flex flex-col w-full min-w-0">
+            {/*  Terminal Container FOR Projects and Project Media */}
+            <div className="w-full relative h-[550px] md:h-[600px] bg-[#0a0a0a] border border-[var(--accent-cyan)]/30 rounded-xl overflow-hidden flex flex-col shadow-[0_0_40px_rgba(34,211,238,0.1)] transition-shadow duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.2)]">
               
-              <div className="relative w-full h-[550px] md:h-[600px] bg-[#0a0a0a] border border-[var(--accent-cyan)]/30 rounded-xl overflow-hidden flex flex-col shadow-[0_0_40px_rgba(34,211,238,0.1)] transition-shadow duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.2)]">
-                
-                {/* ABSOLUTE TOP-RIGHT BUTTONS */}
-                <div className="absolute top-4 right-4 md:top-6 md:right-6 z-50 flex gap-2 md:gap-3">
-                  {filteredProjects.length > 0 && filteredProjects[currentProjectIndex].liveUrl && (
-                    <a 
-                      href={filteredProjects[currentProjectIndex].liveUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 bg-[var(--accent-cyan)]/20 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/30 backdrop-blur-md rounded-full text-[9px] md:text-[10px] uppercase font-mono tracking-widest hover:bg-[var(--accent-cyan)]/30 transition-all shadow-[0_0_15px_rgba(34,211,238,0.2)]"
-                    >
-                      Live ↗
-                    </a>
-                  )}
+              {/* View Live and Github Redirect Buttons */}
+              <div className="absolute top-4 right-4 md:top-6 md:right-6 z-50 flex gap-2 md:gap-3">
+                {filteredProjects.length > 0 && filteredProjects[currentProjectIndex].liveUrl && (
+                  <a 
+                    href={filteredProjects[currentProjectIndex].liveUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 bg-[var(--accent-cyan)]/20 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/30 backdrop-blur-md rounded-full text-[9px] md:text-[10px] uppercase font-mono tracking-widest hover:bg-[var(--accent-cyan)]/30 transition-all shadow-[0_0_15px_rgba(34,211,238,0.2)]"
+                  >
+                    Live ↗
+                  </a>
+                )}
 
-                  {filteredProjects.length > 0 && filteredProjects[currentProjectIndex].githubUrl && (
-                    <a 
-                      href={filteredProjects[currentProjectIndex].githubUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 bg-black/40 text-white border border-white/20 backdrop-blur-md rounded-full text-[9px] md:text-[10px] uppercase font-mono tracking-widest hover:bg-black/60 hover:border-white/40 transition-all"
-                    >
-                      GitHub ↗
-                    </a>
-                  )}
-                </div>
-
-                {/* Main Content Area - Reverted to items-center! */}
-                <div className="flex-1 p-6 pt-16 md:p-10 md:pt-10 relative z-10 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/20">
-                  <AnimatePresence mode="wait">
-                    {filteredProjects.length > 0 && (
-                      <motion.div
-                        key={filteredProjects[currentProjectIndex].id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
-                        className="min-h-full flex flex-col lg:flex-row items-center gap-6 lg:gap-10"
-                      >
-                        
-                        <div className="flex-1 flex flex-col justify-center w-full">
-                          <div className="font-mono text-[10px] text-[var(--accent-cyan)] tracking-widest mb-4 flex items-center gap-3">
-                            <span>{filteredProjects[currentProjectIndex].id}</span>
-                            <span className="text-white/20">//</span>
-                            <span>{filteredProjects[currentProjectIndex].category}</span>
-                          </div>
-                          
-                          <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4 md:mb-6">
-                            {filteredProjects[currentProjectIndex].title}
-                          </h3>
-                          
-                          {/* Reverted back to max-w-xl so your tags stay in the grid! */}
-                          <p className="text-white/70 text-sm md:text-base leading-relaxed max-w-xl font-light mb-6">
-                            {filteredProjects[currentProjectIndex].description}
-                          </p>
-                          
-                          <div className="flex flex-wrap gap-2 mt-auto">
-                            {filteredProjects[currentProjectIndex].stack.map((tech, idx) => (
-                              <span key={idx} className="px-3 py-1 bg-white/5 border border-white/10 rounded font-mono text-[10px] md:text-xs text-[var(--accent-violet)] hover:border-[var(--accent-violet)]/50 hover:bg-[var(--accent-violet)]/10 transition-all duration-300 cursor-default">
-                                {tech}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Media Terminal - Reverted to proper width lg:w-[45%] xl:w-[50%] */}
-                        <div className="w-full lg:w-[45%] xl:w-[50%] aspect-video rounded-xl overflow-hidden border border-[var(--accent-cyan)]/20 shadow-[0_0_40px_rgba(34,211,238,0.1)] relative group shrink-0 bg-[#050505] transition-all duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.2)] hover:border-[var(--accent-cyan)]/40">
-                          
-                          {filteredProjects[currentProjectIndex].videoUrl ? (
-                            <video 
-                              src={filteredProjects[currentProjectIndex].videoUrl} 
-                              playsInline 
-                              controls
-                              className="absolute inset-0 w-full h-full object-cover z-10"
-                            />
-                          ) : filteredProjects[currentProjectIndex].imageUrl ? (
-                            <div 
-                              className={`absolute inset-0 w-full h-full bg-center bg-no-repeat z-10 ${filteredProjects[currentProjectIndex].imageDisplay === 'contain' ? 'bg-contain p-2' : 'bg-cover'}`}
-                              style={{ backgroundImage: `url('${filteredProjects[currentProjectIndex].imageUrl}')` }}
-                            />
-                          ) : (
-                            <div className="absolute inset-0 w-full h-full z-10 flex flex-col items-center justify-center p-6 text-center border border-dashed border-white/10 m-4 rounded">
-                              <span className="font-mono text-xs text-[var(--text-muted)] animate-pulse">
-                                   AWAITING_MEDIA_PAYLOAD...
-                              </span>
-                            </div>
-                          )}
-
-                          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none z-20" />
-                        </div>
-
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* BOTTOM: Scroll Wheel Dial */}
-                <div className="h-28 md:h-36 w-full relative flex items-center justify-center overflow-hidden border-t border-white/5 bg-gradient-to-t from-[#0a0a0a] to-transparent shrink-0">
-                  <div className="absolute w-[2px] h-full bg-[var(--accent-cyan)]/20 z-0 pointer-events-none" />
-                  <div className="relative w-full h-full flex items-center justify-center mt-2">
-                    {filteredProjects.map((project, index) => {
-                      const style = getDialStyle(index);
-                      return (
-                        <motion.div
-                          key={project.id}
-                          animate={{ x: style.x, scale: style.scale, opacity: style.opacity, zIndex: style.zIndex }}
-                          transition={{ type: "spring", stiffness: 200, damping: 25 }}
-                          onClick={() => setCurrentProjectIndex(index)}
-                          className={`absolute w-32 h-16 md:w-36 md:h-20 rounded-lg cursor-pointer flex flex-col items-center justify-center p-3 transition-colors duration-300 ${
-                            currentProjectIndex === index ? 'bg-[#0a0a0a] border border-[var(--accent-cyan)] shadow-[0_0_20px_rgba(34,211,238,0.2)]' : 'bg-[#111] border border-white/5 hover:border-white/20'
-                          }`}
-                          style={{ originX: 0.5, originY: 0.5 }}
-                        >
-                          <span className={`font-mono text-[9px] md:text-[10px] tracking-widest mb-1 ${currentProjectIndex === index ? 'text-[var(--accent-cyan)]' : 'text-[var(--text-muted)]'}`}>
-                            {project.id}
-                          </span>
-                          <span className={`text-[9px] md:text-[10px] font-bold text-center line-clamp-2 ${currentProjectIndex === index ? 'text-white' : 'text-white/40'}`}>
-                            {project.title}
-                          </span>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                </div>
+                {filteredProjects.length > 0 && filteredProjects[currentProjectIndex].githubUrl && (
+                  <a 
+                    href={filteredProjects[currentProjectIndex].githubUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 bg-black/40 text-white border border-white/20 backdrop-blur-md rounded-full text-[9px] md:text-[10px] uppercase font-mono tracking-widest hover:bg-black/60 hover:border-white/40 transition-all"
+                  >
+                    GitHub ↗
+                  </a>
+                )}
               </div>
 
+              {/* Main Content Area */}
+              <div className="flex-1 p-6 pt-16 md:p-10 md:pt-10 relative z-10 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/20">
+                <AnimatePresence mode="wait">
+                  {filteredProjects.length > 0 && (
+                    <motion.div
+                      key={filteredProjects[currentProjectIndex].id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="min-h-full flex flex-col lg:flex-row items-center gap-6 lg:gap-10 pt-2"
+                    >
+                      
+                      <div className="flex-1 flex flex-col justify-start w-full">
+                        <div className="font-mono text-[10px] text-[var(--accent-cyan)] tracking-widest mb-4 flex items-center gap-3 mt-1">
+                          <span>{filteredProjects[currentProjectIndex].id}</span>
+                          <span className="text-white/20">//</span>
+                          <span>{filteredProjects[currentProjectIndex].category}</span>
+                        </div>
+                        
+                        <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4 md:mb-6">
+                          {filteredProjects[currentProjectIndex].title}
+                        </h3>
+                        
+                        <p className="text-white/70 text-sm md:text-base leading-relaxed max-w-2xl font-light mb-6">
+                          {filteredProjects[currentProjectIndex].description}
+                        </p>
+                        
+                        <div className="flex flex-wrap gap-2 mt-auto">
+                          {filteredProjects[currentProjectIndex].stack.map((tech, idx) => (
+                            <span key={idx} className="px-3 py-1 bg-white/5 border border-white/10 rounded font-mono text-[10px] md:text-xs text-[var(--accent-violet)] hover:border-[var(--accent-violet)]/50 hover:bg-[var(--accent-violet)]/10 transition-all duration-300 cursor-default">
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Media (Video or Photo) */}
+                      <div className="w-full lg:w-[50%] xl:w-[55%] aspect-video rounded-xl overflow-hidden border border-[var(--accent-cyan)]/20 shadow-[0_0_40px_rgba(34,211,238,0.1)] relative group shrink-0 bg-[#050505] transition-all duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.2)] hover:border-[var(--accent-cyan)]/40 mt-1">
+                        
+                        {filteredProjects[currentProjectIndex].videoUrl ? (
+                          <video 
+                            src={filteredProjects[currentProjectIndex].videoUrl} 
+                            playsInline 
+                            controls
+                            className="absolute inset-0 w-full h-full object-cover z-10"
+                          />
+                        ) : filteredProjects[currentProjectIndex].imageUrl ? (
+                          <div 
+                            className={`absolute inset-0 w-full h-full bg-center bg-no-repeat z-10 ${filteredProjects[currentProjectIndex].imageDisplay === 'contain' ? 'bg-contain p-2' : 'bg-cover'}`}
+                            style={{ backgroundImage: `url('${filteredProjects[currentProjectIndex].imageUrl}')` }}
+                          />
+                        ) : (
+                          <div className="absolute inset-0 w-full h-full z-10 flex flex-col items-center justify-center p-6 text-center border border-dashed border-white/10 m-4 rounded">
+                            <span className="font-mono text-xs text-[var(--text-muted)] animate-pulse">
+                                 AWAITING_MEDIA_PAYLOAD...
+                            </span>
+                          </div>
+                        )}
+
+                        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none z-20" />
+                      </div>
+
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/*  Scroll Wheel Dial */}
+              <div className="h-28 md:h-36 w-full relative flex items-center justify-center overflow-hidden border-t border-white/5 bg-gradient-to-t from-[#0a0a0a] to-transparent shrink-0">
+                <div className="absolute w-[2px] h-full bg-[var(--accent-cyan)]/20 z-0 pointer-events-none" />
+                <div className="relative w-full h-full flex items-center justify-center mt-2">
+                  {filteredProjects.map((project, index) => {
+                    const style = getDialStyle(index);
+                    return (
+                      <motion.div
+                        key={project.id}
+                        animate={{ x: style.x, scale: style.scale, opacity: style.opacity, zIndex: style.zIndex }}
+                        transition={{ type: "spring", stiffness: 200, damping: 25 }}
+                        onClick={() => setCurrentProjectIndex(index)}
+                        className={`absolute w-32 h-16 md:w-36 md:h-20 rounded-lg cursor-pointer flex flex-col items-center justify-center p-3 transition-colors duration-300 ${
+                          currentProjectIndex === index ? 'bg-[#0a0a0a] border border-[var(--accent-cyan)] shadow-[0_0_20px_rgba(34,211,238,0.2)]' : 'bg-[#111] border border-white/5 hover:border-white/20'
+                        }`}
+                        style={{ originX: 0.5, originY: 0.5 }}
+                      >
+                        <span className={`font-mono text-[9px] md:text-[10px] tracking-widest mb-1 ${currentProjectIndex === index ? 'text-[var(--accent-cyan)]' : 'text-[var(--text-muted)]'}`}>
+                          {project.id}
+                        </span>
+                        <span className={`text-[9px] md:text-[10px] font-bold text-center line-clamp-2 ${currentProjectIndex === index ? 'text-white' : 'text-white/40'}`}>
+                          {project.title}
+                        </span>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* SECURE COMMUNICATIONS CHANNEL (Contact Section) */}
+        {/* (Contact Section) */}
         <div id="contact" className="w-full flex flex-col items-center justify-center pb-32 pt-20 border-t border-white/5 scroll-mt-24 relative">
            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-cyan)] to-transparent opacity-50" />
            
@@ -488,7 +481,7 @@ export default function Home() {
 
       </div>
 
-      {/* Floating Back to Top Button */}
+      {/* Back to Top Button */}
       <AnimatePresence>
         {showScrollTop && (
           <motion.button
