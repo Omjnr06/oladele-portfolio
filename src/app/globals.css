@@ -8,12 +8,16 @@
   --accent-cyan: #22d3ee;    
   --accent-violet: #8b5cf6;  
   --grid-line: rgba(255, 255, 255, 0.03);
+  /* Brighter cyan with 25% opacity for the core of the glowing dot */
+  --grid-dot: rgba(34, 211, 238, 0.25); 
 }
 
 body {
   background-color: var(--bg-base);
   color: var(--text-main);
   overflow-x: hidden;
+  background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
+  background-attachment: fixed;
 }
 
 @layer components {
@@ -64,5 +68,15 @@ body {
       linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
       linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
     background-color: var(--bg-base);
+  }
+
+  .bg-journal-dots {
+    /* The trick to the glow: 1px intense center, fading out completely by 2px */
+    background-image: radial-gradient(circle, var(--grid-dot) 1px, transparent 2px);
+    background-size: 26px 26px; /* Slightly tighter spacing to make it pop */
+  }
+
+  .perforation-line {
+    border-right: 1px dashed rgba(255, 255, 255, 0.1);
   }
 }
