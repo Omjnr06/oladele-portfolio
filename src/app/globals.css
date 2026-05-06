@@ -8,16 +8,12 @@
   --accent-cyan: #22d3ee;    
   --accent-violet: #8b5cf6;  
   --grid-line: rgba(255, 255, 255, 0.03);
-  --grid-dot: rgba(255, 255, 255, 0.05); /* Added for notebook */
 }
 
 body {
   background-color: var(--bg-base);
   color: var(--text-main);
   overflow-x: hidden;
-  /* Added subtle paper/carbon grain */
-  background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
-  background-attachment: fixed;
 }
 
 @layer components {
@@ -30,7 +26,6 @@ body {
     z-index: 1;
   }
   
-  /* YOUR EXACT WORKING HOVER */
   .hover-letter:hover {
     animation: none !important; 
     color: #ffffff !important; 
@@ -39,7 +34,6 @@ body {
     z-index: 10;
   }
 
-  /* YOUR EXACT WORKING SCAN ANIMATION */
   @keyframes ghost-scan {
     0%, 30%, 100% {
       color: var(--text-main);
@@ -70,14 +64,5 @@ body {
       linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
       linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
     background-color: var(--bg-base);
-  }
-
-  .bg-journal-dots {
-    background-image: radial-gradient(var(--grid-dot) 1px, transparent 0);
-    background-size: 32px 32px;
-  }
-
-  .perforation-line {
-    border-right: 1px dashed rgba(255, 255, 255, 0.1);
   }
 }

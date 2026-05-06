@@ -52,7 +52,7 @@ export default function Home() {
       liveUrl: "http://short.urlshortener-mlh.xyz/",
       githubUrl: "https://github.com/kathyjydong/PE-Hackathon-Template-2026", 
       videoUrl: "", 
-      imageUrl: "" 
+      imageUrl: "/images/distributed-shortener-diagram.jpg" 
     },
     {
       id: "PROJECT 02",
@@ -235,14 +235,14 @@ export default function Home() {
             </div>
           </div>
 
-          {/* SECTION DIVIDER (Removed the ID from here!) */}
+          {/* SECTION DIVIDER */}
           <div className="flex items-center gap-4 mb-8 md:mb-12">
             <div className="w-2 h-2 rounded-full bg-[var(--accent-cyan)] shadow-[0_0_10px_var(--accent-cyan)]" />
             <h1 className="font-mono text-xl md:text-2xl tracking-[0.3em] text-white uppercase">PROJECTS AND HACKATHONS</h1>
             <div className="h-[1px] flex-1 bg-white/5" />
           </div>
 
-          {/* DASHBOARD LAYOUT (Added the ID here! This brings the scroll wheel into perfect view) */}
+          {/* DASHBOARD LAYOUT */}
           <div id="projects" className="flex flex-col lg:flex-row items-start gap-8 lg:gap-12 w-full pb-20 scroll-mt-6">
             
             {/* LEFT COLUMN: Vertical Category Filter */}
@@ -336,7 +336,7 @@ export default function Home() {
                           </div>
                         </div>
 
-                        {/* Media Terminal */}
+                        {/* Media Terminal - Updated to use bg-contain instead of bg-cover */}
                         <div className="w-full lg:w-[45%] xl:w-[50%] aspect-video rounded-xl overflow-hidden border border-white/10 shadow-[0_0_40px_rgba(34,211,238,0.15)] relative group shrink-0 bg-[#050505] transition-all duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.25)] hover:border-white/20">
                           
                           {filteredProjects[currentProjectIndex].videoUrl ? (
@@ -348,13 +348,13 @@ export default function Home() {
                             />
                           ) : filteredProjects[currentProjectIndex].imageUrl ? (
                             <div 
-                              className="absolute inset-0 w-full h-full bg-cover bg-center z-10"
+                              className="absolute inset-0 w-full h-full bg-contain bg-no-repeat bg-center z-10 p-2"
                               style={{ backgroundImage: `url('${filteredProjects[currentProjectIndex].imageUrl}')` }}
                             />
                           ) : (
                             <div className="absolute inset-0 w-full h-full z-10 flex flex-col items-center justify-center p-6 text-center border border-dashed border-white/10 m-4 rounded">
                               <span className="font-mono text-xs text-[var(--text-muted)] animate-pulse">
-                                  AWAITING_MEDIA_PAYLOAD...
+                                   AWAITING_MEDIA_PAYLOAD...
                               </span>
                             </div>
                           )}
@@ -409,7 +409,7 @@ export default function Home() {
 
       </div>
 
-      {/* Floating Back to Top Button (With Hover Expansion) */}
+      {/* Floating Back to Top Button */}
       <AnimatePresence>
         {showScrollTop && (
           <motion.button
