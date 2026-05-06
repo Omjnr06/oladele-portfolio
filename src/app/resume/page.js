@@ -138,7 +138,7 @@ export default function ResumePage() {
   return (
     <main className="min-h-screen w-full flex flex-row bg-[var(--bg-base)] font-sans selection:bg-[var(--accent-cyan)] selection:text-black relative">
       
-      {/* ALWAYS VISIBLE Sidebar Nav (Sticky avoids layout transform bugs) */}
+      {/* ALWAYS VISIBLE Sidebar Nav */}
       <nav className="sticky top-0 h-screen w-12 md:w-20 shrink-0 flex flex-col items-center justify-center bg-[var(--bg-surface)] border-r border-white/5 z-50">
         <div className="flex flex-col items-center gap-16 text-[10px] font-mono font-bold tracking-[0.3em] text-[var(--text-muted)]">
           
@@ -184,8 +184,8 @@ export default function ResumePage() {
         </div>
       </nav>
 
-      {/* Main Canvas */}
-      <div className="flex-1 min-w-0 bg-journal-dots relative overflow-x-hidden">
+      {/* Main Canvas - Refactored back to bg-journal-dots */}
+      <div className="flex-1 min-w-0 bg-journal-dots bg-[#050505] relative overflow-x-hidden">
         
         {/* Ambient Glows */}
         <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-[var(--accent-violet)] opacity-[0.02] rounded-full blur-[120px] pointer-events-none fixed" />

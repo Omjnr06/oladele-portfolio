@@ -173,8 +173,8 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Main Content Area */}
-      <div className="flex-1 min-w-0 bg-journal-dots relative overflow-x-hidden">
+      {/* Main Content Area - Refactored back to bg-journal-dots */}
+      <div className="flex-1 min-w-0 bg-journal-dots bg-[#050505] relative overflow-x-hidden">
         
         {/* Ambient Glows */}
         <div className="absolute left-10 h-full w-[1px] bg-[var(--accent-cyan)] opacity-20 pointer-events-none hidden md:block z-0" />
@@ -272,7 +272,7 @@ export default function Home() {
             {/* RIGHT COLUMN: Terminal Container */}
             <div className="flex-1 flex flex-col w-full min-w-0">
               
-              <div className="relative w-full h-[550px] md:h-[600px] bg-[#050505] border border-[var(--accent-cyan)]/20 rounded-xl overflow-hidden flex flex-col shadow-[0_0_30px_rgba(34,211,238,0.05)] transition-shadow duration-500 hover:shadow-[0_0_50px_rgba(34,211,238,0.15)]">
+              <div className="relative w-full h-[550px] md:h-[600px] bg-[#0a0a0a] border border-[var(--accent-cyan)]/30 rounded-xl overflow-hidden flex flex-col shadow-[0_0_40px_rgba(34,211,238,0.1)] transition-shadow duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.2)]">
                 
                 {/* ABSOLUTE TOP-RIGHT BUTTONS */}
                 <div className="absolute top-4 right-4 md:top-6 md:right-6 z-50 flex gap-2 md:gap-3">
@@ -336,8 +336,8 @@ export default function Home() {
                           </div>
                         </div>
 
-                        {/* Media Terminal - Updated to use bg-contain instead of bg-cover */}
-                        <div className="w-full lg:w-[45%] xl:w-[50%] aspect-video rounded-xl overflow-hidden border border-white/10 shadow-[0_0_40px_rgba(34,211,238,0.15)] relative group shrink-0 bg-[#050505] transition-all duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.25)] hover:border-white/20">
+                        {/* Media Terminal */}
+                        <div className="w-full lg:w-[45%] xl:w-[50%] aspect-video rounded-xl overflow-hidden border border-[var(--accent-cyan)]/20 shadow-[0_0_40px_rgba(34,211,238,0.1)] relative group shrink-0 bg-[#050505] transition-all duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.2)] hover:border-[var(--accent-cyan)]/40">
                           
                           {filteredProjects[currentProjectIndex].videoUrl ? (
                             <video 
@@ -380,7 +380,7 @@ export default function Home() {
                           transition={{ type: "spring", stiffness: 200, damping: 25 }}
                           onClick={() => setCurrentProjectIndex(index)}
                           className={`absolute w-32 h-16 md:w-36 md:h-20 rounded-lg cursor-pointer flex flex-col items-center justify-center p-3 transition-colors duration-300 ${
-                            currentProjectIndex === index ? 'bg-black border border-[var(--accent-cyan)] shadow-[0_0_20px_rgba(34,211,238,0.15)]' : 'bg-[#111] border border-white/5 hover:border-white/20'
+                            currentProjectIndex === index ? 'bg-[#0a0a0a] border border-[var(--accent-cyan)] shadow-[0_0_20px_rgba(34,211,238,0.2)]' : 'bg-[#111] border border-white/5 hover:border-white/20'
                           }`}
                           style={{ originX: 0.5, originY: 0.5 }}
                         >
