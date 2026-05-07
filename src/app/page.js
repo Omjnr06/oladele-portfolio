@@ -197,9 +197,9 @@ export default function Home() {
             Resume
           </Link>
 
-          <button className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" style={{ writingMode: 'vertical-rl' }}>
+          <Link href="/music" className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" style={{ writingMode: 'vertical-rl' }}>
             Music
-          </button>
+          </Link>
 
 
           <a 
