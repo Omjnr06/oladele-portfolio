@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -14,6 +15,12 @@ export default function Home() {
 
   const [activeSection, setActiveSection] = useState("home");
   const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const [selectedImage, setSelectedImage] = useState(null);
+  const savedScrollY = useRef(0);
+  // FIX: gate createPortal behind a mounted flag — document is undefined during SSR
+  const [portalMounted, setPortalMounted] = useState(false);
+  useEffect(() => setPortalMounted(true), []);
 
   // Image Array for slide show
   const galleryImages = [
@@ -122,6 +129,26 @@ export default function Home() {
     handleScrollEvent();
     return () => window.removeEventListener('scroll', handleScrollEvent);
   }, []);
+
+  // FIX: lock body scroll without losing position — save scrollY, pin body with negative top offset
+  useEffect(() => {
+    if (selectedImage) {
+      savedScrollY.current = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${savedScrollY.current}px`;
+      document.body.style.width = '100%';
+    } else {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo(0, savedScrollY.current);
+    }
+    return () => {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+    };
+  }, [selectedImage]);
 
 // Smooth Scroll Helper to go from section to section within same page
   const handleScroll = (e, targetId) => {
@@ -358,9 +385,11 @@ export default function Home() {
                             className="absolute inset-0 w-full h-full object-cover z-10"
                           />
                         ) : filteredProjects[currentProjectIndex].imageUrl ? (
+                          // FIX: open modal on click; cursor signals interactivity
                           <div 
-                            className={`absolute inset-0 w-full h-full bg-center bg-no-repeat z-10 ${filteredProjects[currentProjectIndex].imageDisplay === 'contain' ? 'bg-contain p-2' : 'bg-cover'}`}
+                            className={`absolute inset-0 w-full h-full bg-center bg-no-repeat z-10 cursor-zoom-in ${filteredProjects[currentProjectIndex].imageDisplay === 'contain' ? 'bg-contain p-2' : 'bg-cover'}`}
                             style={{ backgroundImage: `url('${filteredProjects[currentProjectIndex].imageUrl}')` }}
+                            onClick={() => setSelectedImage(filteredProjects[currentProjectIndex].imageUrl)}
                           />
                         ) : (
                           <div className="absolute inset-0 w-full h-full z-10 flex flex-col items-center justify-center p-6 text-center border border-dashed border-white/10 m-4 rounded">
@@ -408,97 +437,138 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
 
-        {/* (Contact Section) */}
-        <div id="contact" className="w-full flex flex-col items-center justify-center pb-32 pt-20 border-t border-white/5 scroll-mt-24 relative">
-           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-cyan)] to-transparent opacity-50" />
-           
-           <span className="font-mono text-[10px] text-[var(--accent-cyan)] tracking-[0.3em] uppercase mb-4">
-             // Lets Work Together
-           </span>
-           <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 tracking-tight">Contact Information</h2>
-
-           <div className="flex flex-wrap justify-center gap-6 md:gap-10">
+          {/* (Contact Section) */}
+          <div id="contact" className="w-full flex flex-col items-center justify-center pb-32 pt-20 border-t border-white/5 scroll-mt-24 relative">
+             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-cyan)] to-transparent opacity-50" />
              
-             {/* EMAIL */}
-             <a href="mailto:oj.magbadelo@gmail.com" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                   <polyline points="22,6 12,13 2,6"></polyline>
-                 </svg>
-               </div>
-               <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">Email</span>
-             </a>
+             <span className="font-mono text-[10px] text-[var(--accent-cyan)] tracking-[0.3em] uppercase mb-4">
+               // Lets Work Together
+             </span>
+             <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 tracking-tight">Contact Information</h2>
 
-             {/* LINKEDIN */}
-             <a href="https://www.linkedin.com/in/oladele-magbadelo" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                   <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                   <rect x="2" y="9" width="4" height="12"></rect>
-                   <circle cx="4" cy="4" r="2"></circle>
-                 </svg>
-               </div>
-               <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">LinkedIn</span>
-             </a>
+             <div className="flex flex-wrap justify-center gap-6 md:gap-10">
+               
+               {/* EMAIL */}
+               <a href="mailto:oj.magbadelo@gmail.com" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
+                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
+                   <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                     <polyline points="22,6 12,13 2,6"></polyline>
+                   </svg>
+                 </div>
+                 <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">Email</span>
+               </a>
 
-             {/* GITHUB */}
-             <a href="https://github.com/Omjnr06" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                   <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-                 </svg>
-               </div>
-               <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">GitHub</span>
-             </a>
+               {/* LINKEDIN */}
+               <a href="https://www.linkedin.com/in/oladele-magbadelo" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
+                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
+                   <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                     <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                     <rect x="2" y="9" width="4" height="12"></rect>
+                     <circle cx="4" cy="4" r="2"></circle>
+                   </svg>
+                 </div>
+                 <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">LinkedIn</span>
+               </a>
 
-             {/* DEVPOST */}
-             <a href="https://devpost.com/oj-magbadelo" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                   <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"></polygon>
-                 </svg>
-               </div>
-               <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">Devpost</span>
-             </a>
+               {/* GITHUB */}
+               <a href="https://github.com/Omjnr06" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
+                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
+                   <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                     <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                   </svg>
+                 </div>
+                 <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">GitHub</span>
+               </a>
 
-             {/* INSTAGRAM */}
-             <a href="https://www.instagram.com/magbadelojr/" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                   <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                 </svg>
-               </div>
-               <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">Instagram</span>
-             </a>
+               {/* DEVPOST */}
+               <a href="https://devpost.com/oj-magbadelo" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
+                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
+                   <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                     <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"></polygon>
+                   </svg>
+                 </div>
+                 <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">Devpost</span>
+               </a>
 
-           </div>
+               {/* INSTAGRAM */}
+               <a href="https://www.instagram.com/magbadelojr/" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
+                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
+                   <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                   </svg>
+                 </div>
+                 <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">Instagram</span>
+               </a>
+
+             </div>
+          </div>
+
         </div>
+
+        {/* Back to Top Button */}
+        <AnimatePresence>
+          {showScrollTop && (
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              onClick={(e) => handleScroll(e, 'home')}
+              className="group fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex items-center justify-center p-3 md:p-4 rounded-full bg-black/60 border border-white/10 text-[var(--accent-cyan)] shadow-lg backdrop-blur-md hover:bg-black hover:border-[var(--accent-cyan)] transition-all overflow-hidden"
+              aria-label="Back to top"
+            >
+              <svg className="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+              <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-[max-width,opacity,margin] duration-500 ease-in-out font-mono text-[10px] uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 group-hover:ml-2">
+                Back to Home
+              </span>
+            </motion.button>
+          )}
+        </AnimatePresence>
+
+        {/* Code for Modal for images that are in projects*/}
+        {portalMounted && createPortal(
+          <AnimatePresence>
+            {selectedImage && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                className="fixed inset-0 z-[200] overflow-y-auto bg-black/90 backdrop-blur-md"
+                onClick={() => setSelectedImage(null)}
+              >
+                <div className="min-h-full flex items-center justify-center p-6">
+                  <motion.div
+                    initial={{ scale: 0.92, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.92, opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="relative max-w-5xl w-full"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <img
+                      src={selectedImage}
+                      alt="Project preview"
+                      className="w-full h-auto object-contain rounded-xl border border-[var(--accent-cyan)]/20 shadow-[0_0_60px_rgba(34,211,238,0.15)]"
+                    />
+                    <button
+                      onClick={() => setSelectedImage(null)}
+                      className="absolute -top-4 -right-4 w-9 h-9 flex items-center justify-center rounded-full bg-[#0a0a0a] border border-white/10 text-[var(--text-muted)] hover:text-white hover:border-[var(--accent-cyan)] transition-all"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                  </motion.div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
+        )}
 
       </div>
-
-      {/* Back to Top Button */}
-      <AnimatePresence>
-        {showScrollTop && (
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            onClick={(e) => handleScroll(e, 'home')}
-            className="group fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex items-center justify-center p-3 md:p-4 rounded-full bg-black/60 border border-white/10 text-[var(--accent-cyan)] shadow-lg backdrop-blur-md hover:bg-black hover:border-[var(--accent-cyan)] transition-all overflow-hidden"
-            aria-label="Back to top"
-          >
-            <svg className="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
-            <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-[max-width,opacity,margin] duration-500 ease-in-out font-mono text-[10px] uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 group-hover:ml-2">
-              Back to Home
-            </span>
-          </motion.button>
-        )}
-      </AnimatePresence>
 
     </main>
   );
