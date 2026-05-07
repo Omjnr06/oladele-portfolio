@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link"; 
 import { motion, AnimatePresence } from "framer-motion";
 
-// This is where you put the resume changes
 const resumeData = {
   header: {
     name: "Oladele Magbadelo",
@@ -12,14 +11,26 @@ const resumeData = {
     status: "BSc. CS, Minor Data Sci @ Western University '28",
   },
   skills: [
-    { category: "LANGUAGES & FRAMEWORKS", items: ["Python", "JavaScript", "PostgreSQL", "Java", "C", "React.js", "Express.js", "Flask"] },
-    { category: "DEVELOPER TOOLS", items: ["Git", "Docker", "Nginx", "Figma", "Notion"] },
-    { category: "DATA LIBRARIES", items: ["NumPy", "Matplotlib", "Seaborn"] },
-    { category: "OTHER CAPABILITIES", items: ["Sound Engineering", "Event Management", "Arabic"] }
+    { category: "LANGUAGES & FRAMEWORKS", items: ["Python", "JavaScript", "PostgreSQL", "Java", "HTML/CSS", "R", "C", "React", "Next.js", "Express.js", "Flask"] },
+    { category: "DEVELOPER TOOLS", items: ["Git", "GitHub", "Docker", "Nginx", "Supabase", "VS Code", "Figma", "Notion"] },
+    { category: "DATA LIBRARIES", items: ["PyTorch", "TensorFlow", "Keras", "NumPy", "Matplotlib", "Seaborn"] },
+    { category: "OTHER CAPABILITIES", items: ["Computer Vision", "Sound Engineering", "Event Management", "Arabic", "Microsoft Office Suite"] }
   ],
   experience: [
     {
-      id: "EXP_04",
+      id: "EXP_01",
+      role: "AI & Software Developer Intern",
+      company: "Purely Biome",
+      date: "May 2026 - Present",
+      location: "Remote",
+      points: [
+        "Engineered multi-task Convolutional Neural Networks (CNNs) with Python and PyTorch/TensorFlow, leveraging specialized datasets (ACNE04, SCIN) to train classification models that detect and grade skin conditions.",
+        "Developed the end-to-end customer reporting interface using Next.js and Supabase, building dynamic visualizations to translate complex biological JSON data into actionable microbiome insights."
+      ]
+    },
+
+    {
+      id: "EXP_02",
       role: "Facilities Asset Management Intern",
       company: "RCCG HOP",
       date: "Jun. 2022 - Aug. 2022",
@@ -30,7 +41,7 @@ const resumeData = {
       ]
     },
     {
-      id: "EXP_02",
+      id: "EXP_03",
       role: "Projects Director",
       company: "Western Founders Network",
       date: "Sep. 2025 - Present",
@@ -40,7 +51,7 @@ const resumeData = {
       ]
     },
     {
-      id: "EXP_03",
+      id: "EXP_04",
       role: "Marketing Director",
       company: "Western Engineering AutoPilot",
       date: "Sep. 2025 - Present",
@@ -48,24 +59,12 @@ const resumeData = {
       points: [
         "Worked in WEAP's Communications Team to ensure a clear, consistent, and engaging brand voice across all digital platforms while spearheading design and social outreach initiatives for effective promotion."
       ]
-    },
-    {
-      id: "EXP_01",
-      role: "Technical Co-Founder",
-      company: "Ableo Solutions",
-      date: "Jan. 2026 - Present",
-      location: "London, ON",
-      points: [
-        "Architected a multi-page agency web app using React.js, Vite, and React Router to market AI solutions.",
-        "Integrated the Chatbase REST API via asynchronous fetch for real-time, interactive AI product demos.",
-        "Managed CI/CD and deployment via GitHub and Vercel, configuring custom DNS and SSL certification."
-      ]
     }
   ],
   projects: [
     {
       id: "PRJ_01",
-      title: "Distributed URL Shortener (MLH Hackathon)",
+      title: "Distributed URL Shortener",
       stack: "Flask, Docker, Nginx, Redis, Neon",
       date: "Apr. 2026",
       points: [
@@ -76,7 +75,7 @@ const resumeData = {
     {
       id: "PRJ_02",
       title: "UofTHacks: Flowlytics",
-      stack: "Python, Mesa, TypeScript, React, Gemini API",
+      stack: "Python, Mesa, TypeScript, React",
       date: "Jan. 2026",
       points: [
         "Conducted data analysis using Python to simulate customer traffic and generate heat maps, successfully identifying densely populated areas and store 'dead zones'."
@@ -85,7 +84,7 @@ const resumeData = {
     {
       id: "PRJ_03",
       title: "Mustang Wrapped",
-      stack: "Spotify API, Supabase, React, SQL, Figma",
+      stack: "Spotify API, Supabase, React, SQL",
       date: "Oct. 2025 - Present",
       points: [
         "Worked in a team of 4 to develop a full stack data driven social platform web app by integrating the Spotify Web API with a Supabase backend to normalize and store real-time user listening history.",
@@ -96,7 +95,7 @@ const resumeData = {
   education: [
     {
       id: "EDU_01",
-      degree: "BSc Computer Science, Minor in Data Science",
+      degree: "Bachelor of Science in Computer Science, Minor in Data Science",
       school: "Western University",
       date: "Sep. 2024 - May 2028",
       details: "Recipient of the Carmeta Thelma Hodges Scholarship Award ($6000 CAD) and Western Admission Scholarship ($2500 CAD)."
@@ -104,20 +103,16 @@ const resumeData = {
     {
       id: "EDU_02",
       degree: "High School Diploma",
-      school: "Gems American Academy (Doha, Qatar)",
+      school: "Gems American Academy",
       date: "Aug. 2023 - May 2024",
       details: "High Honours, Male Athlete of the Year (Basketball MVP)."
     }
   ]
 };
 
-// ==============================================================================
-// PRESENTATION LAYER
-// ==============================================================================
 export default function ResumePage() {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // Scroll Tracking for Back to Top Button
   useEffect(() => {
     const handleScrollEvent = () => {
       if (window.scrollY > 300) setShowScrollTop(true);
@@ -134,150 +129,75 @@ export default function ResumePage() {
   };
 
   return (
-    <main className="min-h-screen w-full flex flex-row bg-[var(--bg-base)] font-sans selection:bg-[var(--accent-cyan)] selection:text-black relative">
+    <main className="min-h-screen w-full flex flex-row bg-[#050505] font-sans selection:bg-[#22d3ee] selection:text-black relative">
       
-      {/* ALWAYS VISIBLE Sidebar Nav */}
-      <nav className="sticky top-0 h-screen w-12 md:w-20 shrink-0 flex flex-col items-center justify-center bg-[var(--bg-surface)] border-r border-white/5 z-50">
-        <div className="flex flex-col items-center gap-16 text-[10px] font-mono font-bold tracking-[0.3em] text-[var(--text-muted)]">
-          
-          <Link 
-            href="/#home"
-            className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" 
-            style={{ writingMode: 'vertical-rl' }}
-          >
-            Home
-          </Link>
-
-          <Link 
-            href="/#projects"
-            className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" 
-            style={{ writingMode: 'vertical-rl' }}
-          >
-            Projects
-          </Link>
-
-          <Link 
-            href="/resume" 
-            className="text-[var(--accent-cyan)] uppercase cursor-pointer border-l-2 border-[var(--accent-cyan)] pr-2 rotate-180 block" 
-            style={{ writingMode: 'vertical-rl' }}
-          >
-            Resume
-          </Link>
-          
-
-           <Link href="/music" className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" style={{ writingMode: 'vertical-rl' }}>
-            Music
-          </Link>
-
-          <Link 
-            href="#contact"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" 
-            style={{ writingMode: 'vertical-rl' }}
-          >
-            Contact
-          </Link>
-
+      <nav className="sticky top-0 h-screen w-12 md:w-20 shrink-0 flex flex-col items-center justify-center bg-[#0a0a0a] border-r border-white/5 z-50">
+        <div className="flex flex-col items-center gap-16 text-[10px] font-mono font-bold tracking-[0.3em] text-[#666666]">
+          <Link href="/#home" className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" style={{ writingMode: 'vertical-rl' }}>Home</Link>
+          <Link href="/#projects" className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" style={{ writingMode: 'vertical-rl' }}>Projects</Link>
+          <Link href="/resume" className="text-[#22d3ee] uppercase cursor-pointer border-l-2 border-[#22d3ee] pr-2 rotate-180 block" style={{ writingMode: 'vertical-rl' }}>Resume</Link>
+          <Link href="/music" className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" style={{ writingMode: 'vertical-rl' }}>Music</Link>
+          <Link href="#contact" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }} className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" style={{ writingMode: 'vertical-rl' }}>Contact</Link>
         </div>
       </nav>
 
-      {/* Main Canvas */}
-      <div className="flex-1 min-w-0 bg-journal-dots bg-[#050505] relative overflow-x-hidden">
-        
-        {/* Ambient Glows */}
-        <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-[var(--accent-violet)] opacity-[0.02] rounded-full blur-[120px] pointer-events-none fixed" />
-        <div className="absolute bottom-[10%] left-[-5%] w-[400px] h-[400px] bg-[var(--accent-cyan)] opacity-[0.02] rounded-full blur-[120px] pointer-events-none fixed" />
-
+      <div className="flex-1 min-w-0 bg-[#050505] relative overflow-x-hidden">
         <div className="px-6 md:px-16 lg:px-24 py-16 md:py-24 max-w-7xl mx-auto w-full z-10 flex flex-col lg:flex-row gap-16">
           
-          {/* LEFT COLUMN: System Status & Skills (Sticky) */}
           <div className="w-full lg:w-1/3 space-y-12 lg:sticky lg:top-24 h-fit">
-            
-            {/* Header */}
             <div>
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-2">
-                {resumeData.header.name}
-              </h1>
-              <p className="font-mono text-xs tracking-widest text-[var(--accent-cyan)] mb-4">
-                {resumeData.header.title}
-              </p>
-              <div className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded-sm font-mono text-[10px] text-[var(--text-muted)]">
-                {resumeData.header.status}
-              </div>
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-2">{resumeData.header.name}</h1>
+              <p className="font-mono text-xs tracking-widest text-[#22d3ee] mb-4">{resumeData.header.title}</p>
+              <div className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded-sm font-mono text-[10px] text-[#666666]">{resumeData.header.status}</div>
             </div>
 
-            {/* The Export Button - Now an active link to your PDF */}
-            <a 
-              href="/Oladele_Magbadelo_Resume.pdf" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="group relative overflow-hidden bg-[#0c0c0c] border border-white/10 text-white font-mono text-sm px-6 py-4 w-full block transition-all hover:border-[var(--accent-cyan)] hover:shadow-[0_0_15px_rgba(34,211,238,0.2)] rounded-md"
-            >
+            <a href="/Oladele_Magbadelo_Resume.pdf" target="_blank" rel="noopener noreferrer" className="group relative overflow-hidden bg-[#0c0c0c] border border-white/10 text-white font-mono text-sm px-6 py-4 w-full block transition-all hover:border-[#22d3ee] hover:shadow-[0_0_15px_rgba(34,211,238,0.2)] rounded-md">
               <span className="relative z-10 flex items-center justify-between">
                 <span>{`> EXPORT_PDF`}</span>
-                <span className="text-[var(--text-muted)] text-xs">102_KB</span>
+                <span className="text-[#666666] text-xs">102_KB</span>
               </span>
-              <div className="absolute top-0 left-0 h-full bg-[var(--accent-cyan)] w-0 group-hover:w-full transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] opacity-10" />
+              <div className="absolute top-0 left-0 h-full bg-[#22d3ee] w-0 group-hover:w-full transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] opacity-10" />
             </a>
 
-            {/* Skills Engine */}
             <div>
               <div className="flex items-center gap-4 mb-6">
-                <span className="font-mono text-[10px] text-[var(--text-muted)]">SKILLS</span>
+                <span className="font-mono text-[10px] text-[#666666]">SKILLS</span>
                 <div className="h-[1px] flex-1 bg-white/5" />
               </div>
-              
               <div className="space-y-6">
                 {resumeData.skills.map((skillGroup, idx) => (
                   <div key={idx}>
-                    <h3 className="font-mono text-[10px] tracking-widest text-[var(--accent-violet)] mb-3 uppercase">
-                      [{skillGroup.category}]
-                    </h3>
+                    <h3 className="font-mono text-[10px] tracking-widest text-[#8b5cf6] mb-3 uppercase">[{skillGroup.category}]</h3>
                     <div className="flex flex-wrap gap-2">
                       {skillGroup.items.map((item, i) => (
-                        <span key={i} className="px-3 py-1 bg-white/5 border border-white/5 text-[var(--text-main)] text-xs rounded-full hover:bg-white/10 transition-colors cursor-default">
-                          {item}
-                        </span>
+                        <span key={i} className="px-3 py-1 bg-white/5 border border-white/5 text-white text-xs rounded-full hover:bg-white/10 transition-colors cursor-default">{item}</span>
                       ))}
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-
           </div>
 
-          {/* RIGHT COLUMN: Execution Logs */}
           <div className="w-full lg:w-2/3 lg:pl-10 lg:border-l border-white/5 space-y-16 pb-12">
-            
-            {/* Experience Section */}
             <div>
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-2 h-2 rounded-full bg-[var(--accent-cyan)] shadow-[0_0_10px_var(--accent-cyan)]" />
+                <div className="w-2 h-2 rounded-full bg-[#22d3ee] shadow-[0_0_10px_#22d3ee]" />
                 <h2 className="font-mono text-sm tracking-[0.2em] text-white">EXPERIENCE</h2>
               </div>
-
               <div className="space-y-12 relative border-l border-white/10 ml-1">
                 {resumeData.experience.map((exp) => (
                   <div key={exp.id} className="relative pl-8">
-                    <div className="absolute w-3 h-3 bg-[#0a0a0a] border-2 border-[var(--text-muted)] rounded-full -left-[6.5px] top-1.5 transition-colors hover:border-[var(--accent-cyan)]" />
-                    
+                    <div className="absolute w-3 h-3 bg-[#0a0a0a] border-2 border-[#666666] rounded-full -left-[6.5px] top-1.5 transition-colors hover:border-[#22d3ee]" />
                     <div className="mb-2 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                       <h3 className="text-xl font-bold text-white tracking-tight">{exp.role}</h3>
-                      <span className="font-mono text-[10px] text-[var(--text-muted)] whitespace-nowrap">{exp.date}</span>
+                      <span className="font-mono text-[10px] text-[#666666] whitespace-nowrap">{exp.date}</span>
                     </div>
-                    
-                    <div className="font-mono text-xs text-[var(--accent-cyan)] mb-4">
-                      {exp.company} // {exp.location}
-                    </div>
-
+                    <div className="font-mono text-xs text-[#22d3ee] mb-4">{exp.company} // {exp.location}</div>
                     <ul className="space-y-3">
                       {exp.points.map((point, i) => (
                         <li key={i} className="text-white/75 leading-relaxed flex items-start text-sm">
-                          <span className="text-[var(--accent-violet)] mr-3 font-mono mt-0.5">{`>`}</span>
+                          <span className="text-[#8b5cf6] mr-3 font-mono mt-0.5">{`>`}</span>
                           <span>{point}</span>
                         </li>
                       ))}
@@ -287,31 +207,24 @@ export default function ResumePage() {
               </div>
             </div>
 
-            {/* Projects Section */}
             <div>
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-2 h-2 rounded-full bg-[var(--accent-cyan)] shadow-[0_0_10px_var(--accent-cyan)]" />
+                <div className="w-2 h-2 rounded-full bg-[#22d3ee] shadow-[0_0_10px_#22d3ee]" />
                 <h2 className="font-mono text-sm tracking-[0.2em] text-white">PROJECTS</h2>
               </div>
-
               <div className="space-y-12 relative border-l border-white/10 ml-1">
                 {resumeData.projects.map((prj) => (
                   <div key={prj.id} className="relative pl-8">
-                    <div className="absolute w-3 h-3 bg-[#0a0a0a] border-2 border-[var(--text-muted)] rounded-full -left-[6.5px] top-1.5 transition-colors hover:border-[var(--accent-cyan)]" />
-                    
+                    <div className="absolute w-3 h-3 bg-[#0a0a0a] border-2 border-[#666666] rounded-full -left-[6.5px] top-1.5 transition-colors hover:border-[#22d3ee]" />
                     <div className="mb-2 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                       <h3 className="text-xl font-bold text-white tracking-tight">{prj.title}</h3>
-                      <span className="font-mono text-[10px] text-[var(--text-muted)] whitespace-nowrap">{prj.date}</span>
+                      <span className="font-mono text-[10px] text-[#666666] whitespace-nowrap">{prj.date}</span>
                     </div>
-                    
-                    <div className="font-mono text-[10px] text-[var(--text-muted)] mb-4 flex flex-wrap gap-2">
-                       STACK: <span className="text-[var(--accent-violet)]">{prj.stack}</span>
-                    </div>
-
+                    <div className="font-mono text-[10px] text-[#666666] mb-4 flex flex-wrap gap-2">STACK: <span className="text-[#8b5cf6]">{prj.stack}</span></div>
                     <ul className="space-y-3">
                       {prj.points.map((point, i) => (
                         <li key={i} className="text-white/75 leading-relaxed flex items-start text-sm">
-                          <span className="text-[var(--accent-violet)] mr-3 font-mono mt-0.5">{`>`}</span>
+                          <span className="text-[#8b5cf6] mr-3 font-mono mt-0.5">{`>`}</span>
                           <span>{point}</span>
                         </li>
                       ))}
@@ -321,128 +234,75 @@ export default function ResumePage() {
               </div>
             </div>
 
-            {/* Education Section */}
             <div>
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-2 h-2 rounded-full bg-[var(--accent-violet)] shadow-[0_0_10px_var(--accent-violet)]" />
+                <div className="w-2 h-2 rounded-full bg-[#8b5cf6] shadow-[0_0_10px_#8b5cf6]" />
                 <h2 className="font-mono text-sm tracking-[0.2em] text-white">EDUCATION</h2>
               </div>
-
               <div className="space-y-10 relative border-l border-white/10 ml-1">
                 {resumeData.education.map((edu) => (
                   <div key={edu.id} className="relative pl-8">
-                    <div className="absolute w-3 h-3 bg-[#0a0a0a] border-2 border-[var(--text-muted)] rounded-full -left-[6.5px] top-1.5 transition-colors hover:border-[var(--accent-violet)]" />
-                    
+                    <div className="absolute w-3 h-3 bg-[#0a0a0a] border-2 border-[#666666] rounded-full -left-[6.5px] top-1.5 transition-colors hover:border-[#8b5cf6]" />
                     <div className="mb-2 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                       <h3 className="text-lg font-bold text-white tracking-tight">{edu.degree}</h3>
-                      <span className="font-mono text-[10px] text-[var(--text-muted)] whitespace-nowrap">{edu.date}</span>
+                      <span className="font-mono text-[10px] text-[#666666] whitespace-nowrap">{edu.date}</span>
                     </div>
-                    
-                    <div className="font-mono text-xs text-[var(--accent-violet)] mb-2">
-                      {edu.school}
-                    </div>
-
-                    <p className="text-white/75 leading-relaxed text-sm">
-                      {edu.details}
-                    </p>
+                    <div className="font-mono text-xs text-[#8b5cf6] mb-2">{edu.school}</div>
+                    <p className="text-white/75 leading-relaxed text-sm">{edu.details}</p>
                   </div>
                 ))}
               </div>
             </div>
-
           </div>
         </div>
 
-        {/* (Contact Section using clean SVGs) */}
         <div id="contact" className="w-full flex flex-col items-center justify-center pb-32 pt-20 border-t border-white/5 scroll-mt-24 relative">
-           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-cyan)] to-transparent opacity-50" />
-           
-           <span className="font-mono text-[10px] text-[var(--accent-cyan)] tracking-[0.3em] uppercase mb-4">
-             // Lets Work Together
-           </span>
+           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-[1px] bg-gradient-to-r from-transparent via-[#22d3ee] to-transparent opacity-50" />
+           <span className="font-mono text-[10px] text-[#22d3ee] tracking-[0.3em] uppercase mb-4">// Lets Work Together</span>
            <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 tracking-tight">Contact Information</h2>
-
            <div className="flex flex-wrap justify-center gap-6 md:gap-10">
-             
-             {/* EMAIL */}
              <a href="mailto:oj.magbadelo@gmail.com" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                   <polyline points="22,6 12,13 2,6"></polyline>
-                 </svg>
+               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[#22d3ee] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)]">
+                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[#666666] group-hover:text-[#22d3ee] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                </div>
-               <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">Email</span>
+               <span className="font-mono text-[9px] md:text-[10px] text-[#666666] tracking-widest uppercase group-hover:text-[#22d3ee] transition-colors">Email</span>
              </a>
-
-             {/* LINKEDIN */}
              <a href="https://www.linkedin.com/in/oladele-magbadelo" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                   <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                   <rect x="2" y="9" width="4" height="12"></rect>
-                   <circle cx="4" cy="4" r="2"></circle>
-                 </svg>
+               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[#22d3ee] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)]">
+                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[#666666] group-hover:text-[#22d3ee] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                </div>
-               <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">LinkedIn</span>
+               <span className="font-mono text-[9px] md:text-[10px] text-[#666666] tracking-widest uppercase group-hover:text-[#22d3ee] transition-colors">LinkedIn</span>
              </a>
-
-             {/* GITHUB */}
              <a href="https://github.com/Omjnr06" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                   <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-                 </svg>
+               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[#22d3ee] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)]">
+                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[#666666] group-hover:text-[#22d3ee] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                </div>
-               <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">GitHub</span>
+               <span className="font-mono text-[9px] md:text-[10px] text-[#666666] tracking-widest uppercase group-hover:text-[#22d3ee] transition-colors">GitHub</span>
              </a>
-
-             {/* DEVPOST (Using Hexagon to match branding) */}
              <a href="https://devpost.com/oj-magbadelo" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                   <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"></polygon>
-                 </svg>
+               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[#22d3ee] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)]">
+                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[#666666] group-hover:text-[#22d3ee] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"></polygon></svg>
                </div>
-               <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">Devpost</span>
+               <span className="font-mono text-[9px] md:text-[10px] text-[#666666] tracking-widest uppercase group-hover:text-[#22d3ee] transition-colors">Devpost</span>
              </a>
-
-             {/* INSTAGRAM */}
              <a href="https://www.instagram.com/magbadelojr/" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                   <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                 </svg>
+               <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[#22d3ee] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)]">
+                 <svg className="w-8 h-8 md:w-10 md:h-10 text-[#666666] group-hover:text-[#22d3ee] group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                </div>
-               <span className="font-mono text-[9px] md:text-[10px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">Instagram</span>
+               <span className="font-mono text-[9px] md:text-[10px] text-[#666666] tracking-widest uppercase group-hover:text-[#22d3ee] transition-colors">Instagram</span>
              </a>
-
            </div>
         </div>
-
       </div>
 
-      {/* Floating Back to Top Button */}
       <AnimatePresence>
         {showScrollTop && (
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            onClick={scrollToTop}
-            className="group fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex items-center justify-center p-3 md:p-4 rounded-full bg-black/60 border border-white/10 text-[var(--accent-cyan)] shadow-lg backdrop-blur-md hover:bg-black hover:border-[var(--accent-cyan)] transition-all overflow-hidden"
-            aria-label="Back to top"
-          >
+          <motion.button initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} onClick={scrollToTop} className="group fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex items-center justify-center p-3 md:p-4 rounded-full bg-black/60 border border-white/10 text-[#22d3ee] shadow-lg backdrop-blur-md hover:bg-black hover:border-[#22d3ee] transition-all overflow-hidden" aria-label="Back to top">
             <svg className="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
-            <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-[max-width,opacity,margin] duration-500 ease-in-out font-mono text-[10px] uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 group-hover:ml-2">
-              Back to Top
-            </span>
+            <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-[max-width,opacity,margin] duration-500 ease-in-out font-mono text-[10px] uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 group-hover:ml-2">Back to Top</span>
           </motion.button>
         )}
       </AnimatePresence>
-
     </main>
   );
 }
