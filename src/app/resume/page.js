@@ -4,9 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link"; 
 import { motion, AnimatePresence } from "framer-motion";
 
-// ==============================================================================
-// DATA LAYER
-// ==============================================================================
+// This is where you put the resume changes
 const resumeData = {
   header: {
     name: "Oladele Magbadelo",
@@ -157,14 +155,7 @@ export default function ResumePage() {
           >
             Projects
           </Link>
-          
-          <button 
-            className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" 
-            style={{ writingMode: 'vertical-rl' }}
-          >
-            Music
-          </button>
-          
+
           <Link 
             href="/resume" 
             className="text-[var(--accent-cyan)] uppercase cursor-pointer border-l-2 border-[var(--accent-cyan)] pr-2 rotate-180 block" 
@@ -172,6 +163,13 @@ export default function ResumePage() {
           >
             Resume
           </Link>
+          
+          <button 
+            className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" 
+            style={{ writingMode: 'vertical-rl' }}
+          >
+            Music
+          </button>
 
           <Link 
             href="#contact"

@@ -39,7 +39,7 @@ export default function Home() {
     {
       id: "PROJECT 00",
       title: "Mustang Wrapped",
-      category: "FULL STACK DATA",
+      category: "FULL STACK",
       stack: ["Spotify API", "Supabase","Express.js", "React", "SQL"],
       description: "Data-driven social platform integrating the Spotify Web API with a Supabase backend. Shows Univeristy community-level music trends and insights by complex SQL aggregation.",
       liveUrl: "", 
@@ -193,13 +193,14 @@ export default function Home() {
             Projects
           </a>
 
+          <Link href="/resume" className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" style={{ writingMode: 'vertical-rl' }}>
+            Resume
+          </Link>
+
           <button className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" style={{ writingMode: 'vertical-rl' }}>
             Music
           </button>
 
-          <Link href="/resume" className="hover:text-white transition-colors uppercase cursor-pointer rotate-180 block" style={{ writingMode: 'vertical-rl' }}>
-            Resume
-          </Link>
 
           <a 
             href="#contact" 
@@ -237,7 +238,7 @@ export default function Home() {
                 Pursuing <span className="text-white">Computer Science</span> & <span className="text-white">Data Science</span> at Western University.
               </p>
               <p className="text-lg md:text-xl leading-relaxed font-light border-l border-white/10 pl-6">
-                Building <span className="text-[var(--accent-cyan)]">cool things.</span> Mastering <span className="text-[var(--accent-cyan)]">5</span> instruments on the side.
+                Building <span className="text-[var(--accent-cyan)]">cool things.</span> Jamming <span className="text-[var(--accent-cyan)]">along the way.</span>
               </p>
             </div>
           </div>
@@ -385,7 +386,7 @@ export default function Home() {
                             className="absolute inset-0 w-full h-full object-cover z-10"
                           />
                         ) : filteredProjects[currentProjectIndex].imageUrl ? (
-                          // FIX: open modal on click; cursor signals interactivity
+                          
                           <div 
                             className={`absolute inset-0 w-full h-full bg-center bg-no-repeat z-10 cursor-zoom-in ${filteredProjects[currentProjectIndex].imageDisplay === 'contain' ? 'bg-contain p-2' : 'bg-cover'}`}
                             style={{ backgroundImage: `url('${filteredProjects[currentProjectIndex].imageUrl}')` }}
