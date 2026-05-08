@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Analytics } from '@vercel/analytics/react';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "Oladele Magbadelo | Developer and Musician",
-  description: "Portfolio of Oladele Magbadelo, a cool dude.",
+  description: "A digital station to see all the cool things I engage in!",
 };
 
 export default function RootLayout({ children }) {
@@ -22,7 +23,10 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
