@@ -198,6 +198,7 @@ export default function TheMusicVault() {
   const [activeCatIdx,   setActiveCatIdx]   = useState(1);
   const [activeTrackIdx, setActiveTrackIdx] = useState(0);
   const [leftOpen,  setLeftOpen]  = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false); 
 
   const playerContainerRef = useRef(null);
   const videoRef    = useRef(null);
@@ -237,7 +238,11 @@ export default function TheMusicVault() {
 
   const toggleFullScreen = () => {
     if (!document.fullscreenElement) {
-      playerContainerRef.current?.requestFullscreen().catch(() => {});
+      if (playerContainerRef.current?.requestFullscreen) {
+        playerContainerRef.current.requestFullscreen().catch(() => {});
+      } else if (videoRef.current?.webkitEnterFullscreen) {
+        videoRef.current.webkitEnterFullscreen(); 
+      }
     } else {
       document.exitFullscreen();
     }
@@ -480,12 +485,12 @@ export default function TheMusicVault() {
   useEffect(() => { if (!isPlaying) setCtrlVis(true); }, [isPlaying]);
 
   return (
-    <main className="h-screen w-full flex flex-col bg-[#020202] overflow-hidden relative" style={{ fontFamily: "'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace" }}>
+    <main className="h-[100dvh] lg:h-screen w-full flex flex-col bg-[#020202] overflow-hidden relative" style={{ fontFamily: "'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace" }}>
       <style>{`*, *::before, *::after { scrollbar-width: none; -ms-overflow-style: none; } ::-webkit-scrollbar { display: none; }`}</style>
 
       <div className="absolute inset-0 z-0 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, rgba(34,211,238,0.18) 1px, transparent 0)", backgroundSize: "30px 30px", opacity: 0.12 }} />
 
-      <div className="absolute top-6 left-16 z-50 pointer-events-none hidden md:block">
+      <div className="absolute top-6 left-16 z-50 pointer-events-none hidden lg:block">
         <span className="text-[10px] text-[var(--accent-cyan)] uppercase tracking-[0.3em] opacity-60">THE MUSIC VAULT</span>
       </div>
 
@@ -501,7 +506,7 @@ export default function TheMusicVault() {
           x: leftOpen ? 0 : -8 
         }} 
         transition={{ type: "spring", stiffness: 420, damping: 40 }} 
-        className="absolute left-0 top-0 h-full w-[52px] z-50 flex flex-col items-center justify-center gap-9 cursor-pointer"
+        className="absolute left-0 top-0 h-full w-[44px] lg:w-[52px] z-50 flex flex-col items-center justify-center gap-9 cursor-pointer"
       >
         <div className="absolute top-5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "#22d3ee", boxShadow: "0 0 8px rgba(34,211,238,0.7)" }} />
         {[ { label: "Home", href: "/#home" }, { label: "Projects", href: "/#projects" }, { label: "Music", href: "/music" }, { label: "Resume", href: "/resume" } ].map(({ label, href }) => (
@@ -510,9 +515,107 @@ export default function TheMusicVault() {
         <div className="absolute bottom-5 w-px h-7" style={{ background: "linear-gradient(to bottom, rgba(34,211,238,0.3), transparent)" }} />
       </motion.nav>
 
-      <div className="relative flex-1 flex flex-row items-center justify-center gap-6 z-40 pt-8 px-12" onMouseMove={nudgeControls}>
+      {/* ── MOBILE ONLY: Waffle Drawer Toggle (Moved to Top Right) ── */}
+      {!drawerOpen && (
+        <button 
+          onClick={() => setDrawerOpen(true)} 
+          className="fixed top-6 right-0 w-12 h-12 bg-[#050505]/80 border-y border-l border-[var(--accent-cyan)]/20 rounded-l-xl flex lg:hidden items-center justify-center text-[var(--accent-cyan)] backdrop-blur-md z-50 hover:bg-[#0a0a0a] shadow-[-5px_0_15px_rgba(0,0,0,0.5)]"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+             <rect x="4" y="4" width="4" height="4" rx="1" />
+             <rect x="10" y="4" width="4" height="4" rx="1" />
+             <rect x="16" y="4" width="4" height="4" rx="1" />
+             <rect x="4" y="10" width="4" height="4" rx="1" />
+             <rect x="10" y="10" width="4" height="4" rx="1" />
+             <rect x="16" y="10" width="4" height="4" rx="1" />
+             <rect x="4" y="16" width="4" height="4" rx="1" />
+             <rect x="10" y="16" width="4" height="4" rx="1" />
+             <rect x="16" y="16" width="4" height="4" rx="1" />
+          </svg>
+        </button>
+      )}
+
+      {/* ── MOBILE ONLY: Right-Side Glassmorphic Drawer ── */}
+      <AnimatePresence>
+        {drawerOpen && (
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.2}
+            onDragEnd={(e, { offset }) => {
+              if (offset.x > 50) setDrawerOpen(false);
+            }}
+            className="fixed top-0 right-0 w-[280px] h-[100dvh] bg-[#050505]/95 backdrop-blur-2xl border-l border-[var(--accent-cyan)]/20 z-[60] flex flex-col lg:hidden shadow-[-20px_0_50px_rgba(0,0,0,0.8)]"
+          >
+            <button onClick={() => setDrawerOpen(false)} className="absolute top-1/2 -left-12 -translate-y-1/2 w-12 h-16 bg-[#050505]/95 border-y border-l border-[var(--accent-cyan)]/20 rounded-l-xl flex items-center justify-center text-[var(--accent-cyan)] backdrop-blur-xl shadow-[-10px_0_20px_rgba(0,0,0,0.5)]">
+               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <rect x="4" y="4" width="4" height="4" rx="1" />
+                  <rect x="10" y="4" width="4" height="4" rx="1" />
+                  <rect x="16" y="4" width="4" height="4" rx="1" />
+                  <rect x="4" y="10" width="4" height="4" rx="1" />
+                  <rect x="10" y="10" width="4" height="4" rx="1" />
+                  <rect x="16" y="10" width="4" height="4" rx="1" />
+                  <rect x="4" y="16" width="4" height="4" rx="1" />
+                  <rect x="10" y="16" width="4" height="4" rx="1" />
+                  <rect x="16" y="16" width="4" height="4" rx="1" />
+               </svg>
+            </button>
+
+            <div className="flex flex-col h-1/2 border-b border-[var(--accent-cyan)]/10">
+               <div className="p-5 border-b border-white/5">
+                  <span className="text-[10px] text-[var(--accent-cyan)] uppercase tracking-widest block mb-2">Queue // {activeCat.id}</span>
+                  <div className="h-px w-full bg-[var(--accent-cyan)]/20" />
+               </div>
+               <div className="flex-1 p-3 space-y-2 overflow-y-auto">
+                  {activeCat.tracks.length > 0 ? activeCat.tracks.map((track, idx) => (
+                    <button 
+                      key={track.id} 
+                      onClick={() => setActiveTrackIdx(idx)} 
+                      className={`group w-full text-left flex items-center gap-3 p-3 rounded-xl transition-all duration-300 ${
+                        idx === activeTrackIdx 
+                          ? "bg-[var(--accent-cyan)]/10 border border-[var(--accent-cyan)]/30 shadow-[0_0_15px_rgba(34,211,238,0.1)]" 
+                          : "bg-transparent border border-transparent hover:bg-white/5 hover:border-[var(--accent-cyan)]/20"
+                      }`}
+                    >
+                      <span className={`text-[8px] transition-colors duration-300 ${
+                        idx === activeTrackIdx ? 'text-[var(--accent-cyan)] drop-shadow-[0_0_5px_rgba(34,211,238,0.8)]' : 'text-white/20 group-hover:text-[var(--accent-cyan)]/60'
+                      }`}>▶</span>
+                      <span className={`text-xs truncate transition-colors duration-300 ${
+                        idx === activeTrackIdx ? 'text-[var(--accent-cyan)] font-bold' : 'text-white/50 group-hover:text-white'
+                      }`}>{track.title}</span>
+                    </button>
+                  )) : <p className="text-xs text-white/30 italic p-2">// empty_queue</p>}
+               </div>
+            </div>
+
+            <div className="flex flex-col h-1/2">
+               <div className="p-5 border-b border-white/5">
+                  <span className="text-[10px] text-[var(--accent-cyan)] uppercase tracking-widest block mb-2">Info</span>
+                  <div className="h-px w-full bg-[var(--accent-cyan)]/20" />
+               </div>
+               <div className="flex-1 p-5 space-y-5 overflow-y-auto flex flex-col">
+                  {activeTrack ? (
+                    <>
+                      <div><span className="text-[8px] text-[var(--accent-cyan)] uppercase tracking-widest block mb-1">Title</span><span className="text-sm text-white/80">{activeTrack.title}</span></div>
+                      {activeTrack.originalArtist && <div><span className="text-[8px] text-[var(--accent-cyan)] uppercase tracking-widest block mb-1">Original By</span><span className="text-sm text-white/60">{activeTrack.originalArtist}</span></div>}
+                      {activeTrack.location && <div><span className="text-[8px] text-[var(--accent-cyan)] uppercase tracking-widest block mb-1">Location</span><span className="text-xs text-white/60 bg-white/5 px-2 py-1 rounded">{activeTrack.location}</span></div>}
+                      <div><span className="text-[8px] text-[var(--accent-cyan)] uppercase tracking-widest block mb-2">Analysis</span><p className="text-xs text-white/40 leading-relaxed">{activeTrack.notes}</p></div>
+                    </>
+                  ) : <p className="text-xs text-white/30 italic">// offline</p>}
+               </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="relative flex-1 flex flex-row items-center justify-center gap-4 lg:gap-6 z-40 pt-6 lg:pt-8 pl-[52px] pr-4 lg:px-12" onMouseMove={nudgeControls} onTouchStart={nudgeControls}>
         
-        <div className="hidden lg:flex flex-col w-64 h-[60vh] bg-[#050505]/80 backdrop-blur-md border border-[var(--accent-cyan)]/10 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden">
+        {/* DESKTOP ONLY: Left HUD Tracklist */}
+        <div className="hidden lg:flex flex-col w-64 h-[60vh] bg-[#050505]/80 backdrop-blur-md border border-[var(--accent-cyan)]/10 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden shrink-0">
           <div className="p-6 border-b border-white/5">
             <span className="text-[10px] text-[var(--accent-cyan)] uppercase tracking-widest block mb-2">Queue // {activeCat.id}</span>
             <div className="h-px w-full bg-[var(--accent-cyan)]/20" />
@@ -539,8 +642,9 @@ export default function TheMusicVault() {
           </div>
         </div>
 
-        <div ref={playerContainerRef} className={`relative flex-1 flex items-center justify-center transition-all duration-300 ${isFullscreen ? "bg-[#020202] h-screen w-screen fixed inset-0 z-50 p-0" : "h-[60vh] max-w-4xl"}`}>
-          <div className={`relative overflow-hidden cursor-pointer w-full flex-shrink-0 ${isFullscreen ? "h-full rounded-none border-none" : "h-full rounded-2xl border border-[var(--accent-cyan)]/20 shadow-[0_0_80px_rgba(0,0,0,0.8),_0_0_200px_rgba(34,211,238,0.04)]"}`} onClick={togglePlay}>
+        {/* ── VIDEO PLAYER (Updated Height/Safe Zone for Mobile) ── */}
+        <div ref={playerContainerRef} className={`relative flex-1 flex items-center justify-center transition-all duration-300 ${isFullscreen ? "bg-[#020202] h-[100dvh] lg:h-screen w-screen fixed inset-0 z-50 p-0" : "h-[45vh] lg:h-[60vh] max-w-4xl mb-12 lg:mb-0"}`}>
+          <div className={`relative overflow-hidden cursor-pointer w-full h-full flex-shrink-0 ${isFullscreen ? "rounded-none border-none" : "rounded-2xl border border-[var(--accent-cyan)]/20 shadow-[0_0_80px_rgba(0,0,0,0.8),_0_0_200px_rgba(34,211,238,0.04)]"}`} onClick={togglePlay}>
             {activeTrack ? (
               <>
                 <video ref={videoRef} className="absolute inset-0 w-full h-full object-contain bg-black" playsInline crossOrigin="anonymous" muted={muted} onTimeUpdate={() => { const v = videoRef.current; if (!v) return; setProgress(((v.currentTime / v.duration) * 100) || 0); setCurTime(fmt(v.currentTime)); }} onLoadedMetadata={() => setDur(fmt(videoRef.current?.duration))} onEnded={() => { if (activeTrackIdx < activeCat.tracks.length - 1) { setActiveTrackIdx(prev => prev + 1); } else { setIsPlaying(false); } }}>
@@ -556,14 +660,12 @@ export default function TheMusicVault() {
                       </svg>
                     </div>
                     <span className="text-[10px] text-[var(--accent-cyan)] uppercase tracking-[0.4em] animate-pulse">Audio Only</span>
-  
                   </div>
                 )}
 
-                
                 {isFullscreen && (
                   <motion.div
-                    className="absolute top-8 left-8 z-40 w-72 bg-black/50 backdrop-blur-md border border-[var(--accent-cyan)]/20 rounded-2xl p-6 shadow-2xl pointer-events-none"
+                    className="absolute top-8 left-8 z-40 w-72 bg-black/50 backdrop-blur-md border border-[var(--accent-cyan)]/20 rounded-2xl p-6 shadow-2xl pointer-events-none hidden lg:block"
                     animate={{ opacity: ctrlVis || !isPlaying ? 1 : 0 }}
                     transition={{ duration: 0.28 }}
                   >
@@ -579,24 +681,24 @@ export default function TheMusicVault() {
 
                 {isFullscreen && activeCat.tracks.length > 1 && (
                   <motion.div
-                    className="absolute inset-y-0 left-0 right-0 z-30 pointer-events-none flex items-center justify-between px-8"
+                    className="absolute inset-y-0 left-0 right-0 z-30 pointer-events-none flex items-center justify-between px-4 lg:px-8"
                     animate={{ opacity: ctrlVis || !isPlaying ? 1 : 0 }}
                     transition={{ duration: 0.28 }}
                   >
                     <button
                       onClick={(e) => { e.stopPropagation(); prevTrack(); }}
                       disabled={activeTrackIdx === 0}
-                      className="pointer-events-auto w-14 h-14 rounded-full flex items-center justify-center bg-black/50 border border-white/10 text-white/50 backdrop-blur-md transition-all hover:text-[var(--accent-cyan)] hover:border-[var(--accent-cyan)]/50 hover:bg-black/80 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
+                      className="pointer-events-auto w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center bg-black/50 border border-white/10 text-white/50 backdrop-blur-md transition-all hover:text-[var(--accent-cyan)] hover:border-[var(--accent-cyan)]/50 hover:bg-black/80 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
                     >
-                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                     </button>
 
                     <button
                       onClick={(e) => { e.stopPropagation(); nextTrack(); }}
                       disabled={activeTrackIdx === activeCat.tracks.length - 1}
-                      className="pointer-events-auto w-14 h-14 rounded-full flex items-center justify-center bg-black/50 border border-white/10 text-white/50 backdrop-blur-md transition-all hover:text-[var(--accent-cyan)] hover:border-[var(--accent-cyan)]/50 hover:bg-black/80 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
+                      className="pointer-events-auto w-10 h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center bg-black/50 border border-white/10 text-white/50 backdrop-blur-md transition-all hover:text-[var(--accent-cyan)] hover:border-[var(--accent-cyan)]/50 hover:bg-black/80 hover:scale-110 disabled:opacity-0 disabled:pointer-events-none"
                     >
-                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                     </button>
                   </motion.div>
                 )}
@@ -604,26 +706,26 @@ export default function TheMusicVault() {
                 <AnimatePresence>
                   {!isPlaying && (
                     <motion.div key="play-overlay" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} transition={{ duration: 0.15 }} className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none">
-                      <div className="w-20 h-20 rounded-full bg-black/60 border border-[var(--accent-cyan)]/30 shadow-[0_0_40px_rgba(34,211,238,0.15)] backdrop-blur-md flex items-center justify-center pl-1 text-[var(--accent-cyan)]">
+                      <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-black/60 border border-[var(--accent-cyan)]/30 shadow-[0_0_40px_rgba(34,211,238,0.15)] backdrop-blur-md flex items-center justify-center pl-1 text-[var(--accent-cyan)]">
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
 
-                <motion.div className="absolute bottom-0 left-0 w-full z-40 pt-12 pb-4 px-4" animate={{ opacity: ctrlVis || !isPlaying ? 1 : 0 }} transition={{ duration: 0.28 }} onClick={(e) => e.stopPropagation()} style={{ background: "linear-gradient(to top, rgba(2,2,2,0.95) 0%, transparent 100%)" }}>
-                  <div ref={seekRef} onClick={handleSeek} className="group relative mb-4 cursor-pointer h-1.5 bg-white/10 rounded-full">
+                <motion.div className="absolute bottom-0 left-0 w-full z-40 pt-12 pb-2 lg:pb-4 px-3 lg:px-4" animate={{ opacity: ctrlVis || !isPlaying ? 1 : 0 }} transition={{ duration: 0.28 }} onClick={(e) => e.stopPropagation()} style={{ background: "linear-gradient(to top, rgba(2,2,2,0.95) 0%, transparent 100%)" }}>
+                  <div ref={seekRef} onClick={handleSeek} className="group relative mb-3 lg:mb-4 cursor-pointer h-1.5 bg-white/10 rounded-full">
                     <div className="absolute top-0 left-0 h-full bg-[var(--accent-cyan)] rounded-full pointer-events-none transition-all duration-75" style={{ width: `${progress}%`, boxShadow: "0 0 10px rgba(34,211,238,0.5)" }} />
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 lg:gap-4">
                     <button onClick={togglePlay} className="text-white hover:text-[var(--accent-cyan)] transition-colors">
-                      {isPlaying ? <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg> : <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>}
+                      {isPlaying ? <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg> : <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>}
                     </button>
-                    <span className="text-xs text-white/50 w-24">{curTime} / {dur}</span>
+                    <span className="text-[10px] lg:text-xs text-white/50 w-20 lg:w-24">{curTime} / {dur}</span>
                     <div className="flex-1" />
                     
-                    <button onClick={toggleFullScreen} className="text-white/50 hover:text-[var(--accent-cyan)] transition-colors ml-4">
-                      {isFullscreen ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg> : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>}
+                    <button onClick={toggleFullScreen} className="text-white/50 hover:text-[var(--accent-cyan)] transition-colors ml-2 lg:ml-4">
+                      {isFullscreen ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg> : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>}
                     </button>
                   </div>
                 </motion.div>
@@ -637,7 +739,8 @@ export default function TheMusicVault() {
           </div>
         </div>
 
-        <div className="hidden lg:flex flex-col w-64 h-[60vh] bg-[#050505]/80 backdrop-blur-md border border-[var(--accent-cyan)]/10 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden">
+        {/* DESKTOP ONLY: Right HUD Telemetry */}
+        <div className="hidden lg:flex flex-col w-64 h-[60vh] bg-[#050505]/80 backdrop-blur-md border border-[var(--accent-cyan)]/10 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden shrink-0">
           <div className="p-6 border-b border-white/5">
             <span className="text-[10px] text-[var(--accent-cyan)] uppercase tracking-widest block mb-2">Info</span>
             <div className="h-px w-full bg-[var(--accent-cyan)]/20" />
@@ -663,11 +766,11 @@ export default function TheMusicVault() {
 
       </div>
 
-      <div className="h-[280px] w-full shrink-0 relative z-20 bg-transparent overflow-visible" style={{ cursor: wheelCursor ? "grabbing" : "grab", touchAction: "pan-y" }} onPointerDown={handleWheelPointerDown} onTouchStart={handleWheelTouchStart}>
+      <div className="h-[220px] lg:h-[280px] w-full shrink-0 relative z-20 bg-transparent overflow-visible" style={{ cursor: wheelCursor ? "grabbing" : "grab", touchAction: "pan-y" }} onPointerDown={handleWheelPointerDown} onTouchStart={handleWheelTouchStart}>
         
         <canvas ref={canvasRef} className="absolute bottom-0 left-0 w-full h-full z-0 pointer-events-none opacity-40" />
 
-        <div className="absolute top-0 left-0 right-0 z-30 pointer-events-none" style={{ height: 60, background: "linear-gradient(to bottom, #020202 20%, transparent)" }} />
+        <div className="absolute top-0 left-0 right-0 z-0 pointer-events-none" style={{ height: 60, background: "linear-gradient(to bottom, #020202 20%, transparent)" }} />
         
         <div className="absolute top-0 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex flex-col items-center">
           <div style={{ width: 2, height: 20, background: "linear-gradient(to bottom, rgba(34,211,238,0.8), transparent)" }} />
@@ -707,20 +810,20 @@ export default function TheMusicVault() {
                     className="group flex flex-col items-center gap-2 bg-transparent border-none cursor-pointer p-0"
                   >
                     <div 
-                      className={`w-[70px] h-[70px] rounded-full flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                      className={`w-[55px] h-[55px] lg:w-[70px] lg:h-[70px] rounded-full flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
                         isActive 
                           ? "bg-[var(--accent-cyan)]/10 border border-[var(--accent-cyan)]/60 shadow-[0_0_30px_rgba(34,211,238,0.25),inset_0_0_20px_rgba(34,211,238,0.1)] scale-[1.15]" 
                           : "bg-[#080808]/90 border border-white/10 group-hover:border-[var(--accent-cyan)]/50 group-hover:shadow-[0_0_15px_rgba(34,211,238,0.15)] group-hover:bg-[#0a0a0a] scale-100"
                       }`}
                     >
                       <Icon 
-                        className={`w-7 h-7 transition-colors duration-400 ${
+                        className={`w-6 h-6 lg:w-7 lg:h-7 transition-colors duration-400 ${
                           isActive ? "text-[var(--accent-cyan)]" : "text-white/40 group-hover:text-[var(--accent-cyan)]"
                         }`} 
                       />
                     </div>
                     <span 
-                      className={`text-[10px] tracking-[0.4em] uppercase font-inherit transition-all duration-400 block ${
+                      className={`text-[9px] lg:text-[10px] tracking-[0.4em] uppercase font-inherit transition-all duration-400 block ${
                         isActive 
                           ? "text-[var(--accent-cyan)] drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]" 
                           : "text-white/30 group-hover:text-white/90"
