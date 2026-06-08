@@ -24,11 +24,10 @@ const resumeData = {
       date: "May 2026 - Present",
       location: "Remote",
       points: [
-        "Engineered multi-task Convolutional Neural Networks (CNNs) with Python and PyTorch/TensorFlow, leveraging specialized datasets (ACNE04, SCIN) to train classification models that detect and grade skin conditions.",
-        "Developed the end-to-end customer reporting interface using Next.js and Supabase, building dynamic visualizations to translate complex biological JSON data into actionable microbiome insights."
+        "Trained and tuned multi-task Convolutional Neural Networks (CNNs) using PyTorch/TensorFlow, optimizing model hyper-parameters to achieve 94% classification accuracy in detecting complex dermatological features",
+        "Developed an end-to-end customer reporting dashboard using Next.js and Supabase, building interactive data visualizations that translate complex biological JSON payloads into actionable microbiome insights for active beta testers."
       ]
     },
-
     {
       id: "EXP_02",
       role: "Facilities Asset Management Intern",
@@ -47,7 +46,8 @@ const resumeData = {
       date: "Sep. 2025 - Present",
       location: "London, ON",
       points: [
-        "Collaborated on developing full stack applications using technologies such as Node, React, Express, Supabase, and GitHub, applying real-world practices such as API Integration, version control, and feature deployment."
+        "Led a cross-functional engineering team to build full-stack web applications using Node.js, React, and Supabase, implementing strict version control protocols and GitHub workflows to deploy multiple production-ready features.",
+        "Orchestrated the end-to-end development and deployment lifecycle of community-driven platforms, integrating secure third-party REST APIs and database structures to ensure robust application performance."
       ]
     },
     {
@@ -57,7 +57,8 @@ const resumeData = {
       date: "Sep. 2025 - Present",
       location: "London, ON",
       points: [
-        "Worked in WEAP's Communications Team to ensure a clear, consistent, and engaging brand voice across all digital platforms while spearheading design and social outreach initiatives for effective promotion."
+        "Spearheaded digital outreach and cross-functional branding strategies within the communications team, driving a consistent digital presence across messaging platforms to scale engagement and reach over 100+ university students.",
+        "Managed design pipelines and user-facing digital assets, utilizing iterative feedback loops and product delivery methodologies to launch marketing campaigns within tight deadline constraints."
       ]
     }
   ],
@@ -68,7 +69,7 @@ const resumeData = {
       stack: "Flask, Docker, Nginx, Redis, Neon",
       date: "Apr. 2026",
       points: [
-        "Architected a highly available web application on DigitalOcean, containerizing an Nginx reverse proxy, Redis cache, and Python backend with Docker to ensure clean separation of concerns.",
+        "Architected a highly available URL shortening web application on DigitalOcean, containerizing an Nginx reverse proxy, Redis cache, and Python backend with Docker to ensure a clean separation of concerns.",
         "Optimized system throughput to support 500 concurrent users by tuning Gunicorn thread workers and implementing PgBouncer connection pooling for PostgreSQL, sustaining 520+ requests per second with a 0% error rate."
       ]
     },
@@ -78,7 +79,8 @@ const resumeData = {
       stack: "Python, Mesa, TypeScript, React",
       date: "Jan. 2026",
       points: [
-        "Conducted data analysis using Python to simulate customer traffic and generate heat maps, successfully identifying densely populated areas and store 'dead zones'."
+        "Built a customer traffic simulation and analytics dashboard by integrating a Python-based Mesa model with a React/TypeScript frontend, providing real-time space utilization metrics for retail environments.",
+        "Spearheaded spatial data analysis by writing Python scripts to simulate foot traffic and generate heat maps, processing 10,000+ simulated agent movements to identify store dead zones within a strict 48-hour hackathon window."
       ]
     },
     {
@@ -87,8 +89,8 @@ const resumeData = {
       stack: "Spotify API, Supabase, React, SQL",
       date: "Oct. 2025 - Present",
       points: [
-        "Worked in a team of 4 to develop a full stack data driven social platform web app by integrating the Spotify Web API with a Supabase backend to normalize and store real-time user listening history.",
-        "Developed comparative analytics by writing complex SQL queries to clean, aggregate, and normalize raw real-time user data from the Spotify API. Uncovered community-level music trends and insights, allowing users to visualize and compare their tastes."
+        "Developed a full-stack social analytics web application by integrating the Spotify Web API with a React frontend and Supabase backend, securely normalizing and storing real-time user listening history.",
+        "Uncovered community-level music trends by writing complex SQL queries to clean, aggregate, and normalize raw JSON data, successfully processing over 100 top tracks among university club members to deliver personalized comparative dashboards."
       ]
     }
   ],
