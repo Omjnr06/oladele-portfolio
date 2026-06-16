@@ -299,8 +299,8 @@ export default function Home() {
             <div className="w-full relative h-[550px] md:h-[600px] bg-[#0a0a0a] border border-[var(--accent-cyan)]/30 rounded-xl overflow-hidden flex flex-col shadow-[0_0_40px_rgba(34,211,238,0.1)] transition-shadow duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.2)]">
               <div className="absolute top-4 right-4 md:top-6 md:right-6 z-50 flex gap-2 md:gap-3">
                 {filteredProjects.length > 0 && filteredProjects[currentProjectIndex].caseStudyUrl && (
-                  <Link href={filteredProjects[currentProjectIndex].caseStudyUrl} className="px-4 py-2 bg-[#8b5cf6]/20 text-[#8b5cf6] border border-[#8b5cf6]/30 backdrop-blur-md rounded-full text-[9px] md:text-[10px] uppercase font-mono tracking-widest hover:bg-[#8b5cf6]/30 transition-all shadow-[0_0_15px_rgba(139,92,246,0.2)]">
-                    Read Case Study ↗
+                  <Link href={filteredProjects[currentProjectIndex].caseStudyUrl} className="px-4 py-2 bg-[#8b5cf6]/20 text-[#fdfdfd] border border-[#8b5cf6]/30 backdrop-blur-md rounded-full text-[9px] md:text-[10px] uppercase font-mono tracking-widest hover:bg-[#8b5cf6]/30 transition-all shadow-[0_0_15px_rgba(139,92,246,0.2)]">
+                    View More 
                   </Link>
                 )}
                 {filteredProjects.length > 0 && filteredProjects[currentProjectIndex].liveUrl && (
