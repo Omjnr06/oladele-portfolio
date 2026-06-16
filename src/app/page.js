@@ -77,6 +77,18 @@ export default function Home() {
       videoUrl: "",
       imageUrl: "/images/SpacefinderAI-output.jpg",
       imageDisplay: "cover" 
+    },
+    {
+      id: "PROJECT 04",
+      title: "PimpleNet",
+      category: "MACHINE LEARNING",
+      isInternship: true,
+      stack: ["Python", "CNNs", "EfficientNetB0", "Transfer Learning"],
+      description: "Developed a deep learning acne severity classifier to enhance microbiome-based skincare personalization. Fine-tuned an EfficientNetB0 model achieving 95.5% validation accuracy on real-world customer images.",
+      caseStudyUrl: "/projects/pimplenet",
+      videoUrl: "",
+      imageUrl: "/images/pimplenetthumbnail.png",
+      imageDisplay: "cover" 
     }
   ];
 
@@ -97,6 +109,18 @@ export default function Home() {
   }, [isPaused, galleryImages.length]);
 
   useEffect(() => {
+    if (window.location.hash) {
+      const id = window.location.hash.substring(1);
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     const handleScrollEvent = () => {
       if (window.scrollY > 300) setShowScrollTop(true);
       else setShowScrollTop(false);
@@ -112,7 +136,6 @@ export default function Home() {
         setActiveSection('home');
       }
     };
-
     window.addEventListener('scroll', handleScrollEvent);
     handleScrollEvent();
     return () => window.removeEventListener('scroll', handleScrollEvent);
@@ -176,7 +199,6 @@ export default function Home() {
         <div className="px-6 md:px-16 lg:px-24 w-full z-10 py-16 md:py-24 max-w-7xl mx-auto flex flex-col">
           
           <div id="home" className="mb-16 scroll-mt-24">
-            {/* UPDATED: Split name to allow clean wrapping on mobile */}
             <h1 className="text-[2.8rem] leading-[1.1] sm:text-5xl md:text-6xl lg:text-[5.5rem] xl:text-[7rem] font-extrabold mb-8 md:mb-10 tracking-tight flex flex-wrap gap-x-3 md:gap-x-5 overflow-visible pl-1 md:pl-2">
               <div className="flex">
                 {"Oladele".split("").map((letter, index) => (
@@ -276,6 +298,11 @@ export default function Home() {
 
             <div className="w-full relative h-[550px] md:h-[600px] bg-[#0a0a0a] border border-[var(--accent-cyan)]/30 rounded-xl overflow-hidden flex flex-col shadow-[0_0_40px_rgba(34,211,238,0.1)] transition-shadow duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.2)]">
               <div className="absolute top-4 right-4 md:top-6 md:right-6 z-50 flex gap-2 md:gap-3">
+                {filteredProjects.length > 0 && filteredProjects[currentProjectIndex].caseStudyUrl && (
+                  <Link href={filteredProjects[currentProjectIndex].caseStudyUrl} className="px-4 py-2 bg-[#8b5cf6]/20 text-[#8b5cf6] border border-[#8b5cf6]/30 backdrop-blur-md rounded-full text-[9px] md:text-[10px] uppercase font-mono tracking-widest hover:bg-[#8b5cf6]/30 transition-all shadow-[0_0_15px_rgba(139,92,246,0.2)]">
+                    Read Case Study ↗
+                  </Link>
+                )}
                 {filteredProjects.length > 0 && filteredProjects[currentProjectIndex].liveUrl && (
                   <a href={filteredProjects[currentProjectIndex].liveUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-[var(--accent-cyan)]/20 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/30 backdrop-blur-md rounded-full text-[9px] md:text-[10px] uppercase font-mono tracking-widest hover:bg-[var(--accent-cyan)]/30 transition-all shadow-[0_0_15px_rgba(34,211,238,0.2)]">
                     Live ↗
@@ -311,8 +338,14 @@ export default function Home() {
                       }}
                     >
                       <div className="flex-1 flex flex-col justify-start w-full pointer-events-none">
-                        <div className="font-mono text-[10px] text-[var(--accent-cyan)] tracking-widest mb-4 flex items-center gap-3 mt-1">
+                        <div className="font-mono text-[10px] text-[var(--accent-cyan)] tracking-widest mb-4 flex items-center gap-3 mt-1 flex-wrap">
                           <span>{filteredProjects[currentProjectIndex].id}</span>
+                          {filteredProjects[currentProjectIndex].isInternship && (
+                            <>
+                              <span className="text-white/20">//</span>
+                              <span className="text-[#8b5cf6] font-bold tracking-widest bg-[#8b5cf6]/10 px-2 py-0.5 rounded border border-[#8b5cf6]/20">INTERNSHIP</span>
+                            </>
+                          )}
                           <span className="text-white/20">//</span>
                           <span>{filteredProjects[currentProjectIndex].category}</span>
                         </div>
@@ -336,7 +369,7 @@ export default function Home() {
                           <video src={filteredProjects[currentProjectIndex].videoUrl} playsInline controls className="absolute inset-0 w-full h-full object-cover z-10" />
                         ) : filteredProjects[currentProjectIndex].imageUrl ? (
                           <div 
-                            className={`absolute inset-0 w-full h-full bg-center bg-no-repeat z-10 cursor-zoom-in ${filteredProjects[currentProjectIndex].imageDisplay === 'contain' ? 'bg-contain p-2' : 'bg-cover'}`}
+                            className={`absolute inset-0 w-full h-full bg-center bg-no-repeat z-10 cursor-zoom-in ${filteredProjects[currentProjectIndex].imageDisplay === 'contain' ? 'bg-contain p-6' : 'bg-cover'}`}
                             style={{ backgroundImage: `url('${filteredProjects[currentProjectIndex].imageUrl}')` }}
                             onClick={(e) => {
                               e.stopPropagation();
@@ -386,7 +419,6 @@ export default function Home() {
              <span className="font-mono text-[10px] text-[var(--accent-cyan)] tracking-[0.3em] uppercase mb-4">// Lets Work Together</span>
              <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 tracking-tight">Contact Information</h2>
 
-             {/* UPDATED: Constrained max-width to force 3-2 layout on mobile, flows inline on md: screens */}
              <div className="flex flex-wrap justify-center gap-6 md:gap-10 max-w-[280px] sm:max-w-[400px] md:max-w-none mx-auto">
                <a href="mailto:oj.magbadelo@gmail.com" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
