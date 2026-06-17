@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { musicLibrary } from "./music/page";
 
 export default function Home() {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
@@ -40,7 +41,8 @@ export default function Home() {
       githubUrl: "https://github.com/tudor-filimon/mustangs-wrapped",
       videoUrl: "/mustang-demo.mp4",
       imageUrl: "",
-      imageDisplay: "cover"
+      imageDisplay: "cover",
+      isFeatured: true,
     },
     {
       id: "PROJECT 01",
@@ -88,7 +90,8 @@ export default function Home() {
       caseStudyUrl: "/projects/pimplenet",
       videoUrl: "",
       imageUrl: "/images/pimplenetthumbnail.png",
-      imageDisplay: "cover" 
+      imageDisplay: "cover",
+      isFeatured: true,
     }
   ];
 
@@ -153,12 +156,64 @@ export default function Home() {
       document.body.style.width = '';
       window.scrollTo(0, savedScrollY.current);
     }
+
     return () => {
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
     };
   }, [selectedImage]);
+
+  const [spotlightMode, setSpotlightMode] = useState("TECH"); 
+  const [featuredTechIndex, setFeaturedTechIndex] = useState(0);
+  const [featuredMusicIndex, setFeaturedMusicIndex] = useState(0);
+  const [isSpotlightHovered, setIsSpotlightHovered] = useState(false);
+
+  // Force PimpleNet to be first
+  const featuredProjects = projects.filter(p => p.isFeatured).sort((a, b) => {
+    if (a.title === "PimpleNet") return -1;
+    if (b.title === "PimpleNet") return 1;
+    return 0;
+  });
+  
+  const rawFeaturedMusic = musicLibrary.flatMap(category => category.tracks).filter(track => track.isFeatured);
+  const featuredMusicTracks = rawFeaturedMusic.length > 0 ? rawFeaturedMusic : [musicLibrary[0].tracks[0]];
+  const hasMultipleSpotlights = spotlightMode === "TECH" ? featuredProjects.length > 1 : featuredMusicTracks.length > 1;
+
+  useEffect(() => {
+    if (isSpotlightHovered) return;
+    
+    const length = spotlightMode === "TECH" ? featuredProjects.length : featuredMusicTracks.length;
+    if (length <= 1) return;
+    
+    const timer = setInterval(() => {
+      if (spotlightMode === "TECH") {
+        setFeaturedTechIndex((prev) => (prev + 1) % length);
+      } else {
+        setFeaturedMusicIndex((prev) => (prev + 1) % length);
+      }
+    }, 12000); 
+    
+    return () => clearInterval(timer);
+  }, [spotlightMode, featuredProjects.length, featuredMusicTracks.length, isSpotlightHovered]);
+
+  const handleNextSpotlight = (e) => {
+    e.stopPropagation();
+    if (spotlightMode === "TECH") {
+      setFeaturedTechIndex(prev => (prev + 1) % featuredProjects.length);
+    } else {
+      setFeaturedMusicIndex(prev => (prev + 1) % featuredMusicTracks.length);
+    }
+  };
+
+  const handlePrevSpotlight = (e) => {
+    e.stopPropagation();
+    if (spotlightMode === "TECH") {
+      setFeaturedTechIndex(prev => prev === 0 ? featuredProjects.length - 1 : prev - 1);
+    } else {
+      setFeaturedMusicIndex(prev => prev === 0 ? featuredMusicTracks.length - 1 : prev - 1);
+    }
+  };
 
   const handleScroll = (e, targetId) => {
     e.preventDefault();
@@ -267,6 +322,211 @@ export default function Home() {
               </div>
             </div>
           </motion.div>
+
+
+          {/* --- SPOTLIGHT SECTION --- */}
+          <div className="w-full flex flex-col mb-32 scroll-mt-24" id="spotlight">
+            
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-6">
+              <div className="flex items-center gap-4">
+                <div className="w-2 h-2 rounded-full bg-[#8b5cf6] shadow-[0_0_10px_#8b5cf6] animate-pulse" />
+                <h2 className="font-mono text-xl md:text-2xl tracking-[0.3em] text-white uppercase">Spotlight</h2>
+              </div>
+
+              <div className="flex items-center bg-[#0a0a0a] border border-white/10 rounded-full p-1 shadow-lg w-full md:w-auto">
+                <button 
+                  onClick={() => setSpotlightMode("TECH")}
+                  className={`flex-1 md:flex-none px-6 py-2 rounded-full font-mono text-[10px] uppercase tracking-widest transition-all duration-300 ${
+                    spotlightMode === "TECH" 
+                      ? "bg-[var(--accent-cyan)]/20 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/30 shadow-[0_0_15px_rgba(34,211,238,0.2)]" 
+                      : "text-white/40 hover:text-white"
+                  }`}
+                >
+                  Tech
+                </button>
+                <button 
+                  onClick={() => setSpotlightMode("MUSIC")}
+                  className={`flex-1 md:flex-none px-6 py-2 rounded-full font-mono text-[10px] uppercase tracking-widest transition-all duration-300 ${
+                    spotlightMode === "MUSIC" 
+                      ? "bg-[#8b5cf6]/20 text-[#8b5cf6] border border-[#8b5cf6]/30 shadow-[0_0_15px_rgba(139,92,246,0.2)]" 
+                      : "text-white/40 hover:text-white"
+                  }`}
+                >
+                  Music
+                </button>
+              </div>
+            </div>
+
+            {/* Spotlight Display */}
+            <div 
+              className="w-full h-[500px] md:h-[600px] bg-[#050505] border border-white/10 rounded-2xl overflow-hidden relative shadow-[0_0_40px_rgba(0,0,0,0.8)] group"
+              onMouseEnter={() => setIsSpotlightHovered(true)}
+              onMouseLeave={() => setIsSpotlightHovered(false)}
+            >
+              
+              {/* Navigation Arrows (Only show if there are multiple items) */}
+              {hasMultipleSpotlights && (
+                <>
+                  <button onClick={handlePrevSpotlight} className={`absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/10 transition-all duration-300 hover:bg-black/70 hover:scale-110 ${isSpotlightHovered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 pointer-events-none'}`}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                  </button>
+                  <button onClick={handleNextSpotlight} className={`absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/10 transition-all duration-300 hover:bg-black/70 hover:scale-110 ${isSpotlightHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'}`}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                  </button>
+                </>
+              )}
+
+              <AnimatePresence mode="wait">
+                
+                {/* --- TECH SPOTLIGHT --- */}
+                {spotlightMode === "TECH" && featuredProjects.length > 0 && (
+                  <motion.div 
+                    key={`tech-${featuredTechIndex}`}
+                    initial={{ opacity: 0, scale: 1.02 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                    className="absolute inset-0 w-full h-full"
+                  >
+                    <div className="absolute inset-0 z-0">
+                      {featuredProjects[featuredTechIndex].videoUrl ? (
+                        <video 
+                          src={featuredProjects[featuredTechIndex].videoUrl} 
+                          autoPlay muted loop playsInline 
+                          className="w-full h-full object-cover opacity-40"
+                        />
+                      ) : (
+                        <div 
+                          className="w-full h-full bg-cover bg-center opacity-30"
+                          style={{ backgroundImage: `url('${featuredProjects[featuredTechIndex].imageUrl}')` }}
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-[#020202]/80 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#020202] via-[#020202]/50 to-transparent" />
+                    </div>
+
+                    <div className="absolute inset-0 z-10 flex flex-col justify-end p-6 md:p-12">
+                      <div className="max-w-3xl">
+                        <div className="font-mono text-[10px] text-[var(--accent-cyan)] tracking-widest mb-4 flex items-center gap-3 flex-wrap">
+                          {featuredProjects[featuredTechIndex].isInternship && (
+                            <>
+                              <span className="text-[#8b5cf6] font-bold tracking-widest bg-[#8b5cf6]/10 px-2 py-0.5 rounded border border-[#8b5cf6]/20">INTERNSHIP</span>
+                              <span className="text-white/20">//</span>
+                            </>
+                          )}
+                          <span>{featuredProjects[featuredTechIndex].category}</span>
+                        </div>
+                        
+                        <h3 className="text-3xl md:text-6xl font-bold text-white tracking-tight mb-4 drop-shadow-lg">
+                          {featuredProjects[featuredTechIndex].title}
+                        </h3>
+                        
+                        <p className="text-white/70 text-sm md:text-lg leading-relaxed font-light mb-8 line-clamp-3 md:line-clamp-none">
+                          {featuredProjects[featuredTechIndex].description}
+                        </p>
+                        
+                        <div className="flex flex-wrap gap-3 md:gap-4 pb-8 md:pb-0">
+                          {featuredProjects[featuredTechIndex].caseStudyUrl && (
+                            <Link href={featuredProjects[featuredTechIndex].caseStudyUrl} className="px-5 py-2.5 md:px-6 md:py-3 bg-[#8b5cf6]/20 text-[#8b5cf6] border border-[#8b5cf6]/30 backdrop-blur-md rounded shadow-[0_0_15px_rgba(139,92,246,0.2)] text-[9px] md:text-xs uppercase font-mono tracking-widest hover:bg-[#8b5cf6]/30 hover:-translate-y-1 transition-all">
+                              Read Case Study ↗
+                            </Link>
+                          )}
+
+                          {featuredProjects[featuredTechIndex].liveUrl ? (
+                            <a href={featuredProjects[featuredTechIndex].liveUrl} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 md:px-6 md:py-3 bg-white/5 text-white border border-white/20 backdrop-blur-md rounded text-[9px] md:text-xs uppercase font-mono tracking-widest hover:bg-white/10 hover:-translate-y-1 transition-all">
+                              Live ↗
+                            </a>
+                          ) : featuredProjects[featuredTechIndex].githubUrl ? (
+                            <a href={featuredProjects[featuredTechIndex].githubUrl} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 md:px-6 md:py-3 bg-white/5 text-white border border-white/20 backdrop-blur-md rounded text-[9px] md:text-xs uppercase font-mono tracking-widest hover:bg-white/10 hover:-translate-y-1 transition-all">
+                              View Source ↗
+                            </a>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+
+                    {featuredProjects.length > 1 && (
+                      <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 z-20 flex gap-2">
+                        {featuredProjects.map((_, idx) => (
+                          <button
+                            key={idx}
+                            onClick={(e) => { e.stopPropagation(); setFeaturedTechIndex(idx); }}
+                            className={`h-1.5 rounded-full transition-all duration-300 ${
+                              featuredTechIndex === idx ? 'w-8 bg-[var(--accent-cyan)] shadow-[0_0_10px_var(--accent-cyan)]' : 'w-2 bg-white/20 hover:bg-white/50 cursor-pointer'
+                            }`}
+                            aria-label={`Go to slide ${idx + 1}`}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+
+                {/* --- MUSIC SPOTLIGHT --- */}
+                {spotlightMode === "MUSIC" && featuredMusicTracks.length > 0 && (
+                  <motion.div 
+                    key={`music-${featuredMusicIndex}`}
+                    initial={{ opacity: 0, scale: 1.02 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                    className="absolute inset-0 w-full h-full"
+                  >
+                    <div className="absolute inset-0 z-0">
+                      <video 
+                        src={featuredMusicTracks[featuredMusicIndex].videoUrl} 
+                        autoPlay muted loop playsInline 
+                        className="w-full h-full object-cover opacity-50 blur-[2px]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-[#020202]/80 to-[#020202]/30" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#020202] via-[#020202]/60 to-transparent" />
+                    </div>
+
+                    <div className="absolute inset-0 z-10 flex flex-col justify-end p-6 md:p-12">
+                      <div className="max-w-3xl">
+                        <div className="font-mono text-[10px] text-[#8b5cf6] tracking-widest mb-4 flex items-center gap-3">
+                          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                          <span>LIVE SESSION</span>
+                        </div>
+                        
+                        <h3 className="text-3xl md:text-6xl font-bold text-white tracking-tight mb-2 drop-shadow-lg">
+                          {featuredMusicTracks[featuredMusicIndex].title}
+                        </h3>
+                        
+                        <p className="text-[#8b5cf6] font-mono text-[10px] md:text-sm tracking-widest uppercase mb-6">
+                          Original By // {featuredMusicTracks[featuredMusicIndex].originalArtist}
+                        </p>
+
+                        <p className="text-white/70 text-sm md:text-base leading-relaxed font-light mb-8 italic border-l border-white/20 pl-4 hidden md:block">
+                          "{featuredMusicTracks[featuredMusicIndex].notes}"
+                        </p>
+                        
+                        <Link href={`/music?track=${featuredMusicTracks[featuredMusicIndex].id}`} className="inline-flex px-5 py-2.5 md:px-6 md:py-3 bg-[var(--accent-cyan)]/20 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/30 backdrop-blur-md rounded shadow-[0_0_15px_rgba(34,211,238,0.2)] text-[9px] md:text-xs uppercase font-mono tracking-widest hover:bg-[var(--accent-cyan)]/30 hover:-translate-y-1 transition-all mb-4 md:mb-0">
+                          View in Music Vault ↗
+                        </Link>
+                      </div>
+                    </div>
+                    
+                    {featuredMusicTracks.length > 1 && (
+                      <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 z-20 flex gap-2">
+                        {featuredMusicTracks.map((_, idx) => (
+                          <button
+                            key={idx}
+                            onClick={(e) => { e.stopPropagation(); setFeaturedMusicIndex(idx); }}
+                            className={`h-1.5 rounded-full transition-all duration-300 ${
+                              featuredMusicIndex === idx ? 'w-8 bg-[#8b5cf6] shadow-[0_0_10px_#8b5cf6]' : 'w-2 bg-white/20 hover:bg-white/50 cursor-pointer'
+                            }`}
+                            aria-label={`Go to slide ${idx + 1}`}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+  
 
           <div className="flex items-center gap-4 mb-8 md:mb-12">
             <div className="w-2 h-2 rounded-full bg-[var(--accent-cyan)] shadow-[0_0_10px_var(--accent-cyan)]" />

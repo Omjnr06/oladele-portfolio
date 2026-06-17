@@ -16,7 +16,7 @@ const BassIcon = ({ style, className }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={style} className={className}><path d="M8.5 18.5a3.5 3.5 0 1 0 5-5V4.5" /><path d="M13.5 4.5H17M13.5 7.5H16" /><circle cx="10" cy="18.5" r="0.5" fill="currentColor" /></svg>
 );
 
-const musicLibrary = [
+export const musicLibrary = [
   {
     id: "PIANO", 
     label: "Piano Covers", 
@@ -134,7 +134,8 @@ const musicLibrary = [
         date: "2023.09.27", 
         location: "Gems American Academy", 
         notes: "One of the best guitar covers ive ever done. Played with different voicings of the same chord progression. Isas voice fit perfectly as well", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778127505/best-part-guitar_pcagpc.mov" 
+        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778127505/best-part-guitar_pcagpc.mov",
+        isFeatured: true,
       },
       { 
         id: "guitar 02", 
@@ -195,8 +196,20 @@ const fmt = (t) => {
 };
 
 export default function TheMusicVault() {
-  const [activeCatIdx,   setActiveCatIdx]   = useState(1);
-  const [activeTrackIdx, setActiveTrackIdx] = useState(0);
+  let defaultCatIdx = 1;
+  let defaultTrackIdx = 0;
+  
+  musicLibrary.forEach((cat, cIdx) => {
+    cat.tracks.forEach((track, tIdx) => {
+      if (track.isFeatured) {
+        defaultCatIdx = cIdx;
+        defaultTrackIdx = tIdx;
+      }
+    });
+  });
+
+  const [activeCatIdx,   setActiveCatIdx]   = useState(defaultCatIdx);
+  const [activeTrackIdx, setActiveTrackIdx] = useState(defaultTrackIdx);
   const [leftOpen,  setLeftOpen]  = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false); 
 
@@ -219,8 +232,8 @@ export default function TheMusicVault() {
   const [muted,      setMuted]      = useState(false);
   const [ctrlVis,    setCtrlVis]    = useState(true);
 
-  const wheelMV     = useMotionValue(-(1 * ANGLE_STEP));
-  const wheelRotRef = useRef(-(1 * ANGLE_STEP));          
+  const wheelMV     = useMotionValue(-(defaultCatIdx * ANGLE_STEP));
+  const wheelRotRef = useRef(-(defaultCatIdx * ANGLE_STEP));          
   const counterRot  = useTransform(wheelMV, (r) => -r);
 
   const isDragging     = useRef(false);
@@ -229,6 +242,25 @@ export default function TheMusicVault() {
 
   const activeCat   = musicLibrary[activeCatIdx];
   const activeTrack = activeCat.tracks[activeTrackIdx] ?? null;
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const trackId = params.get("track");
+      if (trackId) {
+        for (let i = 0; i < musicLibrary.length; i++) {
+          const tIdx = musicLibrary[i].tracks.findIndex(t => t.id === trackId);
+          if (tIdx !== -1) {
+            setActiveCatIdx(i);
+            setActiveTrackIdx(tIdx);
+            wheelRotRef.current = -(i * ANGLE_STEP);
+            wheelMV.set(-(i * ANGLE_STEP));
+            break;
+          }
+        }
+      }
+    }
+  }, [wheelMV]);
 
   useEffect(() => {
     const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -471,8 +503,6 @@ export default function TheMusicVault() {
   const nextTrack = () => { if (activeTrackIdx < activeCat.tracks.length - 1) setActiveTrackIdx((i) => i + 1); };
   const prevTrack = () => { if (activeTrackIdx > 0) setActiveTrackIdx((i) => i - 1); };
 
-  useEffect(() => { setActiveTrackIdx(0); }, [activeCatIdx]);
-
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
@@ -515,7 +545,6 @@ export default function TheMusicVault() {
         <div className="absolute bottom-5 w-px h-7" style={{ background: "linear-gradient(to bottom, rgba(34,211,238,0.3), transparent)" }} />
       </motion.nav>
 
-      {/* ── MOBILE ONLY: Waffle Drawer Toggle (Moved to Top Right) ── */}
       {!drawerOpen && (
         <button 
           onClick={() => setDrawerOpen(true)} 
@@ -535,7 +564,6 @@ export default function TheMusicVault() {
         </button>
       )}
 
-      {/* ── MOBILE ONLY: Right-Side Glassmorphic Drawer ── */}
       <AnimatePresence>
         {drawerOpen && (
           <motion.div
@@ -614,7 +642,6 @@ export default function TheMusicVault() {
 
       <div className="relative flex-1 flex flex-row items-center justify-center gap-4 lg:gap-6 z-40 pt-6 lg:pt-8 pl-[52px] pr-4 lg:px-12" onMouseMove={nudgeControls} onTouchStart={nudgeControls}>
         
-        {/* DESKTOP ONLY: Left HUD Tracklist */}
         <div className="hidden lg:flex flex-col w-64 h-[60vh] bg-[#050505]/80 backdrop-blur-md border border-[var(--accent-cyan)]/10 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden shrink-0">
           <div className="p-6 border-b border-white/5">
             <span className="text-[10px] text-[var(--accent-cyan)] uppercase tracking-widest block mb-2">Queue // {activeCat.id}</span>
@@ -642,7 +669,6 @@ export default function TheMusicVault() {
           </div>
         </div>
 
-        {/* ── VIDEO PLAYER (Updated Height/Safe Zone for Mobile) ── */}
         <div ref={playerContainerRef} className={`relative flex-1 flex items-center justify-center transition-all duration-300 ${isFullscreen ? "bg-[#020202] h-[100dvh] lg:h-screen w-screen fixed inset-0 z-50 p-0" : "h-[45vh] lg:h-[60vh] max-w-4xl mb-12 lg:mb-0"}`}>
           <div className={`relative overflow-hidden cursor-pointer w-full h-full flex-shrink-0 ${isFullscreen ? "rounded-none border-none" : "rounded-2xl border border-[var(--accent-cyan)]/20 shadow-[0_0_80px_rgba(0,0,0,0.8),_0_0_200px_rgba(34,211,238,0.04)]"}`} onClick={togglePlay}>
             {activeTrack ? (
@@ -739,7 +765,6 @@ export default function TheMusicVault() {
           </div>
         </div>
 
-        {/* DESKTOP ONLY: Right HUD Telemetry */}
         <div className="hidden lg:flex flex-col w-64 h-[60vh] bg-[#050505]/80 backdrop-blur-md border border-[var(--accent-cyan)]/10 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden shrink-0">
           <div className="p-6 border-b border-white/5">
             <span className="text-[10px] text-[var(--accent-cyan)] uppercase tracking-widest block mb-2">Info</span>
