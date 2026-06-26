@@ -29,7 +29,7 @@ export const musicLibrary = [
         date: "2026.03.11", 
         location: "Talbot College @ Western University", 
         notes: "Really liked the song, best take so far, got to the first 30 seconds. Will update when I learn the full thing.", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778127578/liebenstraum-piano_azptwb.mp4" 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/liebenstraum-piano.mp4" 
       },
       { 
         id: "piano 02", 
@@ -38,7 +38,7 @@ export const musicLibrary = [
         date: "2025.02.01", 
         location: "Medway-Sydenham Hall Basement @ Western University", 
         notes: "At a point this was my favourite song so I had to learn it on piano.", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778127578/samidot-piano_lzmori.mov" 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/samidot-piano.mp4" 
       },
       { 
         id: "piano 03", 
@@ -47,7 +47,7 @@ export const musicLibrary = [
         date: "2024.10.29", 
         location: "Medway-Sydenham Hall Basement @ Western University", 
         notes: "Practicing being able to highlight a vocalist when playing piano. Really beautiful son with a great singer!", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778127588/why-try-change-me-now-piano_u6vu6d.mov" 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/why-try-change-me-now-piano.mp4" 
       },
       { 
         id: "piano 04", 
@@ -56,7 +56,7 @@ export const musicLibrary = [
         date: "2025.12.31", 
         location: "The Gate Mall, Qatar", 
         notes: "Was bored in a mall and decided to play a classic.", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778127587/studio-ghibli-piano_xvv2uu.mov" 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/studio-ghibli-piano.mp4" 
       } 
     ]
   },
@@ -72,7 +72,7 @@ export const musicLibrary = [
         date: "2024.05.29", 
         location: "Gems American Academy", 
         notes: "Testing out Get Lucky with a Reggae Groove. Very Cool and fun to play, ended up performing at Grade 12 Grad.", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778127492/get-lucky-drums_gj1ytx.mp4" 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/get-lucky-drums.MOV" 
       },
       { 
         id: "drums 02", 
@@ -81,7 +81,7 @@ export const musicLibrary = [
         date: "2023.05.05", 
         location: "The Ironwood Stage and Grill, Calgary", 
         notes: "Last time I performed with this group before I moved from Calgary. Super fun song to play around with and fill to. Miss these guys.", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778127560/ironwood-drums_d5dlwv.mp4" 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/ironwood-drums.MP4" 
       },
       { 
         id: "drums 03", 
@@ -90,7 +90,7 @@ export const musicLibrary = [
         date: "2023.03.29", 
         location: "St. Francis Highschool Calgary", 
         notes: "Learnt this song from end to end with my friend and decided to jam to it. First ever jamming video!", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778128599/samidot-drums_mm7fdw.mp4" 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/samidot-drums.mp4" 
       },
       { 
         id: "drums 04", 
@@ -99,7 +99,7 @@ export const musicLibrary = [
         date: "2024.04.24", 
         location: "Gems American Academy", 
         notes: "We had a showcase coming up and this is just a random clip of ideas that we were playing around with that I thought was cool. Shoutout Ghalia(Voice) and Mr. V (Trumpet)", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778127584/feeling-good-drums_e8wwnr.mov" 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/feeling-good-drums.mp4" 
       },
       { 
         id: "drums 05", 
@@ -108,7 +108,7 @@ export const musicLibrary = [
         date: "2023.06.07", 
         location: "St. Francis Highschool Calgary", 
         notes: "During our spare, my good friend and I would sometimes just jam out to our favourite tracks. This is prolly the fatest fill I have ever done LOL. Miss jamming out with Vince.", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778127526/far-away-drums_gyarxx.mov" 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/far-away-drums.MOV" 
       },
       { 
         id: "drums 06", 
@@ -117,7 +117,7 @@ export const musicLibrary = [
         date: "2023.11.14", 
         location: "Gems American Academy", 
         notes: "Unfortunately I placed my phone down to record this so there is no video but this is a clip from when we practicing for a showcase of careless whisper. Joshua killing it on SAX. Tried to keep it like the original track as much as possibile.", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778127572/careless-whisper-drums_zfjok3.mov",
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/careless-whisper-drums.mp4",
         audioOnly: true
       }
     ]
@@ -134,7 +134,7 @@ export const musicLibrary = [
         date: "2023.09.27", 
         location: "Gems American Academy", 
         notes: "One of the best guitar covers ive ever done. Played with different voicings of the same chord progression. Isas voice fit perfectly as well", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778127505/best-part-guitar_pcagpc.mov",
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/best-part-guitar.mov",
         isFeatured: true,
       },
       { 
@@ -144,7 +144,7 @@ export const musicLibrary = [
         date: "2023.08.14", 
         location: "Maria's Home Studio", 
         notes: "Played one of my favourite samba brazilian songs (Maria is Brazillian!) Super fun to play, wish it on acoustic. Maria an amazing artist and singer, super talented.", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778127590/mais-que-nada-guitar_dqbxrm.mov" 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/mais-que-nada-guitar.mp4" 
       },
     ] 
   },
@@ -160,7 +160,7 @@ export const musicLibrary = [
         date: "2023.06.25", 
         location: "Aslyum for Art, Calgary", 
         notes: "My first experience of OPEN MIC. Drummer had never played with us before so was cool to bounce off ideas musically mid performance.", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778128607/black-orpheus-bass_fol1vu.mp4" 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/black-orpheus-bass.mp4" 
       },
       { 
         id: "bass 02", 
@@ -169,7 +169,7 @@ export const musicLibrary = [
         date: "2023.05.05", 
         location: "The Ironwood Stage and Grill, Calgary", 
         notes: "Opening song in our setlist from Whiplash Movie. Cool jazz vibes for a stage and grill bar. Was relatively new to playing bass.", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778128611/fletchers-song-in-club-bass_h5oxyy.mp4" 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/fletchers-song-in-club-bass.mp4" 
       },
       { 
         id: "bass 03", 
@@ -178,7 +178,7 @@ export const musicLibrary = [
         date: "2024.02.07", 
         location: "Gems American Academy", 
         notes: "No clue why I was in a suit. Looked fly though. Super fun 5 String Bass, allowed for some really cool runs.", 
-        videoUrl: "https://res.cloudinary.com/dqhhyjhqc/video/upload/v1778127585/redbone-bass_pfyie2.mov" 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/redbone-bass.mp4" 
       },
     ] 
   },
