@@ -673,7 +673,7 @@ export default function TheMusicVault() {
           <div className={`relative overflow-hidden cursor-pointer w-full h-full flex-shrink-0 ${isFullscreen ? "rounded-none border-none" : "rounded-2xl border border-[var(--accent-cyan)]/20 shadow-[0_0_80px_rgba(0,0,0,0.8),_0_0_200px_rgba(34,211,238,0.04)]"}`} onClick={togglePlay}>
             {activeTrack ? (
               <>
-                <video ref={videoRef} className="absolute inset-0 w-full h-full object-contain bg-black" playsInline crossOrigin="anonymous" muted={muted} onTimeUpdate={() => { const v = videoRef.current; if (!v) return; setProgress(((v.currentTime / v.duration) * 100) || 0); setCurTime(fmt(v.currentTime)); }} onLoadedMetadata={() => setDur(fmt(videoRef.current?.duration))} onEnded={() => { if (activeTrackIdx < activeCat.tracks.length - 1) { setActiveTrackIdx(prev => prev + 1); } else { setIsPlaying(false); } }}>
+                <video ref={videoRef} className="absolute inset-0 w-full h-full object-contain bg-black" playsInline preload="metadata"crossOrigin="anonymous" muted={muted} onTimeUpdate={() => { const v = videoRef.current; if (!v) return; setProgress(((v.currentTime / v.duration) * 100) || 0); setCurTime(fmt(v.currentTime)); }} onLoadedMetadata={() => setDur(fmt(videoRef.current?.duration))} onEnded={() => { if (activeTrackIdx < activeCat.tracks.length - 1) { setActiveTrackIdx(prev => prev + 1); } else { setIsPlaying(false); } }}>
                   <source src={activeTrack.videoUrl} type="video/mp4" />
                 </video>
 

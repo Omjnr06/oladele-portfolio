@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { musicLibrary } from "./music/page";
+import Image from 'next/image';
 
 export default function Home() {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
@@ -39,7 +40,7 @@ export default function Home() {
       description: "Data-driven social platform integrating the Spotify Web API with a Supabase backend. Shows Univeristy community-level music trends and insights by complex SQL aggregation.",
       liveUrl: "", 
       githubUrl: "https://github.com/tudor-filimon/mustangs-wrapped",
-      videoUrl: "/mustang-demo.mp4",
+      videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/mustang-demo.mp4",
       imageUrl: "",
       imageDisplay: "cover",
       isFeatured: true,
@@ -298,8 +299,16 @@ export default function Home() {
               <div 
                 key={index}
                 className={`absolute inset-0 transition-opacity duration-1000 ease-in-out pointer-events-none ${currentPhotoIndex === index ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-                style={{ backgroundImage: `url('${image.src}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-              />
+              >
+                <Image
+                  src={image.src}
+                  alt={`Gallery snapshot ${index + 1}`}
+                  fill
+                  className="object-cover object-center"
+                  priority={index === 0} 
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 85vw, 1200px"
+                />
+              </div>
             ))}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100%_4px] z-20 pointer-events-none" />
             
@@ -391,7 +400,8 @@ export default function Home() {
                     <div className="absolute inset-0 z-0">
                       {featuredProjects[featuredTechIndex].videoUrl ? (
                         <video 
-                          src={featuredProjects[featuredTechIndex].videoUrl} 
+                          src={featuredProjects[featuredTechIndex].videoUrl}
+                          preload="metadata"
                           autoPlay muted loop playsInline 
                           className="w-full h-full object-cover opacity-40"
                         />
@@ -474,8 +484,9 @@ export default function Home() {
                   >
                     <div className="absolute inset-0 z-0">
                       <video 
-                        src={featuredMusicTracks[featuredMusicIndex].videoUrl} 
-                        autoPlay muted loop playsInline 
+                        src={featuredMusicTracks[featuredMusicIndex].videoUrl}
+                        preload="metadata" 
+                        autoPlay muted loop playsInline
                         className="w-full h-full object-cover opacity-50 blur-[2px]"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-[#020202]/80 to-[#020202]/30" />
@@ -626,7 +637,7 @@ export default function Home() {
 
                       <div className="w-full lg:w-[50%] xl:w-[55%] aspect-video rounded-xl overflow-hidden border border-[var(--accent-cyan)]/20 shadow-[0_0_40px_rgba(34,211,238,0.1)] relative group shrink-0 bg-[#050505] transition-all duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.2)] hover:border-[var(--accent-cyan)]/40 mt-1 pointer-events-auto">
                         {filteredProjects[currentProjectIndex].videoUrl ? (
-                          <video src={filteredProjects[currentProjectIndex].videoUrl} playsInline controls className="absolute inset-0 w-full h-full object-cover z-10" />
+                          <video src={filteredProjects[currentProjectIndex].videoUrl} playsInline controls preload="metadata" className="absolute inset-0 w-full h-full object-cover z-10" />
                         ) : filteredProjects[currentProjectIndex].imageUrl ? (
                           <div 
                             className={`absolute inset-0 w-full h-full bg-center bg-no-repeat z-10 cursor-zoom-in ${filteredProjects[currentProjectIndex].imageDisplay === 'contain' ? 'bg-contain p-6' : 'bg-cover'}`}
