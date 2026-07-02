@@ -119,7 +119,29 @@ export const musicLibrary = [
         notes: "Unfortunately I placed my phone down to record this so there is no video but this is a clip from when we practicing for a showcase of careless whisper. Joshua killing it on SAX. Tried to keep it like the original track as much as possibile.", 
         videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/careless-whisper-drums.mp4",
         audioOnly: true
-      }
+      },
+
+      { 
+        id: "drums 07", 
+        title: "Best Part Ending Breakdown",
+        originalArtist: "Daniel Caesar ft. H.E.R.", 
+        date: "2026.06.30", 
+        location: "Carnegie Mellon University Music Room, Qatar", 
+        notes: "Me and Dika Jam sessions are always unforgettable, Hes also in CS so we take a break from all that comp sci talk and just jam out. Hes been only playing for a year in this clip, Hes a phenomenal talent.", 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/BestPartEnding-Drums.MOV" 
+      
+      },
+
+      { 
+        id: "drums 08", 
+        title: "Tadow",
+        originalArtist: "Masego ft. FKJ", 
+        date: "2026.06.30", 
+        location: "Carnegie Mellon University Music Room, Qatar", 
+        notes: "Me and Dika actually played this song in highschool but at the time I was on guitar and he played drums. Glad to see growth from both of us.", 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/tadow-drums.mp4" 
+      },
+
     ]
   },
   { 
@@ -145,6 +167,17 @@ export const musicLibrary = [
         location: "Maria's Home Studio", 
         notes: "Played one of my favourite samba brazilian songs (Maria is Brazillian!) Super fun to play, wish it on acoustic. Maria an amazing artist and singer, super talented.", 
         videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/mais-que-nada-guitar.mp4" 
+      },
+
+      { 
+        id: "guitar 03", 
+        title: "Rapp Snitch Knishes",
+        originalArtist: "MF Doom ft. Mr Fantastik", 
+        date: "2026.06.30", 
+        location: "Carnegie Mellon University Music Room, Qatar", 
+        notes: "Part of the Dika and Me Jam sessions, his friend from university pulled up and he happened to know one of my favourite songs of all time. Childhood dream to jam out to this track.", 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/RappKnishSnitches-guitarmp4",
+        isFeatured: true,
       },
     ] 
   },
