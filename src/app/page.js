@@ -93,6 +93,19 @@ export default function Home() {
       imageUrl: "/images/pimplenetthumbnail.png",
       imageDisplay: "cover",
       isFeatured: true,
+    },
+    {
+      id: "PROJECT 05",
+      title: "Jam",
+      category: "MACHINE LEARNING",
+      isInternship: true,
+      stack: ["Python", "CNNs", "EfficientNetB0", "Transfer Learning"],
+      description: "Developed a deep learning acne severity classifier to enhance microbiome-based skincare personalization. Fine-tuned an EfficientNetB0 model achieving 95.5% validation accuracy on real-world customer images.",
+      caseStudyUrl: "/projects/pimplenet",
+      videoUrl: "",
+      imageUrl: "/images/pimplenetthumbnail.png",
+      imageDisplay: "cover",
+      isFeatured: true,
     }
   ];
 

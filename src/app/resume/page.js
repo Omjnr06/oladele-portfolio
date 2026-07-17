@@ -11,43 +11,44 @@ const resumeData = {
     status: "BSc. CS, Minor Data Sci @ Western University '28",
   },
   skills: [
-    { category: "LANGUAGES & FRAMEWORKS", items: ["Python", "JavaScript", "PostgreSQL", "Java", "HTML/CSS", "R", "C", "React", "Next.js", "Express.js", "Flask"] },
-    { category: "DEVELOPER TOOLS", items: ["Git", "GitHub", "Docker", "Nginx", "Supabase", "VS Code", "Figma", "Notion"] },
-    { category: "DATA LIBRARIES", items: ["PyTorch", "TensorFlow", "Keras", "NumPy", "Matplotlib", "Seaborn"] },
+    { category: "LANGUAGES & FRAMEWORKS", items: ["Python", "JavaScript", "TypeScript", "PostgreSQL", "Java", "HTML/CSS", "R", "C", "React", "Next.js", "Express.js", "Flask", "Tailwind CSS"] },
+    { category: "DEVELOPER TOOLS", items: ["Git", "GitHub", "GitHub Actions (CI/CD)", "Docker", "Nginx", "Supabase", "REST APIs", "MSW", "VS Code", "Figma", "Notion"] },
+    { category: "DATA LIBRARIES", items: ["PyTorch", "TensorFlow", "Keras", "NumPy", "Pandas", "Matplotlib", "Seaborn"] },
     { category: "OTHER CAPABILITIES", items: ["Computer Vision", "Sound Engineering", "Event Management", "Arabic", "Microsoft Office Suite"] }
   ],
   experience: [
     {
       id: "EXP_01",
       role: "AI & Software Developer Intern",
-      company: "Purely Biome",
+      company: "PurelyBiome",
       date: "May 2026 - Present",
       location: "Remote",
       points: [
-        "Trained and tuned multi-task Convolutional Neural Networks (CNNs) using PyTorch/TensorFlow, optimizing model hyper-parameters to achieve 94% classification accuracy in detecting complex dermatological features",
-        "Developed an end-to-end customer reporting dashboard using Next.js and Supabase, building interactive data visualizations that translate complex biological JSON payloads into actionable microbiome insights for active beta testers."
+        "Built a computer vision pipeline to grade acne severity from user facial images, fine-tuning an EfficientNet CNN in PyTorch/TensorFlow with a two-phase transfer-learning strategy to reach 95.5% validation accuracy and 100% accuracy on a held-out set of 50 real customer images.",
+        "Engineered the end-to-end customer reporting interface using Next.js and Supabase, building interactive data visualizations that translate complex biological JSON payloads into actionable microbiome insights for active beta testers."
       ]
     },
     {
       id: "EXP_02",
-      role: "Facilities Asset Management Intern",
-      company: "RCCG HOP",
-      date: "Jun. 2022 - Aug. 2022",
-      location: "Calgary, AB",
+      role: "Software Developer",
+      company: "3D Western",
+      date: "Jun. 2026 - Present",
+      location: "London, ON",
       points: [
-        "Digitized and inputted detailed data on up to 50 key church assets into the Upkeep CMMS to support accurate maintenance tracking and recordkeeping.",
-        "Digitalized and organized church maintenance records, including plumbing, electrical, and audiovisual system maps, using Microsoft Office Suite for streamlined access and documentation."
+        "Built the frontend data and API layer for a 3D-printing lab management dashboard (Next.js, TypeScript, React) launching to production in August 2026, delivering typed contracts and API client wrappers across booking and job-tracking features.",
+        "Implemented an equipment booking system spanning ~9 REST endpoints (availability, create, cancel, admin override, capacity, and approval requests) with server-side conflict and capacity handling, plus a job-tracking layer surfacing ETA, pickup, and status history across four job types.",
+        "Developed against a Mock Service Worker (MSW) layer to build and test data flows in parallel with the backend team, added unit and end-to-end tests, and wired reusable hooks into the UI to eliminate duplicate fetch logic."
       ]
     },
     {
       id: "EXP_03",
-      role: "Projects Director",
+      role: "VP of Projects",
       company: "Western Founders Network",
       date: "Sep. 2025 - Present",
       location: "London, ON",
       points: [
-        "Led a cross-functional engineering team to build full-stack web applications using Node.js, React, and Supabase, implementing strict version control protocols and GitHub workflows to deploy multiple production-ready features.",
-        "Orchestrated the end-to-end development and deployment lifecycle of community-driven platforms, integrating secure third-party REST APIs and database structures to ensure robust application performance."
+        "Promoted from Projects Director to VP of Projects (Apr. 2026); design and run a technical curriculum (VS Code, Git/GitHub, JavaScript, project architecture) that onboards student builders from setup to a functioning full-stack prototype.",
+        "Coordinate a team of directors through a sprint-based build cycle toward Demo Day showcases, providing hands-on mentorship on version control, API integration, and shipping working software."
       ]
     },
     {
@@ -60,27 +61,38 @@ const resumeData = {
         "Spearheaded digital outreach and cross-functional branding strategies within the communications team, driving a consistent digital presence across messaging platforms to scale engagement and reach over 100+ university students.",
         "Managed design pipelines and user-facing digital assets, utilizing iterative feedback loops and product delivery methodologies to launch marketing campaigns within tight deadline constraints."
       ]
+    },
+    {
+      id: "EXP_05",
+      role: "Facilities Asset Management Intern",
+      company: "RCCG HOP",
+      date: "Jun. 2022 - Aug. 2022",
+      location: "Calgary, AB",
+      points: [
+        "Digitized and inputted detailed data on up to 50 key church assets into the Upkeep CMMS to support accurate maintenance tracking and recordkeeping.",
+        "Digitalized and organized church maintenance records, including plumbing, electrical, and audiovisual system maps, using Microsoft Office Suite for streamlined access and documentation."
+      ]
     }
   ],
   projects: [
     {
       id: "PRJ_01",
-      title: "Distributed URL Shortener",
-      stack: "Flask, Docker, Nginx, Redis, Neon",
-      date: "Apr. 2026",
+      title: "Internship Alert Pipeline",
+      stack: "Python, GitHub Actions, REST APIs",
+      date: "Jul. 2026",
       points: [
-        "Architected a highly available URL shortening web application on DigitalOcean, containerizing an Nginx reverse proxy, Redis cache, and Python backend with Docker to ensure a clean separation of concerns.",
-        "Optimized system throughput to support 500 concurrent users by tuning Gunicorn thread workers and implementing PgBouncer connection pooling for PostgreSQL, sustaining 520+ requests per second with a 0% error rate."
+        "Built an automated job-monitoring pipeline that aggregates ~720 postings per run across 5 sources, normalizes and deduplicates them by URL, and routes new or reopened roles through a 3-tier classifier by target company and location.",
+        "Deployed on a 15-minute GitHub Actions cron with committed state for reliable change detection, delivering filtered alerts through push notifications and email with fuzzy company matching to avoid missed or duplicate roles."
       ]
     },
     {
       id: "PRJ_02",
-      title: "UofTHacks: Flowlytics",
-      stack: "Python, Mesa, TypeScript, React",
-      date: "Jan. 2026",
+      title: "Distributed URL Shortener",
+      stack: "Flask, Docker, Nginx, Redis",
+      date: "Apr. 2026",
       points: [
-        "Built a customer traffic simulation and analytics dashboard by integrating a Python-based Mesa model with a React/TypeScript frontend, providing real-time space utilization metrics for retail environments.",
-        "Spearheaded spatial data analysis by writing Python scripts to simulate foot traffic and generate heat maps, processing 10,000+ simulated agent movements to identify store dead zones within a strict 48-hour hackathon window."
+        "Architected a highly available URL shortening web application on DigitalOcean, containerizing an Nginx reverse proxy, Redis cache, and Python backend with Docker to ensure a clean separation of concerns.",
+        "Optimized system throughput to support 500 concurrent users by tuning Gunicorn thread workers and implementing PgBouncer connection pooling for PostgreSQL, sustaining 520+ requests per second with a 0% error rate."
       ]
     },
     {
@@ -91,6 +103,16 @@ const resumeData = {
       points: [
         "Developed a full-stack social analytics web application by integrating the Spotify Web API with a React frontend and Supabase backend, securely normalizing and storing real-time user listening history.",
         "Uncovered community-level music trends by writing complex SQL queries to clean, aggregate, and normalize raw JSON data, successfully processing over 100 top tracks among university club members to deliver personalized comparative dashboards."
+      ]
+    },
+    {
+      id: "PRJ_04",
+      title: "UofTHacks: Flowlytics",
+      stack: "Python, Mesa, TypeScript, React",
+      date: "Jan. 2026",
+      points: [
+        "Built a customer traffic simulation and analytics dashboard by integrating a Python-based Mesa model with a React/TypeScript frontend, providing real-time space utilization metrics for retail environments.",
+        "Spearheaded spatial data analysis by writing Python scripts to simulate foot traffic and generate heat maps, processing 10,000+ simulated agent movements to identify store dead zones within a strict 48-hour hackathon window."
       ]
     }
   ],
@@ -156,7 +178,7 @@ export default function ResumePage() {
             <a href="/Oladele_Magbadelo_Resume.pdf" target="_blank" rel="noopener noreferrer" className="group relative overflow-hidden bg-[#0c0c0c] border border-white/10 text-white font-mono text-sm px-6 py-4 w-full block transition-all hover:border-[#22d3ee] hover:shadow-[0_0_15px_rgba(34,211,238,0.2)] rounded-md">
               <span className="relative z-10 flex items-center justify-between">
                 <span>{`> EXPORT_PDF`}</span>
-                <span className="text-[#666666] text-xs">102_KB</span>
+                <span className="text-[#666666] text-xs">99_KB</span>
               </span>
               <div className="absolute top-0 left-0 h-full bg-[#22d3ee] w-0 group-hover:w-full transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] opacity-10" />
             </a>
