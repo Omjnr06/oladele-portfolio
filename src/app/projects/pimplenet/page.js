@@ -48,7 +48,7 @@ export default function PimpleNetCaseStudy() {
           className="mb-16"
         >
           <a 
-            href="/NextAI__Oladele_.pdf" 
+            href="/assets/NextAI__Oladele_.pdf" 
             target="_blank" 
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-6 py-3 bg-[var(--accent-cyan)]/10 border border-[var(--accent-cyan)]/30 rounded shadow-[0_0_20px_rgba(34,211,238,0.1)] hover:bg-[var(--accent-cyan)]/20 hover:border-[var(--accent-cyan)]/60 transition-all group"
@@ -96,7 +96,7 @@ export default function PimpleNetCaseStudy() {
               </p>
               {/* Optional: You can drop the image you showed me earlier right here! */}
               <div className="my-8 border border-white/10 p-2 rounded bg-black/50">
-                <img src="/images/pimplenet-training-graph.png" alt="PimpleNet Inference Output" className="w-full rounded opacity-90 hover:opacity-100 transition-opacity" />
+                <img src="/assets/images/pimplenet-training-graph.png" alt="PimpleNet Inference Output" className="w-full rounded opacity-90 hover:opacity-100 transition-opacity" />
               </div>
             </section>
 

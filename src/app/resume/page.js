@@ -175,7 +175,7 @@ export default function ResumePage() {
               <div className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded-sm font-mono text-[10px] text-[#666666]">{resumeData.header.status}</div>
             </div>
 
-            <a href="/Oladele_Magbadelo_Resume.pdf" target="_blank" rel="noopener noreferrer" className="group relative overflow-hidden bg-[#0c0c0c] border border-white/10 text-white font-mono text-sm px-6 py-4 w-full block transition-all hover:border-[#22d3ee] hover:shadow-[0_0_15px_rgba(34,211,238,0.2)] rounded-md">
+            <a href="/assets/Oladele_Magbadelo_Resume.pdf" target="_blank" rel="noopener noreferrer" className="group relative overflow-hidden bg-[#0c0c0c] border border-white/10 text-white font-mono text-sm px-6 py-4 w-full block transition-all hover:border-[#22d3ee] hover:shadow-[0_0_15px_rgba(34,211,238,0.2)] rounded-md">
               <span className="relative z-10 flex items-center justify-between">
                 <span>{`> EXPORT_PDF`}</span>
                 <span className="text-[#666666] text-xs">99_KB</span>

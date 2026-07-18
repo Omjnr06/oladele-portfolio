@@ -22,13 +22,13 @@ export default function Home() {
   useEffect(() => setPortalMounted(true), []);
 
   const galleryImages = [
-    { src: "/images/junior-headshot.JPG" },
-    { src: "/images/junior-statue.jpeg" },
-    { src: "/images/junior-food.jpeg" },
-    { src: "/images/junior-basketball.jpg" },
-    { src: "/images/junior-guitar.jpeg" },
-    { src: "/images/junior-boat.jpeg" },
-    { src: "/images/junior-soccer.JPG" },
+    { src: "/assets/images/junior-headshot.JPG" },
+    { src: "/assets/images/junior-statue.jpeg" },
+    { src: "/assets/images/junior-food.jpeg" },
+    { src: "/assets/images/junior-basketball.jpg" },
+    { src: "/assets/images/junior-guitar.jpeg" },
+    { src: "/assets/images/junior-boat.jpeg" },
+    { src: "/assets/images/junior-soccer.JPG" },
   ];
 
   const projects = [
@@ -37,13 +37,13 @@ export default function Home() {
       title: "Mustang Wrapped",
       category: "FULL STACK",
       stack: ["Spotify API", "Supabase","Express.js", "React", "SQL"],
-      description: "Data-driven social platform integrating the Spotify Web API with a Supabase backend. Shows Univeristy community-level music trends and insights by complex SQL aggregation.",
+      description: "Data driven social platform integrating the Spotify Web API with a Supabase backend. Shows Univeristy community-level music trends and insights by complex SQL aggregation.",
       liveUrl: "", 
       githubUrl: "https://github.com/tudor-filimon/mustangs-wrapped",
       videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/mustang-demo.mp4",
       imageUrl: "",
       imageDisplay: "cover",
-      isFeatured: true,
+      isFeatured: false,
     },
     {
       id: "PROJECT 01",
@@ -54,7 +54,7 @@ export default function Home() {
       liveUrl: "http://short.urlshortener-mlh.xyz/",
       githubUrl: "https://github.com/kathyjydong/PE-Hackathon-Template-2026", 
       videoUrl: "", 
-      imageUrl: "/images/distributed-shortener-diagram.jpg",
+      imageUrl: "/assets/images/distributed-shortener-diagram.jpg",
       imageDisplay: "contain" 
     },
     {
@@ -66,7 +66,7 @@ export default function Home() {
       liveUrl: "https://devpost.com/software/phygital-4exqp8",
       githubUrl: "https://github.com/h3692/flowlytics", 
       videoUrl: "",
-      imageUrl: "/images/flowlytics-ui.png",
+      imageUrl: "/assets/images/flowlytics-ui.png",
       imageDisplay: "cover" 
     },
     {
@@ -74,11 +74,11 @@ export default function Home() {
       title: "SpaceFinder AI",
       category: "MACHINE LEARNING",
       stack: ["YOLOv8", "Flask", "OpenCV", "Bootstrap", "Python"],
-      description: "A full-stack web application developed in a team of 4 that detects parking space availability from uploaded images. Key contributions included fine-tuning a custom YOLOv8 model using test-time augmentation for maximum detection recall, designing the responsive Bootstrap UI, and building the Flask backend with OpenCV for real-time inference and server-side image processing.",
+      description: "A full-stack web application developed in a team of 4 that detects parking space availability from uploaded images. Key contributions included fine tuning a custom YOLOv8 model using test time augmentation for maximum detection recall, designing the responsive Bootstrap UI, and building the Flask backend with OpenCV for real time inference and server side image processing.",
       liveUrl: "",
       githubUrl: "https://github.com/Omjnr06/SpaceFinder",
       videoUrl: "",
-      imageUrl: "/images/SpacefinderAI-output.jpg",
+      imageUrl: "/assets/images/SpacefinderAI-output.jpg",
       imageDisplay: "cover" 
     },
     {
@@ -87,32 +87,35 @@ export default function Home() {
       category: "MACHINE LEARNING",
       isInternship: true,
       stack: ["Python", "CNNs", "EfficientNetB0", "Transfer Learning"],
-      description: "Developed a deep learning acne severity classifier to enhance microbiome-based skincare personalization. Fine-tuned an EfficientNetB0 model achieving 95.5% validation accuracy on real-world customer images.",
+      description: "Developed a deep learning acne severity classifier to enhance microbiome based skincare personalization. Fine-tuned an EfficientNetB0 model achieving 95.5% validation accuracy on real world customer images.",
       caseStudyUrl: "/projects/pimplenet",
       videoUrl: "",
-      imageUrl: "/images/pimplenetthumbnail.png",
+      imageUrl: "/assets/images/pimplenetthumbnail.png",
       imageDisplay: "cover",
       isFeatured: true,
+      featuredRank: 1,
     },
     {
       id: "PROJECT 05",
-      title: "Jam",
-      category: "MACHINE LEARNING",
-      isInternship: true,
-      stack: ["Python", "CNNs", "EfficientNetB0", "Transfer Learning"],
-      description: "Developed a deep learning acne severity classifier to enhance microbiome-based skincare personalization. Fine-tuned an EfficientNetB0 model achieving 95.5% validation accuracy on real-world customer images.",
-      caseStudyUrl: "/projects/pimplenet",
-      videoUrl: "",
-      imageUrl: "/images/pimplenetthumbnail.png",
-      imageDisplay: "cover",
+      title: "JAM",
+      category: ["FULL STACK", "SYSTEM INFRASTRUCTURE"],
+      stack: ["React Native", "Expo", "TypeScript", "GraphQL", "Node.js", "Better Auth"],
+      description: "A location based discovery app connecting university and local musicians. Users post short video clips as a living portfolio, get surfaced to others nearby, and send contextual jam requests that open a direct chat. Frontend built and running on a mock data layer, with the GraphQL/Postgres backend in progress.",
+      caseStudyUrl: "/projects/jam",
+      videoUrl: "/assets/jam-frontend-video.mp4",
+      imageUrl: "/assets/images/jam/jam-homepage.png",
+      imageDisplay: "contain",
+      mediaOrientation: "portrait",
       isFeatured: true,
-    }
+      featuredRank: 2,
+    },
   ];
 
-  const categories = ["ALL", ...new Set(projects.map((p) => p.category))];
+  const asCats = (c) => Array.isArray(c) ? c : [c];
+  const categories = ["ALL", ...new Set(projects.flatMap((p) => asCats(p.category)))];
   const filteredProjects = activeCategory === "ALL" 
     ? projects 
-    : projects.filter((p) => p.category === activeCategory);
+    : projects.filter((p) => asCats(p.category).includes(activeCategory));
   
   const handlePrevPhoto = () => setCurrentPhotoIndex((prev) => prev === 0 ? galleryImages.length - 1 : prev - 1);
   const handleNextPhoto = () => setCurrentPhotoIndex((prev) => (prev + 1) % galleryImages.length);
@@ -183,12 +186,8 @@ export default function Home() {
   const [featuredMusicIndex, setFeaturedMusicIndex] = useState(0);
   const [isSpotlightHovered, setIsSpotlightHovered] = useState(false);
 
-  // Force PimpleNet to be first
-  const featuredProjects = projects.filter(p => p.isFeatured).sort((a, b) => {
-    if (a.title === "PimpleNet") return -1;
-    if (b.title === "PimpleNet") return 1;
-    return 0;
-  });
+  // Featured projects ordered by featuredRank (lower = first; unranked fall to the end)
+  const featuredProjects = projects.filter(p => p.isFeatured).sort((a, b) => (a.featuredRank ?? 99) - (b.featuredRank ?? 99));
   
   const rawFeaturedMusic = musicLibrary.flatMap(category => category.tracks).filter(track => track.isFeatured);
   const featuredMusicTracks = rawFeaturedMusic.length > 0 ? rawFeaturedMusic : [musicLibrary[0].tracks[0]];
@@ -411,7 +410,12 @@ export default function Home() {
                     className="absolute inset-0 w-full h-full"
                   >
                     <div className="absolute inset-0 z-0">
-                      {featuredProjects[featuredTechIndex].videoUrl ? (
+                      {featuredProjects[featuredTechIndex].mediaOrientation === 'portrait' ? (
+                        <div 
+                          className="w-full h-full bg-cover bg-center blur-2xl scale-125 opacity-30"
+                          style={{ backgroundImage: `url('${featuredProjects[featuredTechIndex].imageUrl}')` }}
+                        />
+                      ) : featuredProjects[featuredTechIndex].videoUrl ? (
                         <video 
                           src={featuredProjects[featuredTechIndex].videoUrl}
                           preload="metadata"
@@ -426,10 +430,20 @@ export default function Home() {
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-[#020202]/80 to-transparent" />
                       <div className="absolute inset-0 bg-gradient-to-r from-[#020202] via-[#020202]/50 to-transparent" />
+                      {featuredProjects[featuredTechIndex].mediaOrientation === 'portrait' && (
+                        <div className="hidden md:block absolute right-10 lg:right-20 top-1/2 -translate-y-1/2 h-[380px] lg:h-[440px] aspect-[9/19] rounded-[2rem] overflow-hidden border border-[var(--accent-cyan)]/20 shadow-[0_0_50px_rgba(34,211,238,0.15)] bg-[#050505] z-[5] pointer-events-none">
+                          {featuredProjects[featuredTechIndex].videoUrl ? (
+                            <video src={featuredProjects[featuredTechIndex].videoUrl} autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" />
+                          ) : (
+                            <div className="absolute inset-0 w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('${featuredProjects[featuredTechIndex].imageUrl}')` }} />
+                          )}
+                          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none" />
+                        </div>
+                      )}
                     </div>
 
                     <div className="absolute inset-0 z-10 flex flex-col justify-end p-6 md:p-12">
-                      <div className="max-w-3xl">
+                      <div className={`max-w-3xl ${featuredProjects[featuredTechIndex].mediaOrientation === 'portrait' ? 'md:max-w-[52%] lg:max-w-[55%]' : ''}`}>
                         <div className="font-mono text-[10px] text-[var(--accent-cyan)] tracking-widest mb-4 flex items-center gap-3 flex-wrap">
                           {featuredProjects[featuredTechIndex].isInternship && (
                             <>
@@ -437,7 +451,12 @@ export default function Home() {
                               <span className="text-white/20">//</span>
                             </>
                           )}
-                          <span>{featuredProjects[featuredTechIndex].category}</span>
+                          {asCats(featuredProjects[featuredTechIndex].category).map((c, i) => (
+                            <React.Fragment key={c}>
+                              {i > 0 && <span className="text-white/20">//</span>}
+                              <span>{c}</span>
+                            </React.Fragment>
+                          ))}
                         </div>
                         
                         <h3 className="text-3xl md:text-6xl font-bold text-white tracking-tight mb-4 drop-shadow-lg">
@@ -631,7 +650,12 @@ export default function Home() {
                             </>
                           )}
                           <span className="text-white/20">//</span>
-                          <span>{filteredProjects[currentProjectIndex].category}</span>
+                          {asCats(filteredProjects[currentProjectIndex].category).map((c, i) => (
+                            <React.Fragment key={c}>
+                              {i > 0 && <span className="text-white/20">//</span>}
+                              <span>{c}</span>
+                            </React.Fragment>
+                          ))}
                         </div>
                         <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4 md:mb-6">
                           {filteredProjects[currentProjectIndex].title}
@@ -648,9 +672,9 @@ export default function Home() {
                         </div>
                       </div>
 
-                      <div className="w-full lg:w-[50%] xl:w-[55%] aspect-video rounded-xl overflow-hidden border border-[var(--accent-cyan)]/20 shadow-[0_0_40px_rgba(34,211,238,0.1)] relative group shrink-0 bg-[#050505] transition-all duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.2)] hover:border-[var(--accent-cyan)]/40 mt-1 pointer-events-auto">
+                      <div className={`${filteredProjects[currentProjectIndex].mediaOrientation === 'portrait' ? 'w-auto h-[380px] md:h-[440px] lg:h-[480px] aspect-[9/19] mx-auto rounded-[2rem]' : 'w-full lg:w-[50%] xl:w-[55%] aspect-video rounded-xl'} overflow-hidden border border-[var(--accent-cyan)]/20 shadow-[0_0_40px_rgba(34,211,238,0.1)] relative group shrink-0 bg-[#050505] transition-all duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.2)] hover:border-[var(--accent-cyan)]/40 mt-1 pointer-events-auto`}>
                         {filteredProjects[currentProjectIndex].videoUrl ? (
-                          <video src={filteredProjects[currentProjectIndex].videoUrl} playsInline controls preload="metadata" className="absolute inset-0 w-full h-full object-cover z-10" />
+                          <video src={filteredProjects[currentProjectIndex].videoUrl} playsInline className="absolute inset-0 w-full h-full object-cover z-10" {...(filteredProjects[currentProjectIndex].mediaOrientation === 'portrait' ? { autoPlay: true, muted: true, loop: true } : { controls: true, preload: "metadata" })} />
                         ) : filteredProjects[currentProjectIndex].imageUrl ? (
                           <div 
                             className={`absolute inset-0 w-full h-full bg-center bg-no-repeat z-10 cursor-zoom-in ${filteredProjects[currentProjectIndex].imageDisplay === 'contain' ? 'bg-contain p-6' : 'bg-cover'}`}
