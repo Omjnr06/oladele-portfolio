@@ -30,6 +30,7 @@ export default function GrindDashboard() {
   const [tier, setTier] = useState("ALL");
   const [q, setQ] = useState("");
   const [source, setSource] = useState("ALL");
+  const [sortBy, setSortBy] = useState("NEWEST");
   const [dashKey, setDashKey] = useState("");
   const [applied, setApplied] = useState(null);
   const [appliedError, setAppliedError] = useState(null);
@@ -98,7 +99,7 @@ export default function GrindDashboard() {
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    return roles.filter((r) => {
+    const out = roles.filter((r) => {
       if (tier !== "ALL" && r.tier !== tier) return false;
       if (source !== "ALL" && r.source !== source) return false;
       if (needle) {
@@ -107,7 +108,11 @@ export default function GrindDashboard() {
       }
       return true;
     });
-  }, [roles, tier, q, source]);
+    if (sortBy === "NEWEST") {
+      out.sort((a, b) => new Date(b.first_seen || 0) - new Date(a.first_seen || 0));
+    }
+    return out;
+  }, [roles, tier, q, source, sortBy]);
 
   const targetCount = data?.counts?.target ?? 0;
   const relevantCount = data?.counts?.relevant ?? 0;
@@ -157,6 +162,14 @@ export default function GrindDashboard() {
             className="bg-[#0a0a0a] border border-white/10 rounded-lg px-3 py-2 font-mono text-xs text-white/70 focus:border-[var(--accent-cyan)]/40 focus:outline-none">
             {sources.map((s) => <option key={s} value={s}>{s === "ALL" ? "all sources" : s}</option>)}
           </select>
+          <div className="flex gap-1.5 p-1 rounded-lg bg-[#0a0a0a] border border-white/10">
+            {[["NEWEST", "Newest"], ["TIER", "By tier"]].map(([v, label]) => (
+              <button key={v} onClick={() => setSortBy(v)}
+                className={`px-3 py-1.5 rounded font-mono text-[11px] tracking-wide transition-colors ${sortBy === v ? "bg-[var(--accent-cyan)] text-black" : "text-white/50 hover:text-white/80"}`}>
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Body */}
