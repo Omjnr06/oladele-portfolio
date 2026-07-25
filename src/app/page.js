@@ -119,6 +119,7 @@ export default function Home() {
       videoUrl: "",
       imageUrl: "/assets/images/grind-pipeline.png",
       imageDisplay: "cover",
+      liveUrl: "/grind"
     },
   ];
 
