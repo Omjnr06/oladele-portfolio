@@ -31,6 +31,7 @@ export default function GrindDashboard() {
   const [q, setQ] = useState("");
   const [source, setSource] = useState("ALL");
   const [sortBy, setSortBy] = useState("NEWEST");
+  const [hideApplied, setHideApplied] = useState(false);
   const [dashKey, setDashKey] = useState("");
   const [applied, setApplied] = useState(null);
   const [appliedError, setAppliedError] = useState(null);
@@ -94,6 +95,17 @@ export default function GrindDashboard() {
 
   const unlocked = !!dashKey;
 
+  const appliedUrls = useMemo(() => {
+    const s = new Set();
+    (applied || []).forEach((a) => { if (a.link) s.add(a.link.replace(/\/+$/, "")); });
+    return s;
+  }, [applied]);
+
+  const isApplied = (r) => {
+    if (marking[r.url] === "done") return true;
+    return appliedUrls.has((r.url || "").replace(/\/+$/, ""));
+  };
+
   const roles = data?.roles || [];
   const sources = useMemo(() => ["ALL", ...Array.from(new Set(roles.map((r) => r.source)))], [roles]);
 
@@ -102,6 +114,7 @@ export default function GrindDashboard() {
     const out = roles.filter((r) => {
       if (tier !== "ALL" && r.tier !== tier) return false;
       if (source !== "ALL" && r.source !== source) return false;
+      if (hideApplied && appliedUrls.has((r.url || "").replace(/\/+$/, ""))) return false;
       if (needle) {
         const hay = `${r.company} ${r.title} ${r.location}`.toLowerCase();
         if (!hay.includes(needle)) return false;
@@ -170,6 +183,12 @@ export default function GrindDashboard() {
               </button>
             ))}
           </div>
+          {unlocked && (
+            <button onClick={() => setHideApplied((v) => !v)}
+              className={`px-3 py-2 rounded-lg font-mono text-[11px] tracking-wide border transition-colors ${hideApplied ? "bg-[var(--accent-violet)]/15 border-[var(--accent-violet)]/40 text-[var(--accent-violet)]" : "bg-[#0a0a0a] border-white/10 text-white/50 hover:text-white/80"}`}>
+              {hideApplied ? "hiding applied" : "hide applied"}
+            </button>
+          )}
         </div>
 
         {/* Body */}
@@ -201,13 +220,18 @@ export default function GrindDashboard() {
                       Apply →
                     </a>
                     {unlocked && (
-                      <button onClick={() => markApplied(r)} disabled={marking[r.url] === "loading" || marking[r.url] === "done"}
-                        className={`font-mono text-[10px] uppercase tracking-widest border rounded px-3 py-2 transition-colors ${
-                          marking[r.url] === "done" ? "border-green-500/40 text-green-400/80"
-                          : marking[r.url] === "error" ? "border-red-500/40 text-red-400/80"
-                          : "border-[var(--accent-violet)]/40 text-[var(--accent-violet)] hover:bg-[var(--accent-violet)]/10"}`}>
-                        {marking[r.url] === "loading" ? "..." : marking[r.url] === "done" ? "Logged" : marking[r.url] === "error" ? "Failed" : "Mark Applied"}
-                      </button>
+                      isApplied(r) ? (
+                        <span className="font-mono text-[10px] uppercase tracking-widest border border-green-500/40 text-green-400/80 rounded px-3 py-2 flex items-center">
+                          Applied
+                        </span>
+                      ) : (
+                        <button onClick={() => markApplied(r)} disabled={marking[r.url] === "loading"}
+                          className={`font-mono text-[10px] uppercase tracking-widest border rounded px-3 py-2 transition-colors ${
+                            marking[r.url] === "error" ? "border-red-500/40 text-red-400/80"
+                            : "border-[var(--accent-violet)]/40 text-[var(--accent-violet)] hover:bg-[var(--accent-violet)]/10"}`}>
+                          {marking[r.url] === "loading" ? "..." : marking[r.url] === "error" ? "Failed" : "Mark Applied"}
+                        </button>
+                      )
                     )}
                   </div>
                 </div>
