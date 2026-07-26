@@ -52,37 +52,42 @@ const SCHEMA = [
       { name: "ba_account", cols: [["id", "uuid"], ["user_id", "uuid"], ["provider_id", "varchar"], ["account_id", "varchar"]] },
       { name: "ba_verification", cols: [["id", "uuid"], ["identifier", "varchar"], ["value", "varchar"], ["expires_at", "timestamp"]] },
     ],
-  },
+  }, 
   {
     group: "Core",
     tables: [
-      { name: "profiles", cols: [["id", "uuid → ba_user"], ["username", "varchar"], ["display_name", "varchar"], ["bio", "text"], ["hub_location", "varchar"], ["avatar_url", "varchar"], ["featured_clip_id", "uuid?"], ["spotify_top_artists", "json"]] },
-      { name: "clips", cols: [["id", "uuid"], ["user_id", "uuid"], ["video_url", "varchar (R2)"], ["thumbnail_url", "varchar"], ["title", "varchar"], ["description", "text?"], ["duration", "int"]] },
-      { name: "clip_tags", cols: [["id", "uuid"], ["clip_id", "uuid"], ["tag", "varchar"]] },
+      { name: "users", cols: [["id", "uuid"], ["email", "varchar"], ["username", "varchar"], ["display_name", "varchar"], ["bio", "text"], ["avatar_url", "varchar"], ["hub_location", "varchar"], ["intents", "varchar[]"], ["featured_clip_id", "uuid?"], ["spotify_top_artists", "json"], ["deleted_at", "ts?"]] },
+      { name: "clips", cols: [["id", "uuid"], ["user_id", "uuid"], ["video_url", "varchar (R2)"], ["thumbnail_url", "varchar"], ["title", "varchar"], ["description", "text?"], ["tags", "varchar[]"], ["duration", "int"], ["is_featured", "bool"], ["deleted_at", "ts?"]] },
     ],
   },
   {
-    group: "Taxonomy — user identity (junction tables)",
+    group: "Taxonomy — user identity",
     tables: [
-      { name: "instruments", cols: [["id", "uuid"], ["name", "varchar"]] },
-      { name: "genres", cols: [["id", "uuid"], ["name", "varchar"]] },
-      { name: "intents", cols: [["id", "uuid"], ["name", "varchar"]] },
-      { name: "user_instruments", cols: [["user_id", "uuid"], ["instrument_id", "uuid"]] },
-      { name: "user_genres", cols: [["user_id", "uuid"], ["genre_id", "uuid"]] },
-      { name: "user_intents", cols: [["user_id", "uuid"], ["intent_id", "uuid"]] },
+      { name: "instruments", cols: [["id", "serial"], ["name", "varchar"]] },
+      { name: "genres", cols: [["id", "serial"], ["name", "varchar"]] },
+      { name: "user_instruments", cols: [["user_id", "uuid"], ["instrument_id", "int"]] },
+      { name: "user_genres", cols: [["user_id", "uuid"], ["genre_id", "int"]] },
     ],
   },
   {
     group: "Social",
     tables: [
-      { name: "jam_requests", cols: [["id", "uuid"], ["sender_id", "uuid"], ["receiver_id", "uuid"], ["clip_id", "uuid?"], ["initial_message", "text"], ["status", "varchar"]] },
-      { name: "conversations", cols: [["id", "uuid"], ["participant_a", "uuid"], ["participant_b", "uuid"], ["jam_request_id", "uuid?"]] },
-      { name: "messages", cols: [["id", "uuid"], ["conversation_id", "uuid"], ["sender_id", "uuid"], ["body", "text"], ["read_at", "timestamp?"]] },
+      { name: "jam_requests", cols: [["id", "uuid"], ["sender_id", "uuid"], ["receiver_id", "uuid"], ["clip_id", "uuid?"], ["initial_message", "text"], ["idempotency_key", "uuid"], ["status", "varchar"]] },
+      { name: "conversations", cols: [["id", "uuid"], ["jam_request_id", "uuid"], ["user_a_id", "uuid"], ["user_b_id", "uuid"], ["deleted_at", "ts?"]] },
+      { name: "messages", cols: [["id", "uuid"], ["conversation_id", "uuid"], ["sender_id", "uuid"], ["body", "text"], ["deleted_at", "ts?"]] },
+    ],
+  },
+  {
+    group: "Moderation & System",
+    tables: [
+      { name: "blocks", cols: [["id", "uuid"], ["blocker_id", "uuid"], ["blocked_id", "uuid"]] },
+      { name: "reports", cols: [["id", "uuid"], ["reporter_id", "uuid"], ["reported_id", "uuid"], ["reason", "varchar"], ["status", "varchar"]] },
+      { name: "notifications", cols: [["id", "uuid"], ["recipient_id", "uuid"], ["actor_id", "uuid"], ["type", "varchar"], ["entity_id", "uuid"], ["read_at", "ts?"]] },
     ],
   },
 ];
 
-const ERD_IMG = "/assets/images/jam/jamAppERD.png";
+const ERD_PDF = "/assets/images/jam/JamAppERD.png";
 const SKETCHES_PDF = "/assets/Jam-App-Design-Drawings.pdf";
 const COLOR_IMG = "/assets/images/jam/Color-Scheme-Jam-App.png";
 const DEMO_VIDEO = "/assets/jam-frontend-video.mp4";
@@ -245,7 +250,7 @@ export default function JamCaseStudy() {
                         </div>
                       ))}
                     </div>
-                    <a href={ERD_IMG} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-8 font-mono text-[11px] uppercase tracking-widest text-[var(--accent-cyan)] hover:underline">
+                    <a href={ERD_PDF} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-8 font-mono text-[11px] uppercase tracking-widest text-[var(--accent-cyan)] hover:underline">
                       View full ERD →
                     </a>
                   </section>
