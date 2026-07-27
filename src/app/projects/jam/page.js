@@ -47,17 +47,17 @@ const SCHEMA = [
     group: "Auth: Better Auth",
     managed: true,
     tables: [
-      { name: "ba_user", cols: [["id", "uuid"], ["email", "varchar"], ["email_verified", "bool"], ["name", "varchar"], ["image", "varchar"]] },
-      { name: "ba_session", cols: [["id", "uuid"], ["user_id", "uuid"], ["token", "varchar"], ["expires_at", "timestamp"]] },
-      { name: "ba_account", cols: [["id", "uuid"], ["user_id", "uuid"], ["provider_id", "varchar"], ["account_id", "varchar"]] },
-      { name: "ba_verification", cols: [["id", "uuid"], ["identifier", "varchar"], ["value", "varchar"], ["expires_at", "timestamp"]] },
+      { name: "ba_user", cols: [["id", "text"], ["email", "varchar"], ["email_verified", "bool"], ["name", "varchar"], ["image", "varchar"]] },
+      { name: "ba_session", cols: [["id", "text"], ["user_id", "text"], ["token", "varchar"], ["expires_at", "timestamp"]] },
+      { name: "ba_account", cols: [["id", "text"], ["user_id", "text"], ["provider_id", "varchar"], ["account_id", "varchar"], ["password", "varchar"]] },
+      { name: "ba_verification", cols: [["id", "text"], ["identifier", "varchar"], ["value", "varchar"], ["expires_at", "timestamp"]] },
     ],
-  }, 
+  },
   {
     group: "Core",
     tables: [
-      { name: "users", cols: [["id", "uuid"], ["email", "varchar"], ["username", "varchar"], ["display_name", "varchar"], ["bio", "text"], ["avatar_url", "varchar"], ["hub_location", "varchar"], ["intents", "varchar[]"], ["featured_clip_id", "uuid?"], ["spotify_top_artists", "json"], ["deleted_at", "ts?"]] },
-      { name: "clips", cols: [["id", "uuid"], ["user_id", "uuid"], ["video_url", "varchar (R2)"], ["thumbnail_url", "varchar"], ["title", "varchar"], ["description", "text?"], ["tags", "varchar[]"], ["duration", "int"], ["is_featured", "bool"], ["deleted_at", "ts?"]] },
+      { name: "profiles", cols: [["user_id", "text (→ba_user)"], ["username", "varchar"], ["bio", "text"], ["instagram_handle", "varchar?"], ["hub_location", "varchar"], ["intents", "varchar[]"], ["featured_clip_id", "uuid?"], ["spotify_top_artists", "json"], ["deleted_at", "ts?"]] },
+      { name: "clips", cols: [["id", "uuid"], ["user_id", "text"], ["video_url", "varchar (R2)"], ["thumbnail_url", "varchar"], ["title", "varchar"], ["description", "text?"], ["tags", "varchar[]"], ["duration", "int"], ["is_featured", "bool"], ["deleted_at", "ts?"]] },
     ],
   },
   {
@@ -65,24 +65,24 @@ const SCHEMA = [
     tables: [
       { name: "instruments", cols: [["id", "serial"], ["name", "varchar"]] },
       { name: "genres", cols: [["id", "serial"], ["name", "varchar"]] },
-      { name: "user_instruments", cols: [["user_id", "uuid"], ["instrument_id", "int"]] },
-      { name: "user_genres", cols: [["user_id", "uuid"], ["genre_id", "int"]] },
+      { name: "user_instruments", cols: [["user_id", "text"], ["instrument_id", "int"]] },
+      { name: "user_genres", cols: [["user_id", "text"], ["genre_id", "int"]] },
     ],
   },
   {
     group: "Social",
     tables: [
-      { name: "jam_requests", cols: [["id", "uuid"], ["sender_id", "uuid"], ["receiver_id", "uuid"], ["clip_id", "uuid?"], ["initial_message", "text"], ["idempotency_key", "uuid"], ["status", "varchar"]] },
-      { name: "conversations", cols: [["id", "uuid"], ["jam_request_id", "uuid"], ["user_a_id", "uuid"], ["user_b_id", "uuid"], ["deleted_at", "ts?"]] },
-      { name: "messages", cols: [["id", "uuid"], ["conversation_id", "uuid"], ["sender_id", "uuid"], ["body", "text"], ["deleted_at", "ts?"]] },
+      { name: "jam_requests", cols: [["id", "uuid"], ["sender_id", "text"], ["receiver_id", "text"], ["clip_id", "uuid?"], ["initial_message", "text"], ["idempotency_key", "uuid"], ["status", "varchar"]] },
+      { name: "conversations", cols: [["id", "uuid"], ["jam_request_id", "uuid"], ["user_a_id", "text"], ["user_b_id", "text"], ["deleted_at", "ts?"]] },
+      { name: "messages", cols: [["id", "uuid"], ["conversation_id", "uuid"], ["sender_id", "text"], ["body", "text"], ["deleted_at", "ts?"]] },
     ],
   },
   {
     group: "Moderation & System",
     tables: [
-      { name: "blocks", cols: [["id", "uuid"], ["blocker_id", "uuid"], ["blocked_id", "uuid"]] },
-      { name: "reports", cols: [["id", "uuid"], ["reporter_id", "uuid"], ["reported_id", "uuid"], ["reason", "varchar"], ["status", "varchar"]] },
-      { name: "notifications", cols: [["id", "uuid"], ["recipient_id", "uuid"], ["actor_id", "uuid"], ["type", "varchar"], ["entity_id", "uuid"], ["read_at", "ts?"]] },
+      { name: "blocks", cols: [["id", "uuid"], ["blocker_id", "text"], ["blocked_id", "text"]] },
+      { name: "reports", cols: [["id", "uuid"], ["reporter_id", "text"], ["reported_id", "text"], ["reason", "varchar"], ["status", "varchar"]] },
+      { name: "notifications", cols: [["id", "uuid"], ["recipient_id", "text"], ["actor_id", "text"], ["type", "varchar"], ["entity_id", "uuid"], ["read_at", "ts?"]] },
     ],
   },
 ];
