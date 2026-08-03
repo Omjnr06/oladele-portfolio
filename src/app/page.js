@@ -121,6 +121,18 @@ export default function Home() {
       imageDisplay: "cover",
       liveUrl: "/grind"
     },
+      {
+      id: "PROJECT 07",
+      title: "The Vault - AI Financial Dashboard",
+      category: ["FULL STACK", "DATA SCIENCE"],
+      stack: ["Next.js","TypeScript", "Python", "FAST API", "Plaid", "BetterAuth", "Neon", "Resend", "SQLModel"],
+      description: "Personal finance dashboard with real bank sync (Plaid), a forward looking budgeting engine, and cross language auth between Next.js and FastAPI. In active development.",
+      githubUrl: "https://github.com/Omjnr06/ai-financial-dashboard",
+      videoUrl: "",
+      imageUrl: "/assets/images/financial-dashboard/dashboard-desktop.png",
+      imageDisplay: "cover",
+      caseStudyUrl: "/projects/vault",
+    },
   ];
 
   const asCats = (c) => Array.isArray(c) ? c : [c];
