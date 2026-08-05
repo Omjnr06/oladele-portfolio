@@ -11,9 +11,10 @@ const resumeData = {
     status: "BSc. CS, Minor Data Sci @ Western University '28",
   },
   skills: [
-    { category: "LANGUAGES & FRAMEWORKS", items: ["Python", "JavaScript", "TypeScript", "PostgreSQL", "Java", "HTML/CSS", "R", "C", "React", "Next.js", "Express.js", "Flask", "Tailwind CSS"] },
-    { category: "DEVELOPER TOOLS", items: ["Git", "GitHub", "GitHub Actions (CI/CD)", "Docker", "Nginx", "Supabase", "REST APIs", "MSW", "VS Code", "Figma", "Notion"] },
-    { category: "DATA LIBRARIES", items: ["PyTorch", "TensorFlow", "Keras", "NumPy", "Pandas", "Matplotlib", "Seaborn"] },
+    { category: "LANGUAGES & FRAMEWORKS", items: ["Python", "JavaScript", "TypeScript", "PostgreSQL", "Java", "HTML/CSS", "R", "C", "React", "Next.js", "Express.js", "Flask", "FastAPI", "Tailwind CSS"] },
+    { category: "DEVELOPER TOOLS", items: ["Git", "GitHub", "GitHub Actions (CI/CD)", "Docker", "Nginx", "Redis", "Supabase", "REST APIs", "MSW", "VS Code", "Figma", "Notion", "GitHub Copilot"] },
+    { category: "DATA LIBRARIES", items: ["PyTorch", "TensorFlow", "Keras", "NumPy", "Pandas", "Matplotlib", "Seaborn", "Transfer Learning", "Monte Carlo Methods"] },
+    { category: "CONCEPTS", items: ["Data Structures & Algorithms", "Real Time Data Pipelines", "API Integration", "Distributed Systems"] },
     { category: "OTHER CAPABILITIES", items: ["Computer Vision", "Sound Engineering", "Event Management", "Arabic", "Microsoft Office Suite"] }
   ],
   experience: [
@@ -24,8 +25,8 @@ const resumeData = {
       date: "May 2026 - Present",
       location: "Remote",
       points: [
-        "Built a computer vision pipeline to grade acne severity from user facial images, fine-tuning an EfficientNet CNN in PyTorch/TensorFlow with a two-phase transfer-learning strategy to reach 95.5% validation accuracy and 100% accuracy on a held-out set of 50 real customer images.",
-        "Engineered the end-to-end customer reporting interface using Next.js and Supabase, building interactive data visualizations that translate complex biological JSON payloads into actionable microbiome insights for active beta testers."
+        "Built and deployed a computer vision model grading acne severity from facial images, fine tuning an Efficient Net CNN in PyTorch/TensorFlow with a two phase transfer learning strategy to reach 95.5% validation accuracy and 100% accuracy on a held-out set of 50 real customer images.",
+        "Engineered the end to end reporting interface in Next.js and Supabase, building data pipelines that normalize complex biological JSON into structured, queryable microbiome insights surfaced to users."
       ]
     },
     {
@@ -77,16 +78,27 @@ const resumeData = {
   projects: [
     {
       id: "PRJ_01",
-      title: "Internship Alert Pipeline",
-      stack: "Python, GitHub Actions, REST APIs",
-      date: "Jul. 2026",
+      title: "The Vault - AI Financial Dashboard",
+      stack: "Python, FastAPI, Plaid, PostgreSQL",
+      date: "July 2026 - Present",
       points: [
-        "Built an automated job-monitoring pipeline that aggregates ~720 postings per run across 5 sources, normalizes and deduplicates them by URL, and routes new or reopened roles through a 3-tier classifier by target company and location.",
-        "Deployed on a 15-minute GitHub Actions cron with committed state for reliable change detection, delivering filtered alerts through push notifications and email with fuzzy company matching to avoid missed or duplicate roles."
+        "Built a real time financial data pipeline ingesting live bank transactions via Plaid, using cursor based sync and idempotent writes to guarantee no duplicate or lost records across accounts.",
+        "Designed a Monte Carlo forecasting engine that models spending volatility from real transaction history to produce probabilistic savings projections with confidence ranges rather than single-point estimates.",
+        "Architected secure multi user infrastructure (encrypted token storage, row level isolation) and led a 3 person team from design through deployment."
       ]
     },
     {
       id: "PRJ_02",
+      title: "JAM",
+      stack: "React Native, Expo, GraphQL (Apollo), Better Auth, PostgreSQL",
+      date: "June 2026 - Present",
+      points: [
+        "Built a cross-platform musician discovery app with React Native and Expo, engineering a typed data-access layer with a mock/live toggle to enable parallel frontend and backend development.",
+        "Architected the backend with an Apollo GraphQL server, Better Auth, and Neon Postgres, wiring authentication, Google OAuth, and email flows for a musician-matching platform."
+      ]
+    },
+    {
+      id: "PRJ_03",
       title: "Distributed URL Shortener",
       stack: "Flask, Docker, Nginx, Redis",
       date: "Apr. 2026",
@@ -96,17 +108,27 @@ const resumeData = {
       ]
     },
     {
-      id: "PRJ_03",
+      id: "PRJ_04",
       title: "Mustang Wrapped",
       stack: "Spotify API, Supabase, React, SQL",
-      date: "Oct. 2025 - Present",
+      date: "Oct. 2025 - April 2026",
       points: [
         "Developed a full-stack social analytics web application by integrating the Spotify Web API with a React frontend and Supabase backend, securely normalizing and storing real-time user listening history.",
         "Uncovered community-level music trends by writing complex SQL queries to clean, aggregate, and normalize raw JSON data, successfully processing over 100 top tracks among university club members to deliver personalized comparative dashboards."
       ]
     },
     {
-      id: "PRJ_04",
+      id: "PRJ_05",
+      title: "Internship Alert Pipeline",
+      stack: "Python, GitHub Actions, REST APIs",
+      date: "Jul. 2026",
+      points: [
+        "Built an automated job-monitoring pipeline that aggregates ~720 postings per run across 5 sources, normalizes and deduplicates them by URL, and routes new or reopened roles through a 3-tier classifier by target company and location.",
+        "Deployed on a 15-minute GitHub Actions cron with committed state for reliable change detection, delivering filtered alerts through push notifications and email with fuzzy company matching to avoid missed or duplicate roles."
+      ]
+    },
+    {
+      id: "PRJ_06",
       title: "UofTHacks: Flowlytics",
       stack: "Python, Mesa, TypeScript, React",
       date: "Jan. 2026",
@@ -114,7 +136,7 @@ const resumeData = {
         "Built a customer traffic simulation and analytics dashboard by integrating a Python-based Mesa model with a React/TypeScript frontend, providing real-time space utilization metrics for retail environments.",
         "Spearheaded spatial data analysis by writing Python scripts to simulate foot traffic and generate heat maps, processing 10,000+ simulated agent movements to identify store dead zones within a strict 48-hour hackathon window."
       ]
-    }
+    },
   ],
   education: [
     {
