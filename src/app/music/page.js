@@ -120,9 +120,18 @@ export const musicLibrary = [
         videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/careless-whisper-drums.mp4",
         audioOnly: true
       },
-
       { 
         id: "drums 07", 
+        title: "Chamber of Reflection Jam Session Take 1",
+        originalArtist: "Mac DeMarco", 
+        date: "2026.08.04", 
+        location: "Carnegie Mellon University Music Room, Qatar", 
+        notes: "Ose, Dika, and Shanah quickly learnt how to play this track. I played drums for this and I was exploring how creative I could be with my fills without losing the groove (I lost the groove a couple times LOL). There is a longer take 2 which is better in terms of pocket but I like some of the ideas more here", 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/Chamberofreflectiontake1.mp4",
+        isFeatured: true,
+      },
+      { 
+        id: "drums 08", 
         title: "Best Part Ending Breakdown",
         originalArtist: "Daniel Caesar ft. H.E.R.", 
         date: "2026.06.30", 
@@ -131,9 +140,8 @@ export const musicLibrary = [
         videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/BestPartEnding-Drums.MOV" 
       
       },
-
       { 
-        id: "drums 08", 
+        id: "drums 09", 
         title: "Tadow",
         originalArtist: "Masego ft. FKJ", 
         date: "2026.06.30", 
@@ -177,7 +185,6 @@ export const musicLibrary = [
         location: "Carnegie Mellon University Music Room, Qatar", 
         notes: "Part of the Dika and Me Jam sessions, his friend from university pulled up and he happened to know one of my favourite songs of all time. Childhood dream to jam out to this track.", 
         videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/RappKnishSnitches-guitarmp4",
-        isFeatured: true,
       },
     ] 
   },
