@@ -106,7 +106,6 @@ export default function Home() {
       imageUrl: "/assets/images/jam/jam-homepage.png",
       imageDisplay: "contain",
       mediaOrientation: "portrait",
-      featuredRank: 2,
     },
     {
       id: "PROJECT 06",
@@ -132,6 +131,7 @@ export default function Home() {
       imageDisplay: "cover",
       caseStudyUrl: "/projects/vault",
       isFeatured: true,
+      featuredRank: 2,
     },
   ];
 
