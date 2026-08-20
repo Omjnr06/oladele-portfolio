@@ -104,7 +104,7 @@ export const musicLibrary = [
       { 
         id: "drums 05", 
         title: "Far Away Jam Session",
-        originalArtist: "Yebba", 
+        originalArtist: "The Deftones", 
         date: "2023.06.07", 
         location: "St. Francis Highschool Calgary", 
         notes: "During our spare, my good friend and I would sometimes just jam out to our favourite tracks. This is prolly the fatest fill I have ever done LOL. Miss jamming out with Vince.", 
