@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { musicLibrary } from "./music/page";
+import { musicLibrary } from "./music/data/musicLibrary";
 import Image from 'next/image';
 
 export default function Home() {
