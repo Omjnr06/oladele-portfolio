@@ -3,7 +3,6 @@ import React from "react";
 import { NAV_INSTRUMENTS } from "../data/boardItems";
 import { INSTRUMENT_ICONS } from "./icons/Instruments";
 
-
 export default function PillNav({ onFly, onHome }) {
   const left = NAV_INSTRUMENTS.slice(0, 2);
   const right = NAV_INSTRUMENTS.slice(2);
@@ -11,7 +10,7 @@ export default function PillNav({ onFly, onHome }) {
   const Pill = ({ item }) => {
     const Icon = INSTRUMENT_ICONS[item.instrumentId];
     return (
-      <button className="mv-pill" onClick={() => onFly(item.anchorId)}>
+      <button className="mv-pill" onClick={() => onFly(item.instrumentId)}>
         {Icon ? <Icon className="mv-pill-ico" /> : null}
         <span>{item.label}</span>
       </button>
