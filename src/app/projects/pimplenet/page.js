@@ -45,7 +45,7 @@ export default function PimpleNetCaseStudy() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="mb-16"
+          className="mb-16 flex flex-col sm:flex-row gap-4"
         >
           <a 
             href="/assets/NextAI__Oladele_.pdf" 
@@ -55,6 +55,16 @@ export default function PimpleNetCaseStudy() {
           >
             <svg className="w-5 h-5 text-[var(--accent-cyan)] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path></svg>
             <span className="font-mono text-xs uppercase tracking-widest text-white">Open Full Research Paper (PDF)</span>
+          </a>
+
+          <a 
+            href="https://report.purelybiome.com/sample-report" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 px-6 py-3 bg-[#8b5cf6]/10 border border-[#8b5cf6]/30 rounded shadow-[0_0_20px_rgba(139,92,246,0.1)] hover:bg-[#8b5cf6]/20 hover:border-[#8b5cf6]/60 transition-all group"
+          >
+            <svg className="w-5 h-5 text-[#8b5cf6] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"></path></svg>
+            <span className="font-mono text-xs uppercase tracking-widest text-white">See It Live · Sample Report</span>
           </a>
         </motion.div>
 
@@ -154,6 +164,10 @@ export default function PimpleNetCaseStudy() {
               
               <p className="text-white/80 leading-relaxed font-light mt-4">
                 The most critical indicator of real-world viability, however, was the model's performance on a held-out set of 50 representative customer images; the model achieved 100% accuracy, demonstrating that it successfully generalized beyond academic datasets to the actual noisy, varied lighting and angles found in user-submitted photos. This validated the architectural transition to a dual-data approach, providing PurelyBiome with an objective, visual-based skin health tracking system. This success establishes a foundation for future high-value product features, such as longitudinal progress monitoring and targeted, facial-area-specific skincare recommendations.
+              </p>
+
+              <p className="text-white/80 leading-relaxed font-light mt-4">
+                This visual analysis now lives in production, powering the Visual Skin Analysis in PurelyBiome's customer report, where a user's photos are tied directly to their microbiome profile to drive targeted recommendations. <a href="https://report.purelybiome.com/sample-report" target="_blank" rel="noopener noreferrer" className="text-[#8b5cf6] underline underline-offset-4 hover:text-white transition-colors">View a live sample report &rarr;</a>
               </p>
             </section>
               

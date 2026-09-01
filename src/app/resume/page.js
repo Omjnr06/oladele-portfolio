@@ -22,7 +22,7 @@ const resumeData = {
       id: "EXP_01",
       role: "AI & Software Developer Intern",
       company: "PurelyBiome",
-      date: "May 2026 - Present",
+      date: "May 2026 - August 2026",
       location: "Remote",
       points: [
         "Built and deployed a computer vision model grading acne severity from facial images, fine tuning an Efficient Net CNN in PyTorch/TensorFlow with a two phase transfer learning strategy to reach 95.5% validation accuracy and 100% accuracy on a held-out set of 50 real customer images.",
@@ -33,7 +33,7 @@ const resumeData = {
       id: "EXP_02",
       role: "Software Developer",
       company: "3D Western",
-      date: "Jun. 2026 - Present",
+      date: "Jun. 2026 - September 2026",
       location: "London, ON",
       points: [
         "Built the frontend data and API layer for a 3D-printing lab management dashboard (Next.js, TypeScript, React) launching to production in August 2026, delivering typed contracts and API client wrappers across booking and job-tracking features.",
