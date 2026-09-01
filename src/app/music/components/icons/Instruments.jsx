@@ -1,10 +1,6 @@
 "use client";
 import React from "react";
 
-// Phase 0 approved icon set. License-clean:
-//   Piano, Guitar      - Phosphor Icons (MIT)
-//   Drums, Bass (head) - game-icons.net (CC BY 3.0) -> see LICENSES.md
-
 export function PianoIcon({ className, style }) {
   return (
     <svg viewBox="0 0 256 256" className={className} style={style} fill="currentColor" xmlns="http://www.w3.org/2000/svg">

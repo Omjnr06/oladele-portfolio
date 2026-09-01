@@ -179,7 +179,7 @@ export const musicLibrary = [
         date: "2026.06.30", 
         location: "Carnegie Mellon University Music Room, Qatar", 
         notes: "Part of the Dika and Me Jam sessions, his friend from university pulled up and he happened to know one of my favourite songs of all time. Childhood dream to jam out to this track.", 
-        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/RappKnishSnitches-guitarmp4",
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/RappKnishSnitches-guitar.mp4",
       },
     ] 
   },

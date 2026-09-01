@@ -3,12 +3,15 @@ import React, { useRef, useState, useCallback, useEffect } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import PillNav from "./PillNav";
 import MusicSidebar from "./MusicSidebar";
+import InstrumentNode from "./Nodes/InstrumentNode";
+import InstrumentModal from "./Modals/InstrumentModal";
+import MusicTitle from "./MusicTitle";
 import useCulling from "../hooks/useCulling";
 import { boardItems, CANVAS_SIZE, CENTER } from "../data/boardItems";
 
 const INITIAL_SCALE = 0.55;
 const FOCUS_SCALE = 0.95;
-const MIN_SCALE = 0.42;
+const MIN_SCALE = 0.20;
 const MAX_SCALE = 2.5;
 const DOT = 22;
 
@@ -18,6 +21,7 @@ export default function CanvasBoard() {
   const [view, setView] = useState({ scale: INITIAL_SCALE, x: 0, y: 0 });
   const [viewport, setViewport] = useState({ w: 0, h: 0 });
   const [start, setStart] = useState(null);
+  const [openCategory, setOpenCategory] = useState(null);
   const raf = useRef(0);
 
   useEffect(() => {
@@ -68,6 +72,12 @@ export default function CanvasBoard() {
 
   const goHome = useCallback(() => centerOn(CENTER, CENTER, INITIAL_SCALE), [centerOn]);
 
+  const handleInstrumentClick = useCallback((categoryId) => {
+    const it = boardItems.find((b) => b.categoryId === categoryId);
+    if (it) centerOn(CENTER + it.x, CENTER + it.y, FOCUS_SCALE, 600);
+    setOpenCategory(categoryId);
+  }, [centerOn]);
+
   if (!start) return <div className="mv-board" />;
 
   return (
@@ -85,9 +95,14 @@ export default function CanvasBoard() {
         maxScale={MAX_SCALE}
         limitToBounds={false}
         centerOnInit={false}
+        centerZoomedOut={false}
+        disablePadding
         wheel={{ step: 0.007, smoothStep: 0.0009 }}
         pinch={{ step: 2 }}
         panning={{ velocityDisabled: true }}
+        alignmentAnimation={{ disabled: true }}
+        velocityAnimation={{ disabled: true }}
+        zoomAnimation={{ disabled: true }}
         doubleClick={{ disabled: true }}
         onTransformed={onTransformed}
       >
@@ -99,20 +114,15 @@ export default function CanvasBoard() {
               contentStyle={{ width: `${CANVAS_SIZE}px`, height: `${CANVAS_SIZE}px` }}
             >
               <div className="mv-canvas" style={{ width: CANVAS_SIZE, height: CANVAS_SIZE }}>
-                <div id="mv-home" className="mv-title" style={{ left: CENTER, top: CENTER }}>
-                  Oladele&apos;s<br />Music Portfolio
+                <div className="mv-title-wrap" style={{ left: CENTER, top: CENTER }}>
+                  <MusicTitle />
                 </div>
 
-                {visible.map((it) => (
-                  <div
-                    key={it.id}
-                    id={it.id}
-                    className="mv-anchor"
-                    style={{ left: CENTER + it.x, top: CENTER + it.y, width: it.size, height: it.size }}
-                  >
-                    <span>{it.label}</span>
-                  </div>
-                ))}
+                {visible.map((it) =>
+                  it.type === "instrument" ? (
+                    <InstrumentNode key={it.id} item={it} onOpen={handleInstrumentClick} />
+                  ) : null
+                )}
               </div>
             </TransformComponent>
 
@@ -130,6 +140,10 @@ export default function CanvasBoard() {
 
       <PillNav onFly={flyToItem} onHome={goHome} />
       <div className="mv-hint">drag to pan · scroll to zoom · pill-nav to fly</div>
+
+      {openCategory ? (
+        <InstrumentModal categoryId={openCategory} onClose={() => setOpenCategory(null)} />
+      ) : null}
     </div>
   );
 }
