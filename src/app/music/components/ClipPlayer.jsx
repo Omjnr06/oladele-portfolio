@@ -169,8 +169,8 @@ export default function ClipPlayer({ clip, onClose }) {
 
   const isPortrait = ratio < 1;
   const stageStyle = isFullscreen
-    ? {}
-    : { aspectRatio: `${ratio}`, maxHeight: "72vh", maxWidth: "100%", width: isPortrait ? "auto" : "100%" };
+    ? { width: "100vw", height: "100vh" }
+    : {};
 
   return (
     <div className="mv-cp-overlay" onClick={onClose}>
