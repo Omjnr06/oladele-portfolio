@@ -243,3 +243,36 @@ export function focusCollection(kind) {
   const height = rows * cellSize + (rows - 1) * gapY + headerH;
   return { kind, label: kind === "photos" ? "Photos" : "In My Playlist", slots, bounds: { top: gridTop - headerH, height, width: Math.max(maxRowW, 800) } };
 }
+
+export const contentBounds = (() => {
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const it of boardItems) {
+    const half = (it.size || 300) / 2;
+    if (it.x - half < minX) minX = it.x - half;
+    if (it.y - half < minY) minY = it.y - half;
+    if (it.x + half > maxX) maxX = it.x + half;
+    if (it.y + half > maxY) maxY = it.y + half;
+  }
+  if (!isFinite(minX)) { minX = minY = -500; maxX = maxY = 500; }
+  return { minX, minY, maxX, maxY };
+})();
+
+export const CONTENT_BOUNDS = (() => {
+  const pad = 900;
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  for (const it of boardItems) {
+    const half = (it.size || 300) / 2;
+    if (it.x - half < minX) minX = it.x - half;
+    if (it.x + half > maxX) maxX = it.x + half;
+    if (it.y - half < minY) minY = it.y - half;
+    if (it.y + half > maxY) maxY = it.y + half;
+  }
+  return {
+    minX: minX - pad,
+    maxX: maxX + pad,
+    minY: minY - pad,
+    maxY: maxY + pad,
+    width: maxX - minX + pad * 2,
+    height: maxY - minY + pad * 2,
+  };
+})();

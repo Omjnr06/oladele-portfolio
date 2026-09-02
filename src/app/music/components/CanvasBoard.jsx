@@ -14,11 +14,11 @@ import ClipPlayer from "./ClipPlayer";
 import MusicTitle from "./MusicTitle";
 import useCulling from "../hooks/useCulling";
 import useDeepLink from "../hooks/useDeepLink";
-import { boardItems, instrumentItems, clipItems, CANVAS_SIZE, CENTER, focusLayout, focusCollection } from "../data/boardItems";
+import { boardItems, instrumentItems, clipItems, CANVAS_SIZE, CENTER, CONTENT_BOUNDS, focusLayout, focusCollection } from "../data/boardItems";
 
 const INITIAL_SCALE = 0.55;
 const FOCUS_SCALE = 0.95;
-const MIN_SCALE = 0.12;
+const MIN_SCALE = 0.1;
 const MAX_SCALE = 2.5;
 const DOT = 40;
 
@@ -71,6 +71,27 @@ export default function CanvasBoard() {
       raf.current = 0;
       setView({ scale: s.scale, x: s.positionX, y: s.positionY });
     });
+  }, []);
+
+  const clampToBounds = useCallback((time = 300) => {
+    const api = apiRef.current;
+    if (!api) return;
+    const st = api.instance?.transformState || api.state || {};
+    const s = st.scale || INITIAL_SCALE;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const cMinX = (CENTER + CONTENT_BOUNDS.minX) * s;
+    const cMaxX = (CENTER + CONTENT_BOUNDS.maxX) * s;
+    const cMinY = (CENTER + CONTENT_BOUNDS.minY) * s;
+    const cMaxY = (CENTER + CONTENT_BOUNDS.maxY) * s;
+    let minPx = vw - cMaxX, maxPx = -cMinX;
+    let minPy = vh - cMaxY, maxPy = -cMinY;
+    if (minPx > maxPx) { const c = (minPx + maxPx) / 2; minPx = maxPx = c; }
+    if (minPy > maxPy) { const c = (minPy + maxPy) / 2; minPy = maxPy = c; }
+    const px = Math.min(maxPx, Math.max(minPx, st.positionX));
+    const py = Math.min(maxPy, Math.max(minPy, st.positionY));
+    if (Math.abs(px - st.positionX) > 0.5 || Math.abs(py - st.positionY) > 0.5) {
+      api.setTransform(px, py, s, time, "easeOutCubic");
+    }
   }, []);
 
   const visible = useCulling(boardItems, view, viewport);
@@ -159,6 +180,8 @@ export default function CanvasBoard() {
         zoomAnimation={{ disabled: true }}
         doubleClick={{ disabled: true }}
         onTransform={onTransform}
+        onPanningStop={() => { if (!focusMode) clampToBounds(300); }}
+        onZoomStop={() => { if (!focusMode) clampToBounds(200); }}
       >
         <TransformComponent
               wrapperClass="mv-tc-wrapper"
