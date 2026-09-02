@@ -5,15 +5,20 @@ import PillNav from "./PillNav";
 import MusicSidebar from "./MusicSidebar";
 import InstrumentNode from "./Nodes/InstrumentNode";
 import ClipNode from "./Nodes/ClipNode";
+import PhotoNode from "./Nodes/PhotoNode";
+import SymbolNode from "./Nodes/SymbolNode";
+import SongNode from "./Nodes/SongNode";
+import SongModal from "./Modals/SongModal";
+import PhotoModal from "./Modals/PhotoModal";
 import ClipPlayer from "./ClipPlayer";
 import MusicTitle from "./MusicTitle";
 import useCulling from "../hooks/useCulling";
 import useDeepLink from "../hooks/useDeepLink";
-import { boardItems, instrumentItems, clipItems, CANVAS_SIZE, CENTER, focusLayout } from "../data/boardItems";
+import { boardItems, instrumentItems, clipItems, CANVAS_SIZE, CENTER, focusLayout, focusCollection } from "../data/boardItems";
 
 const INITIAL_SCALE = 0.55;
 const FOCUS_SCALE = 0.95;
-const MIN_SCALE = 0.15;
+const MIN_SCALE = 0.12;
 const MAX_SCALE = 2.5;
 const DOT = 40;
 
@@ -26,7 +31,9 @@ export default function CanvasBoard() {
   const [start, setStart] = useState(null);
   const [hoveredClip, setHoveredClip] = useState(null);
   const [selectedClip, setSelectedClip] = useState(null);
-  const [focus, setFocus] = useState(null);
+  const [selectedSong, setSelectedSong] = useState(null);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [focusMode, setFocusMode] = useState(null);
   const raf = useRef(0);
 
   useEffect(() => {
@@ -95,7 +102,7 @@ export default function CanvasBoard() {
     );
     if (!inst) return;
     const layout = focusLayout(inst.categoryId);
-    setFocus(layout);
+    setFocusMode({ ...layout, type: "instrument" });
     const vw = window.innerWidth, vh = window.innerHeight;
     const padV = 150, padH = 120;
     const fitH = (vh - padV) / layout.bounds.height;
@@ -107,8 +114,18 @@ export default function CanvasBoard() {
   }, [centerOn]);
 
   const exitFocus = useCallback(() => {
-    setFocus(null);
+    setFocusMode(null);
     centerOn(CENTER, CENTER, INITIAL_SCALE, 650);
+  }, [centerOn]);
+
+  const enterCollection = useCallback((kind) => {
+    const layout = focusCollection(kind);
+    setFocusMode({ ...layout, type: "collection" });
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const fitH = (vh - 150) / layout.bounds.height;
+    const fitW = (vw - 120) / layout.bounds.width;
+    const scale = Math.max(MIN_SCALE, Math.min(0.55, fitH, fitW));
+    centerOn(CENTER, CENTER + layout.bounds.top + layout.bounds.height / 2, scale, 650);
   }, [centerOn]);
 
   const handleInstrumentClick = useCallback((categoryId) => {
@@ -149,16 +166,17 @@ export default function CanvasBoard() {
               contentStyle={{ width: `${CANVAS_SIZE}px`, height: `${CANVAS_SIZE}px` }}
             >
               <div className="mv-canvas" style={{ width: CANVAS_SIZE, height: CANVAS_SIZE }}>
-                <div className="mv-title-wrap" style={{ left: CENTER, top: CENTER, opacity: focus ? 0 : 1, pointerEvents: focus ? "none" : "auto", transition: "opacity .4s ease" }}>
+                <div className="mv-title-wrap" style={{ left: CENTER, top: CENTER, opacity: focusMode ? 0 : 1, pointerEvents: focusMode ? "none" : "auto", transition: "opacity .4s ease" }}>
                   <MusicTitle />
                 </div>
 
-                {(focus ? boardItems : visible).map((it) => {
+                {(focusMode ? boardItems : visible).map((it) => {
                   if (it.type === "instrument") {
-                    const isFocused = focus && it.categoryId === focus.categoryId;
-                    const dimmed = focus && !isFocused;
-                    const fx = isFocused ? focus.instFocus.x : it.x;
-                    const fy = isFocused ? focus.instFocus.y : it.y;
+                    if (focusMode?.type === "collection") return null;
+                    const isFocused = focusMode?.type === "instrument" && it.categoryId === focusMode.categoryId;
+                    const dimmed = focusMode?.type === "instrument" && !isFocused;
+                    const fx = isFocused ? focusMode.instFocus.x : it.x;
+                    const fy = isFocused ? focusMode.instFocus.y : it.y;
                     return (
                       <InstrumentNode
                         key={it.id}
@@ -170,11 +188,31 @@ export default function CanvasBoard() {
                       />
                     );
                   }
+                  if (it.type === "photo") {
+                    if (focusMode?.type === "instrument") return null;
+                    const inColl = focusMode?.type === "collection" && focusMode.kind === "photos";
+                    const slot = inColl ? focusMode.slots.find((sl) => sl.id === it.id) : null;
+                    const slotIdx = inColl ? focusMode.slots.findIndex((sl) => sl.id === it.id) : 0;
+                    const dimmed = focusMode?.type === "collection" && focusMode.kind !== "photos";
+                    return <PhotoNode key={it.id} item={it} onOpen={setSelectedPhoto} focusX={slot ? slot.x : it.x} focusY={slot ? slot.y : it.y} dimmed={dimmed} delay={inColl ? slotIdx * 0.035 : 0} />;
+                  }
+                  if (it.type === "symbol") {
+                    return <SymbolNode key={it.id} item={it} />;
+                  }
+                  if (it.type === "song") {
+                    if (focusMode?.type === "instrument") return null;
+                    const inColl = focusMode?.type === "collection" && focusMode.kind === "songs";
+                    const slot = inColl ? focusMode.slots.find((sl) => sl.id === it.id) : null;
+                    const slotIdx = inColl ? focusMode.slots.findIndex((sl) => sl.id === it.id) : 0;
+                    const dimmed = focusMode?.type === "collection" && focusMode.kind !== "songs";
+                    return <SongNode key={it.id} item={it} onOpen={setSelectedSong} focusX={slot ? slot.x : it.x} focusY={slot ? slot.y : it.y} dimmed={dimmed} delay={inColl ? slotIdx * 0.035 : 0} />;
+                  }
                   if (it.type === "clip") {
-                    const inFocusCat = focus && focus.categoryId === it.categoryId;
-                    const slot = inFocusCat ? focus.slots.find((sl) => sl.id === it.id) : null;
-                    const slotIdx = inFocusCat ? focus.slots.findIndex((sl) => sl.id === it.id) : 0;
-                    const dimmed = focus && it.categoryId !== focus.categoryId;
+                    if (focusMode?.type === "collection") return null;
+                    const inFocusCat = focusMode?.type === "instrument" && focusMode.categoryId === it.categoryId;
+                    const slot = inFocusCat ? focusMode.slots.find((sl) => sl.id === it.id) : null;
+                    const slotIdx = inFocusCat ? focusMode.slots.findIndex((sl) => sl.id === it.id) : 0;
+                    const dimmed = focusMode?.type === "instrument" && it.categoryId !== focusMode.categoryId;
                     return (
                       <ClipNode
                         key={it.id}
@@ -205,10 +243,10 @@ export default function CanvasBoard() {
         </button>
       </div>
 
-      <PillNav onFly={enterFocus} onHome={() => { exitFocus(); goHome(); }} />
+      <PillNav onFly={enterFocus} onCollection={enterCollection} onHome={() => { exitFocus(); goHome(); }} />
       <div className="mv-hint">drag to pan · scroll to zoom · pill-nav to fly</div>
 
-      {focus ? (
+      {focusMode ? (
         <button className="mv-exit-focus mv-exit-focus--tl" onClick={exitFocus}>
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M9 6l-6 6 6 6M3 12h14M21 4v16" /></svg>
           Exit Focus
@@ -217,6 +255,14 @@ export default function CanvasBoard() {
 
       {selectedClip ? (
         <ClipPlayer clip={selectedClip} onClose={() => setSelectedClip(null)} />
+      ) : null}
+
+      {selectedSong ? (
+        <SongModal song={selectedSong} onClose={() => setSelectedSong(null)} />
+      ) : null}
+
+      {selectedPhoto ? (
+        <PhotoModal photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />
       ) : null}
     </div>
   );
