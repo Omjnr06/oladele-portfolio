@@ -22,8 +22,9 @@ export default function Home() {
   useEffect(() => setPortalMounted(true), []);
 
   const galleryImages = [
-    { src: "/assets/images/junior-headshot.JPG" },
+    { src: "/assets/images/junior-headshot.jpg" },
     { src: "/assets/images/junior-statue.jpeg" },
+    {src: "/assets/images/junior-WFNProjects.jpg"},
     { src: "/assets/images/junior-food.jpeg" },
     { src: "/assets/images/junior-basketball.jpg" },
     { src: "/assets/images/junior-guitar.jpeg" },
