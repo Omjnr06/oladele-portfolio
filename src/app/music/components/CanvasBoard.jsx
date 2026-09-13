@@ -49,6 +49,24 @@ export default function CanvasBoard() {
   }, []);
 
   useEffect(() => {
+    const el = document.querySelector(".mv-board");
+    if (!el) return;
+    const onWheel = (e) => {
+      const api = apiRef.current;
+      if (!api) return;
+      const isMouse = e.deltaMode === 1 || Math.abs(e.deltaY) >= 50;
+      if (!isMouse) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const step = 0.08;
+      if (e.deltaY < 0) api.zoomIn(step, 140, "easeOutCubic");
+      else api.zoomOut(step, 140, "easeOutCubic");
+    };
+    el.addEventListener("wheel", onWheel, { capture: true, passive: false });
+    return () => el.removeEventListener("wheel", onWheel, { capture: true });
+  }, []);
+
+  useEffect(() => {
     if (start && gridRef.current) {
       gridRef.current.style.backgroundPosition = `${start.sx}px ${start.sy}px`;
       const ds0 = Math.max(26, DOT * INITIAL_SCALE);
@@ -172,7 +190,7 @@ export default function CanvasBoard() {
         centerOnInit={false}
         centerZoomedOut={false}
         disablePadding
-        wheel={{ step: 0.007, smoothStep: 0.0009 }}
+        wheel={{ step: 0.007, wheelDisabled: true }}
         pinch={{ step: 2 }}
         panning={{ velocityDisabled: true }}
         alignmentAnimation={{ disabled: true }}
