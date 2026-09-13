@@ -41,7 +41,7 @@ export const musicLibrary = [
         originalArtist: "Frank Sinatra", 
         date: "2024.10.29", 
         location: "Medway-Sydenham Hall Basement @ Western University", 
-        notes: "Practicing being able to highlight a vocalist when playing piano. Really beautiful son with a great singer!", 
+        notes: "Practicing being able to highlight a vocalist when playing piano. Really beautiful song with a great singer!", 
         videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/why-try-change-me-now-piano.mp4" 
       },
       { 
@@ -158,7 +158,7 @@ export const musicLibrary = [
         originalArtist: "Daniel Caesar ft. H.E.R.", 
         date: "2023.09.27", 
         location: "Gems American Academy", 
-        notes: "One of the best guitar covers ive ever done. Played with different voicings of the same chord progression. Isas voice fit perfectly as well", 
+        notes: "One of the best guitar covers I've ever done. Played with different voicings of the same chord progression. Isas voice fit perfectly as well", 
         videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/best-part-guitar.mov",
         isFeatured: true,
       },
