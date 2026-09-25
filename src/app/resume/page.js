@@ -12,7 +12,7 @@ const resumeData = {
   },
   skills: [
     { category: "LANGUAGES & FRAMEWORKS", items: ["Python", "JavaScript", "TypeScript", "PostgreSQL", "Java", "HTML/CSS", "R", "C", "React", "Next.js", "Express.js", "Flask", "FastAPI", "Tailwind CSS"] },
-    { category: "DEVELOPER TOOLS", items: ["Git", "GitHub", "GitHub Actions (CI/CD)", "Docker", "Nginx", "Redis", "Supabase", "REST APIs", "MSW", "VS Code", "Figma", "Notion", "GitHub Copilot"] },
+    { category: "DEVELOPER TOOLS", items: ["Git", "GitHub", "GitHub Actions (CI/CD)", "Docker", "Nginx", "Redis", "Supabase", "Neon", "REST APIs", "MSW", "VS Code", "Figma", "Notion", "GitHub Copilot"] },
     { category: "DATA LIBRARIES", items: ["PyTorch", "TensorFlow", "Keras", "NumPy", "Pandas", "Matplotlib", "Seaborn", "Transfer Learning", "Monte Carlo Methods"] },
     { category: "CONCEPTS", items: ["Data Structures & Algorithms", "Real Time Data Pipelines", "API Integration", "Distributed Systems"] },
     { category: "OTHER CAPABILITIES", items: ["Computer Vision", "Sound Engineering", "Event Management", "Arabic", "Microsoft Office Suite"] }
@@ -20,6 +20,18 @@ const resumeData = {
   experience: [
     {
       id: "EXP_01",
+      role: "Product Manager",
+      company: "Grand Theatre",
+      date: "Sep. 2026 - Present",
+      location: "London, ON",
+      points: [
+        "Lead product for a carbon tracking platform replacing a 24 column manual Excel workflow spanning 9 departments, 2 facilities, and 300+ line items (150+ tonnes CO2e baseline), defining requirements with leadership and a phased roadmap.",
+        "Lead 6 developers building a Next.js, FastAPI, and Neon (PostgreSQL) platform with role based admin and department views, replacing VLOOKUP driven calculations with automated lookups against a 95 item emissions factor library.",
+        "Prioritized cost vs. carbon decision support after finding eco alternatives were logged on only 14% of purchases, scoping recommendations for cheaper, lower emission options, carbon offset comparisons, and utility and BAS HVAC data ingestion."
+      ]
+    },
+    {
+      id: "EXP_02",
       role: "AI & Software Developer Intern",
       company: "PurelyBiome",
       date: "May 2026 - August 2026",
@@ -30,7 +42,7 @@ const resumeData = {
       ]
     },
     {
-      id: "EXP_02",
+      id: "EXP_03",
       role: "Software Developer",
       company: "3D Western",
       date: "Jun. 2026 - September 2026",
@@ -42,7 +54,7 @@ const resumeData = {
       ]
     },
     {
-      id: "EXP_03",
+      id: "EXP_04",
       role: "VP of Projects",
       company: "Western Founders Network",
       date: "Sep. 2025 - Present",
@@ -53,7 +65,7 @@ const resumeData = {
       ]
     },
     {
-      id: "EXP_04",
+      id: "EXP_05",
       role: "Marketing Director",
       company: "Western Engineering AutoPilot",
       date: "Sep. 2025 - Present",
@@ -64,7 +76,7 @@ const resumeData = {
       ]
     },
     {
-      id: "EXP_05",
+      id: "EXP_06",
       role: "Facilities Asset Management Intern",
       company: "RCCG HOP",
       date: "Jun. 2022 - Aug. 2022",
@@ -155,7 +167,6 @@ const resumeData = {
     }
   ]
 };
-
 export default function ResumePage() {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
