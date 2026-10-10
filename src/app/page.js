@@ -311,7 +311,7 @@ export default function Home() {
 
             <div className="max-w-3xl space-y-6 text-[var(--text-muted)]">
               <p className="text-xl md:text-2xl leading-relaxed font-light">
-                Pursuing <span className="text-white">Computer Science</span> & <span className="text-white">Data Science</span> at Western University.
+                Pursuing <span className="text-white">Computer Science</span> at Western University.
               </p>
               <p className="text-lg md:text-xl leading-relaxed font-light border-l border-white/10 pl-6">
                 Building <span className="text-[var(--accent-cyan)]">cool things.</span> Jamming <span className="text-[var(--accent-cyan)]">along the way.</span>

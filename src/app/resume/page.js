@@ -8,7 +8,7 @@ const resumeData = {
   header: {
     name: "Oladele Magbadelo",
     title: "EXPLORER // DEVELOPER",
-    status: "BSc. CS, Minor Data Sci @ Western University '28",
+    status: "BSc. Computer Science @ Western University '28",
   },
   skills: [
     { category: "LANGUAGES & FRAMEWORKS", items: ["Python", "JavaScript", "TypeScript", "PostgreSQL", "Java", "HTML/CSS", "R", "C", "React", "Next.js", "Express.js", "Flask", "FastAPI", "Tailwind CSS"] },
@@ -20,7 +20,7 @@ const resumeData = {
   experience: [
     {
       id: "EXP_01",
-      role: "Product Manager",
+      role: "Project Manager",
       company: "Grand Theatre",
       date: "Sep. 2026 - Present",
       location: "London, ON",
