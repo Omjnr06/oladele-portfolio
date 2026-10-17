@@ -52,6 +52,15 @@ export const musicLibrary = [
         location: "The Gate Mall, Qatar", 
         notes: "Was bored in a mall and decided to play a classic.", 
         videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/studio-ghibli-piano.mp4" 
+      },
+      { 
+        id: "piano 05", 
+        title: "Mia and Sebastian's Theme - La La Land Cover",
+        originalArtist: "Justin Hurwitz", 
+        date: "2026.10.17", 
+        location: "Talbot College, Western University", 
+        notes: "3rd Year reaeding week was super tough, the following week i had an interview, 3 midterms, and a paper due. I went to relax my mind and play some piano before studying. Really messed with the acoustics of this room.", 
+        videoUrl: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/mia-sebastian-theme-piano.mp4" 
       } 
     ]
   },
