@@ -23,8 +23,9 @@ export default function Home() {
 
   const galleryImages = [
     { src: "/assets/images/junior-headshot.JPG" },
-    { src: "/assets/images/junior-statue.jpeg" },
+    {src: "/assets/images/tsi-full-team-photo.png"},
     {src: "/assets/images/junior-WFNProjects.jpg"},
+    { src: "/assets/images/junior-statue.jpeg" },
     { src: "/assets/images/junior-food.jpeg" },
     { src: "/assets/images/junior-basketball.jpg" },
     { src: "/assets/images/junior-guitar.jpeg" },
