@@ -2,28 +2,21 @@
 import { useCallback, useDeferredValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { MotionConfig, animate, motion, useMotionValue, useTransform } from "framer-motion";
+import { MotionConfig } from "framer-motion";
 import { REGIONS } from "../lib/normalize";
 import { hydrateRows } from "../lib/rows";
 import { DEFAULTS, ago, filterRoles, groupByCompany, groupByFreshness, normUrl, seasonOptions, toQuery } from "../lib/filters";
 import { Chip, Search, Segmented, Select } from "./Controls";
 import { CompanyList, FreshList } from "./RoleList";
-import { AppliedPanel } from "./AppliedPanel";
+import { Dashboard } from "./Dashboard";
+import { Ticker } from "./Ticker";
+import { Kbd } from "./Kbd";
+import { ACTIVE } from "../lib/status";
 import { Toast } from "./Toast";
 
 const VISIT_LAST = "grind_visit_last";
 const VISIT_PREV = "grind_visit_prev";
 const SESSION_GAP = 30 * 6e4;
-
-function Ticker({ value }) {
-  const mv = useMotionValue(value);
-  const text = useTransform(mv, (v) => Math.round(v).toLocaleString());
-  useEffect(() => {
-    const c = animate(mv, value, { type: "spring", stiffness: 200, damping: 30 });
-    return c.stop;
-  }, [value, mv]);
-  return <motion.span className="tabular-nums">{text}</motion.span>;
-}
 
 function LiveDot({ live }) {
   return (
@@ -169,6 +162,44 @@ export default function GrindBoard({ feed, owner, initial, unlockFailed }) {
 
   const onToggle = useCallback((id) => setOpenId((cur) => (cur === id ? null : id)), []);
 
+  const [saving, setSaving] = useState({});
+  const setStatus = useCallback(async (row, status, { quiet } = {}) => {
+    const prev = row.status;
+    const patchRows = (to) => setApplied((a) => ({ ...a, rows: a.rows?.map((x) => (x.id === row.id ? { ...x, status: to } : x)) ?? a.rows }));
+    const patchMap = (to) => setAppliedMap((m) => {
+      const k = row.link && normUrl(row.link);
+      if (!k || !m.has(k)) return m;
+      return new Map(m).set(k, { ...m.get(k), status: to });
+    });
+    patchRows(status); patchMap(status);
+    setSaving((x) => ({ ...x, [row.id]: true }));
+    try {
+      const res = await fetch(`/api/applied?id=${encodeURIComponent(row.id)}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status }) });
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(j.error);
+      if (!quiet) showToast({ msg: `${row.company} moved to ${status}.`, action: { label: "Undo", run: () => setStatus({ ...row, status }, prev, { quiet: true }) } });
+    } catch (e) {
+      patchRows(prev); patchMap(prev);
+      showToast({ msg: `Couldn't update ${row.company}${e.message ? ` (${e.message})` : ""}. Try again.`, error: true });
+    } finally {
+      setSaving((x) => { const n = { ...x }; delete n[row.id]; return n; });
+    }
+  }, [showToast]);
+
+  const jumpToApps = useCallback(() => {
+    const el = document.getElementById("applications");
+    if (!el) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    el.querySelector("h2")?.focus({ preventScroll: true });
+  }, []);
+  const activeApps = useMemo(() => (applied.rows || []).filter((r) => ACTIVE.has(r.status)).length, [applied.rows]);
+
+  const copyLink = useCallback(async (r) => {
+    try { await navigator.clipboard.writeText(r.url); showToast({ msg: `Copied the ${r.company} posting link.` }); }
+    catch { showToast({ msg: "Your browser blocked clipboard access. Open the posting and copy its URL instead.", error: true }); }
+  }, [showToast]);
+
   const live = useMemo(() => ({ ...f, q }), [f, q]);
   const run = useCallback((over) => filterRoles(roles, { ...live, ...over }, { now, since, isApplied }), [roles, live, now, since, isApplied]);
   const filtered = useMemo(() => run({}), [run]);
@@ -190,7 +221,6 @@ export default function GrindBoard({ feed, owner, initial, unlockFailed }) {
   const toggleRegion = (g) => set({ regions: f.regions.includes(g) ? f.regions.filter((x) => x !== g) : [...f.regions, g] });
 
   useEffect(() => {
-    if (!owner) return;
     const onKey = (e) => {
       const tag = e.target.tagName;
       const typing = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
@@ -201,6 +231,7 @@ export default function GrindBoard({ feed, owner, initial, unlockFailed }) {
         return;
       }
       if (typing) { if (e.key === "Escape") e.target.blur(); return; }
+      if (e.target.closest?.("[role=listbox]")) return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       const rows = [...document.querySelectorAll("[data-nav]")].filter((el) => el.offsetParent !== null);
       const i = rows.indexOf(document.activeElement);
@@ -211,17 +242,22 @@ export default function GrindBoard({ feed, owner, initial, unlockFailed }) {
         next?.scrollIntoView({ block: "nearest" });
       } else if (e.key === "Escape") {
         setOpenId(null);
-      } else if (i >= 0 && (e.key === "o" || e.key === "a")) {
-        const r = rows[i].dataset.row && roleById.get(rows[i].dataset.row);
+      } else if (e.key === "m" && owner) {
+        e.preventDefault();
+        jumpToApps();
+      } else if (e.key === "o" || e.key === "c" || (e.key === "a" && owner)) {
+        const id = e.target.closest?.("li")?.querySelector("[data-row]")?.dataset.row;
+        const r = id && roleById.get(id);
         if (!r) return;
         e.preventDefault();
         if (e.key === "o") window.open(r.url, "_blank", "noopener,noreferrer");
+        else if (e.key === "c") copyLink(r);
         else mark(r);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [owner, roleById, mark]);
+  }, [owner, roleById, mark, copyLink, jumpToApps]);
 
   const lock = async () => {
     await fetch("/api/grind/unlock", { method: "DELETE" }).catch(() => {});
@@ -230,7 +266,7 @@ export default function GrindBoard({ feed, owner, initial, unlockFailed }) {
     router.refresh();
   };
 
-  const ctx = { now, since, owner, openId, onToggle, onMark: mark, onUndo, appliedFor };
+  const ctx = { now, since, owner, openId, onToggle, onMark: mark, onUndo, onCopy: copyLink, appliedFor };
   const isLive = genTs && now - genTs < 45 * 6e4;
 
   return (
@@ -269,7 +305,15 @@ export default function GrindBoard({ feed, owner, initial, unlockFailed }) {
                 options={[{ value: "all", label: "All", count: trackCounts.all }, { value: "swe", label: "SWE", count: trackCounts.swe }, { value: "pm", label: "PM", count: trackCounts.pm }]} />
               <Segmented id="view" label="Group by" value={f.view} onChange={(v) => set({ view: v })}
                 options={[{ value: "fresh", label: "Freshness" }, { value: "company", label: "Company" }]} />
-              <Search ref={searchRef} value={f.q} onChange={(v) => set({ q: v })} shortcut={owner} />
+              <Search ref={searchRef} value={f.q} onChange={(v) => set({ q: v })} shortcut />
+              {owner && (
+                <button type="button" onClick={jumpToApps}
+                  className="flex h-10 shrink-0 items-center gap-2 rounded-lg border border-accent-2/40 bg-accent-2/10 px-3 text-sm font-medium text-[#ddd6fe] transition-[background-color,transform] duration-150 hover:bg-accent-2/20 active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+                  My applications
+                  {applied.rows && <span className="font-mono text-[11px] tabular-nums text-[#c4b5fd]">{activeApps} active</span>}
+                  <span aria-hidden className="hidden md:inline-flex"><Kbd>m</Kbd></span>
+                </button>
+              )}
             </div>
             <div className="mt-2 flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <Select label="Posted" value={f.age} onChange={(v) => set({ age: v })}
@@ -293,7 +337,15 @@ export default function GrindBoard({ feed, owner, initial, unlockFailed }) {
                 Clear filters
               </button>
             )}
-            {owner && <span className="ml-auto hidden lg:block"><kbd>/</kbd> search · <kbd>j</kbd> <kbd>k</kbd> move · <kbd>enter</kbd> expand · <kbd>o</kbd> open · <kbd>a</kbd> mark applied</span>}
+            <span className="ml-auto hidden items-center gap-4 lg:flex" aria-label="Keyboard shortcuts">
+              <span><Kbd>/</Kbd> search</span>
+              <span><Kbd>j</Kbd><Kbd>k</Kbd> move</span>
+              <span><Kbd>↵</Kbd> expand</span>
+              <span><Kbd>o</Kbd> open</span>
+              <span><Kbd>c</Kbd> copy link</span>
+              {owner && <span><Kbd>a</Kbd> mark applied</span>}
+              {owner && <span><Kbd>m</Kbd> my applications</span>}
+            </span>
           </div>
 
           {feedError ? (
@@ -318,7 +370,7 @@ export default function GrindBoard({ feed, owner, initial, unlockFailed }) {
             <FreshList key={toQuery(live)} groups={groups} ctx={ctx} />
           )}
 
-          {owner && <AppliedPanel rows={applied.rows} error={applied.error} loading={applied.loading} onRetry={loadApplied} onLock={lock} />}
+          {owner && <Dashboard rows={applied.rows} error={applied.error} loading={applied.loading} onRetry={loadApplied} onLock={lock} onStatusChange={setStatus} saving={saving} />}
 
           <div className="mt-16 flex items-center gap-2 border-t border-line pt-6 font-mono text-sm text-muted">
             <span>omj@grind:~$</span>

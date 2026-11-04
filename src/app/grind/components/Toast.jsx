@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -7,17 +7,19 @@ const noop = () => () => {};
 
 export function Toast({ toast, onDismiss }) {
   const mounted = useSyncExternalStore(noop, () => true, () => false);
+  const [paused, setPaused] = useState(false);
   useEffect(() => {
-    if (!toast) return;
+    if (!toast || paused) return;
     const t = setTimeout(onDismiss, toast.error ? 7000 : 5000);
     return () => clearTimeout(t);
-  }, [toast, onDismiss]);
+  }, [toast, onDismiss, paused]);
   if (!mounted) return null;
   return createPortal(
     <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center px-4">
       <AnimatePresence>
         {toast && (
           <motion.div key={toast.key} role="status"
+            onPointerEnter={() => setPaused(true)} onPointerLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}
             initial={{ opacity: 0, y: 12, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, transition: { duration: 0.14 } }}
             transition={{ type: "spring", stiffness: 500, damping: 36 }}

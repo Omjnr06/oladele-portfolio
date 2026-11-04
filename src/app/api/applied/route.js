@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { isOwner } from "../../grind/lib/auth";
+import { STATUSES } from "../../grind/lib/status";
 
 export const dynamic = "force-dynamic";
 
@@ -60,6 +61,7 @@ export async function GET() {
           source: rich(props.Source),
           status: rich(props.Status),
           dateApplied: rich(props["Date Applied"]),
+          created: p.created_time,
         });
       }
       cursor = data.has_more ? data.next_cursor : null;
@@ -104,6 +106,23 @@ export async function DELETE(request) {
     const data = await res.json();
     if (!res.ok) return NextResponse.json({ error: "Notion didn't undo it.", detail: data.message }, { status: 502 });
     return NextResponse.json({ ok: true });
+  } catch (e) {
+    return NextResponse.json({ error: "Couldn't reach Notion.", detail: String(e) }, { status: 502 });
+  }
+}
+
+export async function PATCH(request) {
+  const denied = await guard();
+  if (denied) return denied;
+  const id = new URL(request.url).searchParams.get("id");
+  const { status } = await request.json().catch(() => ({}));
+  if (!id || !/^[0-9a-f-]{32,36}$/i.test(id)) return NextResponse.json({ error: "A valid page id is required." }, { status: 400 });
+  if (!STATUSES.includes(status)) return NextResponse.json({ error: `Status must be one of: ${STATUSES.join(", ")}.` }, { status: 400 });
+  try {
+    const res = await notion(`pages/${id}`, { properties: { Status: { select: { name: status } } } }, "PATCH");
+    const data = await res.json();
+    if (!res.ok) return NextResponse.json({ error: "Notion didn't update the status.", detail: data.message }, { status: 502 });
+    return NextResponse.json({ ok: true, status });
   } catch (e) {
     return NextResponse.json({ error: "Couldn't reach Notion.", detail: String(e) }, { status: 502 });
   }
