@@ -15,6 +15,8 @@ function safeEqual(a, b) {
   return x.length === y.length && timingSafeEqual(x, y);
 }
 
+export const secretConfigured = () => Boolean(process.env.DASHBOARD_SECRET);
+
 export function keyMatches(key) {
   return safeEqual(key, process.env.DASHBOARD_SECRET);
 }

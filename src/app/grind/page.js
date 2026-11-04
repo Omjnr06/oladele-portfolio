@@ -13,5 +13,5 @@ export default async function GrindPage({ searchParams }) {
   const sp = await searchParams;
   if (sp.key) redirect(`/api/grind/unlock?${new URLSearchParams(sp).toString()}`);
   const [feed, owner] = await Promise.all([getFeed(), isOwner()]);
-  return <GrindBoard feed={feed} owner={owner} initial={parseParams(sp)} unlockFailed={sp.unlock === "failed"} />;
+  return <GrindBoard feed={feed} owner={owner} initial={parseParams(sp)} unlockStatus={["failed", "unconfigured"].includes(sp.unlock) ? sp.unlock : null} />;
 }

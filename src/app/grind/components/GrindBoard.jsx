@@ -13,6 +13,7 @@ import { Ticker } from "./Ticker";
 import { Kbd } from "./Kbd";
 import { ACTIVE } from "../lib/status";
 import { Toast } from "./Toast";
+import { Terminal } from "./Terminal";
 
 const VISIT_LAST = "grind_visit_last";
 const VISIT_PREV = "grind_visit_prev";
@@ -27,7 +28,7 @@ function LiveDot({ live }) {
   );
 }
 
-export default function GrindBoard({ feed, owner, initial, unlockFailed }) {
+export default function GrindBoard({ feed, owner, initial, unlockStatus }) {
   const router = useRouter();
   const { generatedAt, error: feedError } = feed;
   const roles = useMemo(() => hydrateRows(feed.rows), [feed.rows]);
@@ -65,19 +66,29 @@ export default function GrindBoard({ feed, owner, initial, unlockFailed }) {
   }, []);
 
   useEffect(() => {
-    if (unlockFailed) showToast({ msg: "That key didn't match, so nothing was unlocked.", error: true });
-  }, [unlockFailed, showToast]);
+    if (unlockStatus === "failed") showToast({ msg: "That key didn't match. Type it at the omj@grind prompt at the bottom of the page instead.", error: true });
+    if (unlockStatus === "unconfigured") showToast({ msg: "The server has no DASHBOARD_SECRET set. Add it in Vercel and redeploy.", error: true });
+  }, [unlockStatus, showToast]);
 
   useEffect(() => {
     if (owner) return;
     let legacy = null;
     try { legacy = localStorage.getItem("grind_key"); } catch {}
     if (!legacy) return;
-    try { localStorage.removeItem("grind_key"); } catch {}
     fetch("/api/grind/unlock", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: legacy }) })
-      .then((r) => r.ok && router.refresh())
+      .then(async (r) => {
+        if (r.ok) {
+          try { localStorage.removeItem("grind_key"); } catch {}
+          router.refresh();
+          return;
+        }
+        const j = await r.json().catch(() => ({}));
+        if (sessionStorage.getItem("grind_legacy_warned")) return;
+        sessionStorage.setItem("grind_legacy_warned", "1");
+        showToast({ msg: j.code === "unconfigured" ? "The server has no DASHBOARD_SECRET set. Add it in Vercel and redeploy." : "The key saved on this device no longer matches. Type your current key at the omj@grind prompt below.", error: true });
+      })
       .catch(() => {});
-  }, [owner, router]);
+  }, [owner, router, showToast]);
 
   useEffect(() => {
     const qs = toQuery({ ...f, q });
@@ -372,10 +383,7 @@ export default function GrindBoard({ feed, owner, initial, unlockFailed }) {
 
           {owner && <Dashboard rows={applied.rows} error={applied.error} loading={applied.loading} onRetry={loadApplied} onLock={lock} onStatusChange={setStatus} saving={saving} />}
 
-          <div className="mt-16 flex items-center gap-2 border-t border-line pt-6 font-mono text-sm text-muted">
-            <span>omj@grind:~$</span>
-            <span aria-hidden className="inline-block h-4 w-2 animate-pulse bg-white/60 motion-reduce:animate-none" />
-          </div>
+          <Terminal owner={owner} onUnlocked={() => { try { localStorage.removeItem("grind_key"); } catch {} showToast({ msg: "Unlocked on this device for a year." }); router.refresh(); }} />
         </div>
         <Toast toast={toast} onDismiss={dismiss} />
       </main>
