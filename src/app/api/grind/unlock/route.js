@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { OWNER_COOKIE, cookieOptions, keyMatches, ownerToken } from "../../../grind/lib/auth";
+import { OWNER_COOKIE, cookieOptions, keyMatches, ownerToken, secretConfigured } from "../../../grind/lib/auth";
+
+const UNCONFIGURED = "The server has no DASHBOARD_SECRET. Add it in Vercel (Settings → Environment Variables, Production) and redeploy.";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +15,7 @@ function grindUrl(request, extra) {
 
 export async function GET(request) {
   const key = new URL(request.url).searchParams.get("key");
+  if (!secretConfigured()) return NextResponse.redirect(grindUrl(request, { unlock: "unconfigured" }), 303);
   if (!keyMatches(key)) return NextResponse.redirect(grindUrl(request, { unlock: "failed" }), 303);
   const res = NextResponse.redirect(grindUrl(request), 303);
   res.cookies.set(OWNER_COOKIE, ownerToken(), cookieOptions);
@@ -21,7 +24,8 @@ export async function GET(request) {
 
 export async function POST(request) {
   const body = await request.json().catch(() => ({}));
-  if (!keyMatches(body.key)) return NextResponse.json({ error: "That key doesn't match." }, { status: 401 });
+  if (!secretConfigured()) return NextResponse.json({ error: UNCONFIGURED, code: "unconfigured" }, { status: 503 });
+  if (!keyMatches(typeof body.key === "string" ? body.key.trim() : body.key)) return NextResponse.json({ error: "That key doesn't match." }, { status: 401 });
   const res = NextResponse.json({ ok: true });
   res.cookies.set(OWNER_COOKIE, ownerToken(), cookieOptions);
   return res;
