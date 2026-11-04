@@ -1,5 +1,6 @@
 "use client";
 import { memo, useState } from "react";
+import { Kbd } from "./Kbd";
 import { DAY, ago } from "../lib/filters";
 
 const focusRing = "focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent";
@@ -31,12 +32,8 @@ function Expand({ open, children }) {
   );
 }
 
-export const RoleRow = memo(function RoleRow({ role: r, now, since, open, onToggle, owner, applied, onMark, onUndo, nested }) {
-  const [copied, setCopied] = useState(false);
+export const RoleRow = memo(function RoleRow({ role: r, now, since, open, onToggle, owner, applied, onMark, onUndo, onCopy, nested }) {
   const isNew = since && r.seen > since;
-  const copy = async () => {
-    try { await navigator.clipboard.writeText(r.url); setCopied(true); setTimeout(() => setCopied(false), 1600); } catch {}
-  };
   return (
     <li className="border-b border-line last:border-b-0 [contain-intrinsic-size:auto_48px] [content-visibility:auto]">
       <div className="flex items-stretch">
@@ -82,16 +79,17 @@ export const RoleRow = memo(function RoleRow({ role: r, now, since, open, onTogg
                 )
               ) : (
                 <button type="button" onClick={() => onMark(r)} className={`h-10 rounded-lg border border-accent-2/40 px-4 text-sm text-[#c4b5fd] transition-[background-color,transform] duration-150 hover:bg-accent-2/10 active:scale-[0.97] ${focusRing}`}>
-                  Mark applied
+                  Mark applied<span aria-hidden className="ml-1 hidden md:inline-flex"><Kbd>a</Kbd></span>
                 </button>
               )
             ) : (
-              <button type="button" onClick={copy} className={`h-10 rounded-lg border border-line px-4 text-sm text-muted transition-[color,border-color,transform] duration-150 hover:border-line-strong hover:text-fg active:scale-[0.97] ${focusRing}`}>
-                {copied ? "Link copied" : "Copy link"}
+              <button type="button" onClick={() => onCopy(r)} className={`h-10 rounded-lg border border-line px-4 text-sm text-muted transition-[color,border-color,transform] duration-150 hover:border-line-strong hover:text-fg active:scale-[0.97] ${focusRing}`}>
+                Copy link<span aria-hidden className="ml-1 hidden md:inline-flex"><Kbd>c</Kbd></span>
               </button>
             )}
             <a href={r.url} target="_blank" rel="noopener noreferrer" className={`flex h-10 items-center gap-2 rounded-lg bg-accent px-4 text-sm font-medium text-ink transition-[filter,transform] duration-150 hover:brightness-110 active:scale-[0.97] ${focusRing}`}>
               Open posting
+              <span aria-hidden className="hidden md:inline-flex"><kbd className="inline-flex h-5 min-w-5 items-center justify-center rounded border border-ink/30 px-1 font-mono text-[11px] leading-none text-ink/80">o</kbd></span>
               <svg aria-hidden width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M7 17 17 7M8 7h9v9" /></svg>
             </a>
           </div>
@@ -106,7 +104,7 @@ function RowList({ roles, nested, ctx }) {
     <ul>
       {roles.map((r) => (
         <RoleRow key={r.id} role={r} nested={nested} open={ctx.openId === r.id} applied={ctx.appliedFor(r)}
-          now={ctx.now} since={ctx.since} owner={ctx.owner} onToggle={ctx.onToggle} onMark={ctx.onMark} onUndo={ctx.onUndo} />
+          now={ctx.now} since={ctx.since} owner={ctx.owner} onToggle={ctx.onToggle} onMark={ctx.onMark} onUndo={ctx.onUndo} onCopy={ctx.onCopy} />
       ))}
     </ul>
   );
@@ -170,7 +168,7 @@ export function FreshList({ groups, ctx }) {
               {entries.map((e) =>
                 e.type === "role" ? (
                   <RoleRow key={e.role.id} role={e.role} open={ctx.openId === e.role.id} applied={ctx.appliedFor(e.role)}
-                    now={ctx.now} since={ctx.since} owner={ctx.owner} onToggle={ctx.onToggle} onMark={ctx.onMark} onUndo={ctx.onUndo} />
+                    now={ctx.now} since={ctx.since} owner={ctx.owner} onToggle={ctx.onToggle} onMark={ctx.onMark} onUndo={ctx.onUndo} onCopy={ctx.onCopy} />
                 ) : (
                   <Rollup key={e.key} label={`+ ${e.roles.length} more at ${e.company}`} open={!!openMore[e.key]}
                     onToggle={() => setOpenMore((m) => ({ ...m, [e.key]: !m[e.key] }))}>
