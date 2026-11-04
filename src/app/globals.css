@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+@theme {
+  --color-ink: #050505;
+  --color-panel: #0b0b0c;
+  --color-panel-2: #121214;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.16);
+  --color-fg: #f4f6f8;
+  --color-muted: #8a94a3;
+  --color-accent: #22d3ee;
+  --color-accent-2: #8b5cf6;
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 :root {
   --bg-base: #050505;        
   --bg-surface: #0a0a0a;     
