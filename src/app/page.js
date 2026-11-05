@@ -24,14 +24,17 @@ export default function Home() {
 
   const galleryImages = [
     { src: "/assets/images/junior-headshot.JPG" },
-    {src: "/assets/images/tsi-full-team-photo.png"},
-    {src: "/assets/images/junior-WFNProjects.jpg"},
+    { src: "/assets/images/tsi-full-team-photo.png"},
+    { src: "/assets/images/wfn-full-team-2027.JPG"},
+    { src: "/assets/images/junior-WFNProjects.jpg"},
     { src: "/assets/images/junior-statue.jpeg" },
+    { src: "/assets/images/wfn-kathy-jr-team.JPG"},
     { src: "/assets/images/junior-food.jpeg" },
     { src: "/assets/images/junior-basketball.jpg" },
     { src: "/assets/images/junior-guitar.jpeg" },
     { src: "/assets/images/junior-boat.jpeg" },
     { src: "/assets/images/junior-soccer.JPG" },
+    { src: "/assets/images/wfn-team-construction.JPG"},
   ];
 
   const projects = [
