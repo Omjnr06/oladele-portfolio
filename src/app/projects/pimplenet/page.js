@@ -14,7 +14,7 @@ export default function PimpleNetCaseStudy() {
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-16 md:py-24">
         
         {/* Back Navigation */}
-        <Link href="/#projects" className="inline-flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--accent-cyan)] transition-colors mb-12 font-mono text-[10px] uppercase tracking-widest">
+        <Link href="/#projects" className="inline-flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--accent-cyan)] transition-colors mb-12 font-mono text-[11px] uppercase tracking-widest">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           Back to Projects
         </Link>
@@ -27,10 +27,10 @@ export default function PimpleNetCaseStudy() {
           className="mb-12"
         >
           <div className="flex items-center gap-3 mb-4">
-            <span className="font-mono text-[10px] text-[#8b5cf6] tracking-[0.3em] uppercase bg-[#8b5cf6]/10 px-3 py-1 rounded border border-[#8b5cf6]/20">
+            <span className="font-mono text-[11px] text-[#8b5cf6] tracking-[0.3em] uppercase bg-[#8b5cf6]/10 px-3 py-1 rounded border border-[#8b5cf6]/20">
               Internship
             </span>
-            <span className="font-mono text-[10px] text-[var(--accent-cyan)] tracking-[0.3em] uppercase">
+            <span className="font-mono text-[11px] text-[var(--accent-cyan)] tracking-[0.3em] uppercase">
               // Machine Learning
             </span>
           </div>
@@ -51,7 +51,7 @@ export default function PimpleNetCaseStudy() {
             href="/assets/NextAI__Oladele_.pdf" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 px-6 py-3 bg-[var(--accent-cyan)]/10 border border-[var(--accent-cyan)]/30 rounded shadow-[0_0_20px_rgba(34,211,238,0.1)] hover:bg-[var(--accent-cyan)]/20 hover:border-[var(--accent-cyan)]/60 transition-all group"
+            className="inline-flex items-center gap-3 px-6 py-3 bg-[var(--accent-cyan)]/10 border border-[var(--accent-cyan)]/30 rounded shadow-[0_0_20px_rgba(34,211,238,0.1)] hover:bg-[var(--accent-cyan)]/20 hover:border-[var(--accent-cyan)]/60 transition group"
           >
             <svg className="w-5 h-5 text-[var(--accent-cyan)] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path></svg>
             <span className="font-mono text-xs uppercase tracking-widest text-white">Open Full Research Paper (PDF)</span>
@@ -61,7 +61,7 @@ export default function PimpleNetCaseStudy() {
             href="https://report.purelybiome.com/sample-report" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 px-6 py-3 bg-[#8b5cf6]/10 border border-[#8b5cf6]/30 rounded shadow-[0_0_20px_rgba(139,92,246,0.1)] hover:bg-[#8b5cf6]/20 hover:border-[#8b5cf6]/60 transition-all group"
+            className="inline-flex items-center gap-3 px-6 py-3 bg-[#8b5cf6]/10 border border-[#8b5cf6]/30 rounded shadow-[0_0_20px_rgba(139,92,246,0.1)] hover:bg-[#8b5cf6]/20 hover:border-[#8b5cf6]/60 transition group"
           >
             <svg className="w-5 h-5 text-[#8b5cf6] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"></path></svg>
             <span className="font-mono text-xs uppercase tracking-widest text-white">See It Live · Sample Report</span>
@@ -80,7 +80,7 @@ export default function PimpleNetCaseStudy() {
             <div className="w-3 h-3 rounded-full bg-red-500/80" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
             <div className="w-3 h-3 rounded-full bg-green-500/80" />
-            <span className="ml-4 font-mono text-[10px] text-white/30 tracking-widest">pimplenet_case_study.md</span>
+            <span className="ml-4 font-mono text-[11px] text-white/50 tracking-widest">pimplenet_case_study.md</span>
           </div>
 
           {/* Terminal Body */}
@@ -89,7 +89,7 @@ export default function PimpleNetCaseStudy() {
             {/* The Context */}
             <section>
               <h2 className="text-[var(--accent-cyan)] font-bold text-lg mb-4 flex items-center gap-2">
-                <span className="text-white/30">{`>`}</span> The Directive
+                <span className="text-white/50">{`>`}</span> The Directive
               </h2>
               <p className="mb-4">
                 PurelyBiome’s core product combines at-home skin microbiome testing with personalized skincare recommendations. However, only biological data gives an incomplete picture. It lacks the visual context of the user's current skin state. During the onboarding process, users submit facial images as well as their microbiome samples. The idea was to build an automated computer vision pipeline that was able to interpret these images and grade the users acne severity. By combining biological microbiome profiles and visible skin presentation, the model enables targeted, product recommendations and creates a great starting point for detecting when a user's skin is trending toward an acne-prone state before breakouts can even occur.
@@ -99,7 +99,7 @@ export default function PimpleNetCaseStudy() {
             {/* The Architecture / Process */}
             <section>
               <h2 className="text-[#8b5cf6] font-bold text-lg mb-4 flex items-center gap-2">
-                <span className="text-white/30">{`>`}</span> System Architecture & Process
+                <span className="text-white/50">{`>`}</span> System Architecture & Process
               </h2>
               <p className="mb-4">
                 The system architecture was built on an iterative transfer learning pipeline using an EfficientNetB0 backbone. Data preparation involved rigorous cleaning of corrupted files followed by the consolidation of the ACNE04 dataset, which was supplemented with images from the FFHQ dataset to add a normalization layer (show the model what skin without acne was). I applied random physical augmentations—including rotation, zoom, and contrast adjustments to prevent the model from memorizing the releatively small ACNE04 dataset. The process of training and making the model utilized a 2 phase training strategy: Phase 1 involved freezing the pretrained EfficientNet layer to stabilize the customized classification head of the model, while Phase 2 selectively unfroze the final 50 layers for fine-tuning, allowing the model to adapt high-level visual features to specific acne-related patterns.
@@ -113,7 +113,7 @@ export default function PimpleNetCaseStudy() {
             {/* The Bottlenecks */}
             <section>
               <h2 className="text-yellow-400 font-bold text-lg mb-4 flex items-center gap-2">
-                <span className="text-white/30">{`>`}</span> Bottlenecks & Iterations
+                <span className="text-white/50">{`>`}</span> Bottlenecks & Iterations
               </h2>
               <p className="mb-4">
                 {/* The Bottlenecks */}
@@ -156,7 +156,7 @@ export default function PimpleNetCaseStudy() {
             {/* The Results */}
             <section>
               <h2 className="text-green-400 font-bold text-lg mb-4 flex items-center gap-2">
-                <span className="text-white/30">{`>`}</span> Output & Impact
+                <span className="text-white/50">{`>`}</span> Output & Impact
               </h2>
               <p className="text-white/80 leading-relaxed font-light">
                 The final model surpassed initial benchmarks, establishing a robust visual analysis layer that bridges the gap between biological microbiome data and visible skin presentation. During validation, the model achieved a 95.56% accuracy rate, complemented by a 95.30% weighted F1-score and a 90.81% macro F1-score, proving its ability to reliably distinguish between Clear Skin, Mild/Moderate, and Severe acne cases. 

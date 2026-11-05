@@ -8,12 +8,12 @@ export default function MusicPage() {
   const [mode, setMode] = useState(null);
 
   useEffect(() => {
-    const decide = () => {
-      const coarse = window.matchMedia("(pointer: coarse)").matches;
-      const noHover = window.matchMedia("(hover: none)").matches;
-      const tiny = window.innerWidth < 640;
-      setMode((coarse && noHover) || tiny ? "mobile" : "desktop");
-    };
+    const ua = navigator.userAgent;
+    const handheld =
+      navigator.userAgentData?.mobile === true ||
+      /Android|iPhone|iPad|iPod|Mobile/i.test(ua) ||
+      (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    const decide = () => setMode(handheld || window.innerWidth < 640 ? "mobile" : "desktop");
     decide();
     window.addEventListener("resize", decide);
     return () => window.removeEventListener("resize", decide);

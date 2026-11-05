@@ -93,7 +93,7 @@ const THEME_KEYS = ["midnight", "mono", "neon", "pink", "daylight"];
 function SectionTitle({ color, children }) {
   return (
     <h2 className="font-bold text-lg mb-5 flex items-center gap-2" style={{ color }}>
-      <span className="text-white/30">{">"}</span> {children}
+      <span className="text-white/50">{">"}</span> {children}
     </h2>
   );
 }
@@ -103,7 +103,7 @@ function SafeToSpendHero() {
     <div className="rounded-2xl border border-[var(--accent-cyan)]/20 bg-gradient-to-br from-[#0F1535] to-[#0a0e22] p-6 md:p-8 max-w-xl">
       <div className="flex items-center justify-between mb-2">
         <span className="font-mono text-[11px] text-white/50 tracking-wide">Safe to spend · week</span>
-        <div className="flex gap-1 font-mono text-[10px]">
+        <div className="flex gap-1 font-mono text-[11px]">
           <span className="px-2 py-0.5 rounded text-white/40">Day</span>
           <span className="px-2 py-0.5 rounded bg-[var(--accent-cyan)] text-black">Week</span>
           <span className="px-2 py-0.5 rounded text-white/40">Month</span>
@@ -117,7 +117,7 @@ function SafeToSpendHero() {
         </div>
         <span className="text-white/50">Threshold <span className="text-white/80 font-semibold">CA$4,000</span></span>
       </div>
-      <div className="font-mono text-[10px] text-white/35 mt-2">14% of your balance is safe to spend</div>
+      <div className="font-mono text-[11px] text-white/55 mt-2">14% of your balance is safe to spend</div>
     </div>
   );
 }
@@ -126,7 +126,7 @@ function FlowBox({ label, sub, color }) {
   return (
     <div className="rounded-lg border bg-black/40 px-3 py-2 text-center" style={{ borderColor: `${color}55` }}>
       <div className="font-mono text-[11px]" style={{ color }}>{label}</div>
-      {sub && <div className="font-mono text-[9px] text-white/35 mt-0.5">{sub}</div>}
+      {sub && <div className="font-mono text-[11px] text-white/55 mt-0.5">{sub}</div>}
     </div>
   );
 }
@@ -142,7 +142,7 @@ export default function VaultCaseStudy() {
       <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-[var(--accent-cyan)] opacity-[0.03] rounded-full blur-[120px] pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-16 md:py-24">
-        <Link href="/#projects" className="inline-flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--accent-cyan)] transition-colors mb-12 font-mono text-[10px] uppercase tracking-widest">
+        <Link href="/#projects" className="inline-flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--accent-cyan)] transition-colors mb-12 font-mono text-[11px] uppercase tracking-widest">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
           Back to Projects
         </Link>
@@ -150,10 +150,10 @@ export default function VaultCaseStudy() {
         {/* Hero */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-10">
           <div className="flex items-center gap-3 mb-4 flex-wrap">
-            <span className="font-mono text-[10px] text-[#2CD9FF] tracking-[0.3em] uppercase bg-[#2CD9FF]/10 px-3 py-1 rounded border border-[#2CD9FF]/20">
+            <span className="font-mono text-[11px] text-[#2CD9FF] tracking-[0.3em] uppercase bg-[#2CD9FF]/10 px-3 py-1 rounded border border-[#2CD9FF]/20">
               Team Project · Led by me
             </span>
-            <span className="font-mono text-[10px] text-[var(--accent-cyan)] tracking-[0.3em] uppercase">
+            <span className="font-mono text-[11px] text-[var(--accent-cyan)] tracking-[0.3em] uppercase">
               // Next.js · FastAPI · Plaid
             </span>
           </div>
@@ -191,7 +191,7 @@ export default function VaultCaseStudy() {
             <div className="w-3 h-3 rounded-full bg-red-500/80" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
             <div className="w-3 h-3 rounded-full bg-green-500/80" />
-            <span className="ml-4 font-mono text-[10px] text-white/30 tracking-widest">
+            <span className="ml-4 font-mono text-[11px] text-white/50 tracking-widest">
               vault__{active.toLowerCase().replace(/[^a-z]/g, "_")}.tsx
             </span>
           </div>
@@ -282,8 +282,8 @@ export default function VaultCaseStudy() {
                       {SCHEMA.map((grp) => (
                         <div key={grp.group}>
                           <div className="flex items-center gap-2 mb-3">
-                            <span className="font-mono text-[10px] uppercase tracking-widest text-white/40">{grp.group}</span>
-                            {grp.managed && <span className="font-mono text-[9px] px-2 py-0.5 rounded border border-yellow-400/30 text-yellow-300/80">Better Auth · not seeded</span>}
+                            <span className="font-mono text-[11px] uppercase tracking-widest text-white/40">{grp.group}</span>
+                            {grp.managed && <span className="font-mono text-[11px] px-2 py-0.5 rounded border border-yellow-400/30 text-yellow-300/80">Better Auth · not seeded</span>}
                           </div>
                           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                             {grp.tables.map((tb) => (
@@ -293,7 +293,7 @@ export default function VaultCaseStudy() {
                                   {tb.cols.map(([c, ty]) => (
                                     <div key={c} className="flex justify-between gap-3 font-mono text-[11px]">
                                       <span className="text-white/70">{c}</span>
-                                      <span className="text-white/35">{ty}</span>
+                                      <span className="text-white/55">{ty}</span>
                                     </div>
                                   ))}
                                 </div>
@@ -320,7 +320,7 @@ export default function VaultCaseStudy() {
                       {[["/assets/images/financial-dashboard/dashboard-pill.png", "Horizontal pill nav"], ["/assets/images/financial-dashboard/dashboard-rail.png", "Vertical icon rail"]].map(([src, label]) => (
                         <div key={src} className="rounded-lg overflow-hidden border border-white/10 bg-black/40 transition-colors hover:border-[var(--accent-cyan)]/40">
                           <img src={src} alt={label} className="w-full block" />
-                          <div className="px-2 py-1.5 font-mono text-[10px] text-white/40 text-center border-t border-white/5">{label}</div>
+                          <div className="px-2 py-1.5 font-mono text-[11px] text-white/40 text-center border-t border-white/5">{label}</div>
                         </div>
                       ))}
                     </div>
@@ -349,8 +349,8 @@ export default function VaultCaseStudy() {
                           <span style={{ color: t.success }}>on track</span>
                         </div>
                         <div className="flex gap-2 mt-4">
-                          <span className="text-[10px] px-2 py-1 rounded" style={{ background: t.accent, color: t.surface }}>Primary</span>
-                          <span className="text-[10px] px-2 py-1 rounded border" style={{ borderColor: t.danger, color: t.danger }}>Over budget</span>
+                          <span className="text-[11px] px-2 py-1 rounded" style={{ background: t.accent, color: t.surface }}>Primary</span>
+                          <span className="text-[11px] px-2 py-1 rounded border" style={{ borderColor: t.danger, color: t.danger }}>Over budget</span>
                         </div>
                       </div>
                     </div>
