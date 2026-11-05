@@ -96,7 +96,7 @@ const REPO = "https://github.com/Omjnr06/Jam";
 function SectionTitle({ color, children }) {
   return (
     <h2 className="font-bold text-lg mb-5 flex items-center gap-2" style={{ color }}>
-      <span className="text-white/30">{">"}</span> {children}
+      <span className="text-white/50">{">"}</span> {children}
     </h2>
   );
 }
@@ -112,7 +112,7 @@ export default function JamCaseStudy() {
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-16 md:py-24">
         {/* Back nav */}
-        <Link href="/#projects" className="inline-flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--accent-cyan)] transition-colors mb-12 font-mono text-[10px] uppercase tracking-widest">
+        <Link href="/#projects" className="inline-flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--accent-cyan)] transition-colors mb-12 font-mono text-[11px] uppercase tracking-widest">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
           Back to Projects
         </Link>
@@ -120,10 +120,10 @@ export default function JamCaseStudy() {
         {/* Hero */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-10">
           <div className="flex items-center gap-3 mb-4 flex-wrap">
-            <span className="font-mono text-[10px] text-[#8b5cf6] tracking-[0.3em] uppercase bg-[#8b5cf6]/10 px-3 py-1 rounded border border-[#8b5cf6]/20">
+            <span className="font-mono text-[11px] text-[#8b5cf6] tracking-[0.3em] uppercase bg-[#8b5cf6]/10 px-3 py-1 rounded border border-[#8b5cf6]/20">
               Personal Project
             </span>
-            <span className="font-mono text-[10px] text-[var(--accent-cyan)] tracking-[0.3em] uppercase">
+            <span className="font-mono text-[11px] text-[var(--accent-cyan)] tracking-[0.3em] uppercase">
               // Mobile · React Native · GraphQL
             </span>
           </div>
@@ -161,7 +161,7 @@ export default function JamCaseStudy() {
             <div className="w-3 h-3 rounded-full bg-red-500/80" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
             <div className="w-3 h-3 rounded-full bg-green-500/80" />
-            <span className="ml-4 font-mono text-[10px] text-white/30 tracking-widest">
+            <span className="ml-4 font-mono text-[11px] text-white/50 tracking-widest">
               jam__{active.toLowerCase().replace(/[^a-z]/g, "_")}.tsx
             </span>
           </div>
@@ -200,7 +200,7 @@ export default function JamCaseStudy() {
                     <div className="relative group cursor-pointer rounded-lg overflow-hidden border border-white/10 max-w-sm mx-auto" onClick={() => setExpanded(true)}>
                       <video src={DEMO_VIDEO} autoPlay muted loop playsInline className="w-full block" />
                       <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors">
-                        <span className="opacity-0 group-hover:opacity-100 transition-opacity font-mono text-[10px] tracking-widest uppercase bg-black/60 px-3 py-1.5 rounded border border-white/20">
+                        <span className="opacity-0 group-hover:opacity-100 transition-opacity font-mono text-[11px] tracking-widest uppercase bg-black/60 px-3 py-1.5 rounded border border-white/20">
                           Click to expand
                         </span>
                       </div>
@@ -229,8 +229,8 @@ export default function JamCaseStudy() {
                       {SCHEMA.map((grp) => (
                         <div key={grp.group}>
                           <div className="flex items-center gap-2 mb-3">
-                            <span className="font-mono text-[10px] uppercase tracking-widest text-white/40">{grp.group}</span>
-                            {grp.managed && <span className="font-mono text-[9px] px-2 py-0.5 rounded border border-yellow-400/30 text-yellow-300/80">not seeded</span>}
+                            <span className="font-mono text-[11px] uppercase tracking-widest text-white/40">{grp.group}</span>
+                            {grp.managed && <span className="font-mono text-[11px] px-2 py-0.5 rounded border border-yellow-400/30 text-yellow-300/80">not seeded</span>}
                           </div>
                           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                             {grp.tables.map((t) => (
@@ -240,7 +240,7 @@ export default function JamCaseStudy() {
                                   {t.cols.map(([c, ty]) => (
                                     <div key={c} className="flex justify-between gap-3 font-mono text-[11px]">
                                       <span className="text-white/70">{c}</span>
-                                      <span className="text-white/35">{ty}</span>
+                                      <span className="text-white/55">{ty}</span>
                                     </div>
                                   ))}
                                 </div>
@@ -264,7 +264,7 @@ export default function JamCaseStudy() {
                       {WIREFRAMES.map((w) => (
                         <div key={w.src} className="group rounded-lg overflow-hidden border border-white/10 bg-black/40 transition-colors hover:border-[var(--accent-cyan)]/50">
                           <img src={w.src} alt={w.label} className="w-full block" />
-                          <div className="px-2 py-1.5 font-mono text-[10px] text-white/40 text-center border-t border-white/5 transition-colors group-hover:text-[var(--accent-cyan)]">{w.label}</div>
+                          <div className="px-2 py-1.5 font-mono text-[11px] text-white/40 text-center border-t border-white/5 transition-colors group-hover:text-[var(--accent-cyan)]">{w.label}</div>
                         </div>
                       ))}
                     </div>
@@ -323,7 +323,7 @@ export default function JamCaseStudy() {
               className="max-h-[90vh] max-w-full rounded-lg border border-white/10"
               onClick={(e) => e.stopPropagation()}
             />
-            <button className="absolute top-6 right-6 font-mono text-[10px] uppercase tracking-widest text-white/60 hover:text-white border border-white/20 rounded px-3 py-1.5" onClick={() => setExpanded(false)}>
+            <button className="absolute top-6 right-6 font-mono text-[11px] uppercase tracking-widest text-white/60 hover:text-white border border-white/20 rounded px-3 py-1.5" onClick={() => setExpanded(false)}>
               Close ✕
             </button>
           </motion.div>

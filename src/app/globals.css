@@ -17,7 +17,7 @@
   --bg-base: #050505;        
   --bg-surface: #0a0a0a;     
   --text-main: #ffffff;      
-  --text-muted: #64748b;     
+  --text-muted: #8a94a3;     
   --accent-cyan: #22d3ee;    
   --accent-violet: #8b5cf6;  
   --grid-line: rgba(255, 255, 255, 0.03);
@@ -92,4 +92,42 @@ body {
   .perforation-line {
     border-right: 1px dashed rgba(255, 255, 255, 0.1);
   }
+}
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(34 211 238 / 0.4) transparent;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(34 211 238 / 0.4) transparent;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgb(34 211 238 / 0.3);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: rgb(34 211 238 / 0.55); background-clip: padding-box; }
+
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+@layer base {
+  :where(a, button, [role="button"], [tabindex]):focus-visible {
+    outline: 2px solid var(--accent-cyan);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-scan, .animate-pulse, .animate-ping, .animate-spin, .animate-bounce {
+    animation: none !important;
+  }
+  html { scroll-behavior: auto; }
 }
