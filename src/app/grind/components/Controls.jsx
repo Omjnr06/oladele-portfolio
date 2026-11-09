@@ -59,12 +59,12 @@ export function Select({ value, onChange, options, label }) {
   );
 }
 
-export const Search = forwardRef(function Search({ value, onChange, shortcut }, ref) {
+export const Search = forwardRef(function Search({ value, onChange, shortcut, id, label = "Search roles", placeholder = "Company, role or city" }, ref) {
   return (
     <label className="relative flex min-w-0 basis-full items-center md:basis-0 md:flex-1">
-      <span className="sr-only">Search roles</span>
+      <span className="sr-only">{label}</span>
       <svg aria-hidden className="pointer-events-none absolute left-3 text-muted" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-      <input ref={ref} value={value} onChange={(e) => onChange(e.target.value)} placeholder="Company, role or city"
+      <input ref={ref} id={id} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder}
         className={`h-10 w-full rounded-lg border border-line bg-panel pl-8 pr-12 text-base text-fg placeholder:text-muted/70 transition-[border-color] duration-150 hover:border-line-strong md:text-sm ${focusRing}`} />
       {value ? (
         <button type="button" onClick={() => onChange("")} aria-label="Clear search"
