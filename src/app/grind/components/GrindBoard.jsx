@@ -237,8 +237,13 @@ export default function GrindBoard({ feed, owner, initial, unlockStatus }) {
       const typing = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
       if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || (e.key === "/" && !typing)) {
         e.preventDefault();
-        searchRef.current?.focus();
-        searchRef.current?.select();
+        // Context-aware: once the applications section reaches the top half of the screen, '/' targets its search.
+        const apps = document.getElementById("applications");
+        const appSearch = document.getElementById("app-search");
+        const inApps = apps && appSearch && apps.getBoundingClientRect().top < window.innerHeight / 2;
+        const target = inApps ? appSearch : searchRef.current;
+        target?.focus();
+        target?.select();
         return;
       }
       if (typing) { if (e.key === "Escape") e.target.blur(); return; }

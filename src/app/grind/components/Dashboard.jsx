@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { HIERARCHY, RESPONDED, metaFor, rankOf } from "../lib/status";
-import { Chip, Segmented } from "./Controls";
+import { Chip, Search, Segmented } from "./Controls";
 import { Pipeline } from "./Pipeline";
 import { Heatmap } from "./Heatmap";
 import { StatusMenu } from "./StatusMenu";
@@ -25,6 +25,8 @@ export function Dashboard({ rows, error, loading, onRetry, onLock, onStatusChang
   const [picked, setPicked] = useState([]);
   const [sort, setSort] = useState("stage");
   const [limit, setLimit] = useState(25);
+  const [query, setQuery] = useState("");
+  const search = (v) => { setQuery(v); setLimit(25); };
   const toggle = (s) => { setPicked((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s])); setLimit(25); };
   const only = (s) => { setPicked(s ? [s] : []); setLimit(25); };
 
@@ -37,10 +39,17 @@ export function Dashboard({ rows, error, loading, onRetry, onLock, onStatusChang
   }, [rows]);
 
   const list = useMemo(() => {
-    const out = (rows || []).filter((r) => !picked.length || picked.includes(r.status || "No status"));
+    const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+    const out = (rows || []).filter((r) => {
+      if (picked.length && !picked.includes(r.status || "No status")) return false;
+      if (!terms.length) return true;
+      const hay = `${r.company} ${r.role} ${r.location}`.toLowerCase();
+      return terms.every((t) => hay.includes(t));
+    });
     const date = (r) => r.dateApplied || r.created || "";
     return out.sort((a, b) => (sort === "stage" ? rankOf(a.status) - rankOf(b.status) : 0) || date(b).localeCompare(date(a)));
-  }, [rows, picked, sort]);
+  }, [rows, picked, sort, query]);
+  const statusText = picked.length === 1 ? `with status ${metaFor(picked[0]).label}` : picked.length ? "with those statuses" : "";
   const extra = Object.keys(counts).filter((s) => !HIERARCHY.includes(s));
 
   return (
@@ -88,7 +97,10 @@ export function Dashboard({ rows, error, loading, onRetry, onLock, onStatusChang
           <div>
             <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2">
               <h3 className="text-sm font-semibold text-fg">{picked.length === 1 ? metaFor(picked[0]).label : picked.length ? "Filtered applications" : "All applications"} <span className="ml-2 font-mono text-xs font-normal tabular-nums text-muted">{list.length}</span></h3>
-              <div className="ml-auto">
+              <div className="order-last basis-full md:order-none md:ml-auto md:max-w-xs md:basis-auto md:flex-1 [&>label]:basis-full">
+                <Search id="app-search" label="Search your applications" placeholder="Search company, role or city" value={query} onChange={search} shortcut />
+              </div>
+              <div className="ml-auto md:ml-0">
                 <Segmented id="appsort" label="Sort applications" value={sort} onChange={setSort}
                   options={[{ value: "stage", label: "By stage" }, { value: "newest", label: "Newest" }]} />
               </div>
@@ -107,7 +119,12 @@ export function Dashboard({ rows, error, loading, onRetry, onLock, onStatusChang
                 <span>Company</span><span>Role</span><span>Applied</span><span className="text-right">Status</span>
               </div>
               <ul>
-                {list.length === 0 && <li className="px-4 py-8 text-sm text-muted">No applications with {picked.length === 1 ? `status ${metaFor(picked[0]).label}` : "those statuses"}. <button type="button" onClick={() => only(null)} className="text-accent hover:underline focus-visible:outline-2 focus-visible:outline-accent">Show all</button></li>}
+                {list.length === 0 && (
+                  <li className="px-4 py-8 text-sm text-muted">
+                    No applications {query.trim() && <>match &ldquo;<span className="text-fg">{query.trim()}</span>&rdquo; </>}{statusText}.{" "}
+                    <button type="button" onClick={() => { only(null); setQuery(""); }} className="text-accent hover:underline focus-visible:outline-2 focus-visible:outline-accent">Show all</button>
+                  </li>
+                )}
                 {list.slice(0, limit).map((a) => (
                   <li key={a.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1 border-b border-line px-4 py-3 last:border-b-0 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1.6fr)_7rem_13rem]">
                     <span className="truncate text-sm font-semibold text-fg">
