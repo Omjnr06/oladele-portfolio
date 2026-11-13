@@ -65,6 +65,25 @@ export default function GrindBoard({ feed, owner, initial, unlockStatus }) {
     return () => clearInterval(t);
   }, []);
 
+  // Keep an open tab current: re-fetch the server data every 5 min while visible,
+  // and right away when you come back to the tab (at most once a minute).
+  useEffect(() => {
+    let last = Date.now();
+    const refresh = () => {
+      if (document.visibilityState !== "visible" || Date.now() - last < 60_000) return;
+      last = Date.now();
+      router.refresh();
+    };
+    const t = setInterval(refresh, 5 * 60_000);
+    document.addEventListener("visibilitychange", refresh);
+    window.addEventListener("focus", refresh);
+    return () => {
+      clearInterval(t);
+      document.removeEventListener("visibilitychange", refresh);
+      window.removeEventListener("focus", refresh);
+    };
+  }, [router]);
+
   useEffect(() => {
     if (unlockStatus === "failed") showToast({ msg: "That key didn't match. Type it at the omj@grind prompt at the bottom of the page instead.", error: true });
     if (unlockStatus === "unconfigured") showToast({ msg: "The server has no DASHBOARD_SECRET set. Add it in Vercel and redeploy.", error: true });
