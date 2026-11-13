@@ -311,7 +311,7 @@ export default function Home() {
                 ))}
               </div>
             </h1>
-
+                
             <div className="max-w-3xl space-y-6 text-[var(--text-muted)]">
               <p className="text-xl md:text-2xl leading-relaxed font-light">
                 Pursuing <span className="text-white">Computer Science</span> at Western University.
