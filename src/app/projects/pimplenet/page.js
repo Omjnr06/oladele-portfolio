@@ -115,7 +115,7 @@ export default function PimpleNetCaseStudy() {
               <h2 className="text-yellow-400 font-bold text-lg mb-4 flex items-center gap-2">
                 <span className="text-white/50">{`>`}</span> Bottlenecks & Iterations
               </h2>
-              <p className="mb-4">
+              <div className="mb-4">
                 {/* The Bottlenecks */}
 
               
@@ -150,7 +150,7 @@ export default function PimpleNetCaseStudy() {
                   <br /> To ensure real-world viability, I finalized inference testing exclusively on held-out customer images that the model had never seen during training or validation, confirming strong generalization.
                 </li>
               </ul>
-              </p>
+              </div>
             </section>
 
             {/* The Results */}

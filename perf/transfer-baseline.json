@@ -1,0 +1,72 @@
+[
+  {
+    "route": "/",
+    "script": 260,
+    "stylesheet": 19,
+    "font": 52,
+    "image": 1953,
+    "media": 0,
+    "document": 9,
+    "other": 8
+  },
+  {
+    "route": "/resume",
+    "script": 260,
+    "stylesheet": 19,
+    "font": 52,
+    "image": 1,
+    "media": 0,
+    "document": 10,
+    "other": 10
+  },
+  {
+    "route": "/projects/jam",
+    "script": 224,
+    "stylesheet": 15,
+    "font": 52,
+    "image": 1,
+    "media": 0,
+    "document": 5,
+    "other": 4
+  },
+  {
+    "route": "/projects/pimplenet",
+    "script": 222,
+    "stylesheet": 15,
+    "font": 52,
+    "image": 60,
+    "media": 0,
+    "document": 7,
+    "other": 4
+  },
+  {
+    "route": "/projects/vault",
+    "script": 226,
+    "stylesheet": 15,
+    "font": 52,
+    "image": 1,
+    "media": 0,
+    "document": 5,
+    "other": 4
+  },
+  {
+    "route": "/music",
+    "script": 225,
+    "stylesheet": 19,
+    "font": 52,
+    "image": 1633,
+    "media": 0,
+    "document": 3,
+    "other": 4
+  },
+  {
+    "route": "/grind",
+    "script": 282,
+    "stylesheet": 15,
+    "font": 52,
+    "image": 1,
+    "media": 0,
+    "document": 139,
+    "other": 4
+  }
+]

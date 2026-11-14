@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-     "gen-media": "node scripts/gen-media.mjs"
+    "gen-media": "node scripts/gen-media.mjs",
+    "test:smoke": "playwright test --project=smoke-desktop --project=smoke-phone",
+    "test:visual": "playwright test --project=visual",
+    "test:visual:baseline": "playwright test --project=visual --update-snapshots",
+    "perf": "node scripts/perf.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
@@ -19,6 +23,7 @@
     "react-zoom-pan-pinch": "^4.0.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "26.4.0",
     "@types/react": "19.2.18",
