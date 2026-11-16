@@ -1,35 +1,69 @@
 @import "tailwindcss";
 
-@theme {
+@theme static {
   --color-ink: #050505;
   --color-panel: #0b0b0c;
   --color-panel-2: #121214;
   --color-line: rgb(255 255 255 / 0.08);
   --color-line-strong: rgb(255 255 255 / 0.16);
   --color-fg: #f4f6f8;
+  --color-bright: #ffffff;
   --color-muted: #8a94a3;
   --color-accent: #22d3ee;
   --color-accent-2: #8b5cf6;
+  --color-accent-2-100: #ede9fe;
+  --color-accent-2-200: #ddd6fe;
+  --color-accent-2-300: #c4b5fd;
+  --color-accent-2-400: #a78bfa;
+  --color-accent-2-600: #7c3aed;
+  --color-accent-2-700: #6d28d9;
+  --color-accent-2-900: #4c1d95;
+  --color-on-accent: #000000;
+  --color-scrim: #020202;
+  --color-ok: oklch(79.2% 0.209 151.711);
+  --color-warn: oklch(85.2% 0.199 91.936);
+  --color-warn-soft: oklch(90.5% 0.182 98.111);
+  --color-err: oklch(63.7% 0.237 25.331);
+  --color-err-soft: oklch(80.8% 0.114 19.571);
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 :root {
-  --bg-base: #050505;        
-  --bg-surface: #0a0a0a;     
-  --text-main: #ffffff;      
-  --text-muted: #8a94a3;     
-  --accent-cyan: #22d3ee;    
-  --accent-violet: #8b5cf6;  
-  --grid-line: rgba(255, 255, 255, 0.03);
-  /* Brighter cyan with 25% opacity for the core of the glowing dot */
-  --grid-dot: rgba(34, 211, 238, 0.25); 
+  --grid-line: color-mix(in srgb, var(--color-bright) 3%, transparent);
+  --grid-dot: color-mix(in srgb, var(--color-accent) 25%, transparent);
+  --scrollbar-thumb: color-mix(in srgb, var(--color-accent) 30%, transparent);
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  --scrollbar-thumb-ff: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  --texture: url("/assets/textures/carbon-fibre.png");
+  --mv-ice: #eaf6ff;
+  --mv-ice-2: #cfe9ef;
+  --mv-glass: rgb(8 11 18);
+  --mv-glass-deep: rgb(3 5 8);
+  --mv-glass-blue: rgb(10 14 26);
+  --mv-glass-ink: rgb(5 6 10);
+  --mv-violet-deep: rgb(20 14 32);
+}
+
+[data-colors="fixed"] {
+  --color-ink: #050505;
+  --color-panel: #0b0b0c;
+  --color-panel-2: #121214;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.16);
+  --color-fg: #f4f6f8;
+  --color-bright: #ffffff;
+  --color-muted: #8a94a3;
+  --color-accent: #22d3ee;
+  --color-accent-2: #8b5cf6;
+  --color-on-accent: #000000;
+  --color-scrim: #020202;
 }
 
 body {
-  background-color: var(--bg-base);
-  color: var(--text-main);
+  background-color: var(--color-ink);
+  color: var(--color-bright);
   overflow-x: hidden;
-  background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
+  background-image: var(--texture);
   background-attachment: fixed;
 }
 
@@ -38,33 +72,33 @@ body {
     display: inline-block;
     transition: all 0.4s ease-in-out;
     cursor: crosshair;
-    color: var(--text-main);
+    color: var(--color-bright);
     position: relative;
     z-index: 1;
   }
   
   .hover-letter:hover {
     animation: none !important; 
-    color: #ffffff !important; 
-    text-shadow: 0 0 45px rgba(255, 255, 255, 0.6);
+    color: var(--color-bright) !important; 
+    text-shadow: 0 0 45px color-mix(in srgb, var(--color-bright) 60%, transparent);
     transform: translateY(-4px);
     z-index: 10;
   }
 
   @keyframes ghost-scan {
     0%, 30%, 100% {
-      color: var(--text-main);
+      color: var(--color-bright);
       text-shadow: none;
       transform: translateY(0);
     }
     10% {
-      color: #ffffff;
-      text-shadow: 0 0 15px var(--accent-cyan), 0 0 30px var(--accent-cyan);
+      color: var(--color-bright);
+      text-shadow: 0 0 15px var(--color-accent), 0 0 30px var(--color-accent);
       transform: translateY(-2px);
     }
     15% {
-      color: #ffffff;
-      text-shadow: 0 0 15px var(--accent-violet), 0 0 30px var(--accent-violet);
+      color: var(--color-bright);
+      text-shadow: 0 0 15px var(--color-accent-2), 0 0 30px var(--color-accent-2);
       transform: translateY(-2px);
     }
   }
@@ -80,7 +114,7 @@ body {
     background-image:
       linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
       linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
-    background-color: var(--bg-base);
+    background-color: var(--color-ink);
   }
 
   .bg-journal-dots {
@@ -90,28 +124,28 @@ body {
   }
 
   .perforation-line {
-    border-right: 1px dashed rgba(255, 255, 255, 0.1);
+    border-right: 1px dashed color-mix(in srgb, var(--color-bright) 10%, transparent);
   }
 }
 html {
   scrollbar-width: thin;
-  scrollbar-color: rgb(34 211 238 / 0.4) transparent;
+  scrollbar-color: var(--scrollbar-thumb-ff) transparent;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgb(34 211 238 / 0.4) transparent;
+  scrollbar-color: var(--scrollbar-thumb-ff) transparent;
 }
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgb(34 211 238 / 0.3);
+  background: var(--scrollbar-thumb);
   border: 2px solid transparent;
   border-radius: 999px;
   background-clip: padding-box;
 }
-::-webkit-scrollbar-thumb:hover { background: rgb(34 211 238 / 0.55); background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); background-clip: padding-box; }
 
 @utility scrollbar-hide {
   scrollbar-width: none;
@@ -120,12 +154,48 @@ html {
 
 @layer base {
   :where(a, button, [role="button"], [tabindex]):focus-visible {
-    outline: 2px solid var(--accent-cyan);
+    outline: 2px solid var(--color-accent);
     outline-offset: 2px;
   }
 }
 
+html[data-theme-switching]::view-transition-old(root),
+html[data-theme-switching]::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html[data-theme-switching]::view-transition-old(root) {
+  z-index: 1;
+}
+
+html[data-theme-switching]::view-transition-new(root) {
+  z-index: 9999;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0.001;
+    transform: translateY(25px) scale(0.92);
+    filter: blur(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity, filter;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
+    filter: blur(0px);
+  }
   .animate-scan, .animate-pulse, .animate-ping, .animate-spin, .animate-bounce {
     animation: none !important;
   }

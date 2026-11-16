@@ -276,7 +276,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen w-full flex flex-row bg-[var(--bg-base)] font-sans selection:bg-[var(--accent-cyan)] selection:text-black relative">
+    <main className="min-h-screen w-full flex flex-row bg-ink font-sans selection:bg-accent selection:text-on-accent relative">
       
       <NavRail active={activeSection} items={[
         { key: "home", label: "Home", href: "#home", onClick: (e) => handleScroll(e, "home") },
@@ -286,11 +286,11 @@ export default function Home() {
         { key: "contact", label: "Contact", href: "#contact", onClick: (e) => handleScroll(e, "contact") },
       ]} />
 
-      <div className="flex-1 min-w-0 bg-journal-dots bg-[#050505] relative overflow-x-hidden">
+      <div className="flex-1 min-w-0 bg-journal-dots bg-ink relative overflow-x-hidden">
         
-        <div className="absolute left-10 h-full w-[1px] bg-[var(--accent-cyan)] opacity-20 pointer-events-none hidden md:block z-0" />
-        <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-[var(--accent-violet)] opacity-[0.03] rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[10%] left-[-5%] w-[400px] h-[400px] bg-[var(--accent-cyan)] opacity-[0.03] rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute left-10 h-full w-[1px] bg-accent opacity-20 pointer-events-none hidden md:block z-0" />
+        <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-accent-2 opacity-[0.03] rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-[10%] left-[-5%] w-[400px] h-[400px] bg-accent opacity-[0.03] rounded-full blur-[120px] pointer-events-none" />
 
         <div className="px-6 md:px-16 lg:px-24 w-full z-10 py-16 md:py-24 max-w-7xl mx-auto flex flex-col">
           
@@ -312,18 +312,18 @@ export default function Home() {
               </div>
             </h1>
                 
-            <div className="max-w-3xl space-y-6 text-[var(--text-muted)]">
+            <div className="max-w-3xl space-y-6 text-muted">
               <p className="text-xl md:text-2xl leading-relaxed font-light">
-                Pursuing <span className="text-white">Computer Science</span> at Western University.
+                Pursuing <span className="text-bright">Computer Science</span> at Western University.
               </p>
-              <p className="text-lg md:text-xl leading-relaxed font-light border-l border-white/10 pl-6">
-                Building <span className="text-[var(--accent-cyan)]">cool things.</span> Jamming <span className="text-[var(--accent-cyan)]">along the way.</span>
+              <p className="text-lg md:text-xl leading-relaxed font-light border-l border-bright/10 pl-6">
+                Building <span className="text-accent">cool things.</span> Jamming <span className="text-accent">along the way.</span>
               </p>
             </div>
           </div>
 
           <motion.div 
-            className="mb-32 relative w-full h-[450px] md:h-[clamp(420px,calc(100svh-8rem),550px)] border border-white/10 bg-[#050505] rounded-xl overflow-hidden group shadow-2xl cursor-grab active:cursor-grabbing"
+            className="mb-32 relative w-full h-[450px] md:h-[clamp(420px,calc(100svh-8rem),550px)] border border-bright/10 bg-ink rounded-xl overflow-hidden group shadow-2xl cursor-grab active:cursor-grabbing"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
             drag="x"
@@ -350,22 +350,22 @@ export default function Home() {
                 />
               </div>
             ))}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100%_4px] z-20 pointer-events-none" />
+            <div className="absolute inset-0 bg-[linear-gradient(color-mix(in_srgb,var(--color-bright)_2%,transparent)_1px,transparent_1px)] bg-[size:100%_4px] z-20 pointer-events-none" />
             
-            <button onClick={(e) => { e.stopPropagation(); handlePrevPhoto(); }} className={`absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/10 transition duration-300 hover:bg-black/70 hover:scale-110 ${isPaused ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 pointer-events-none'}`}>
+            <button onClick={(e) => { e.stopPropagation(); handlePrevPhoto(); }} className={`absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-scrim/40 text-bright backdrop-blur-md border border-bright/10 transition duration-300 hover:bg-scrim/70 hover:scale-110 ${isPaused ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 pointer-events-none'}`}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
-            <button onClick={(e) => { e.stopPropagation(); handleNextPhoto(); }} className={`absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/10 transition duration-300 hover:bg-black/70 hover:scale-110 ${isPaused ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'}`}>
+            <button onClick={(e) => { e.stopPropagation(); handleNextPhoto(); }} className={`absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-scrim/40 text-bright backdrop-blur-md border border-bright/10 transition duration-300 hover:bg-scrim/70 hover:scale-110 ${isPaused ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'}`}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
             </button>
             
-            <div className="absolute bottom-0 inset-x-0 h-1/3 bg-gradient-to-t from-black/80 to-transparent z-20 flex items-end justify-center pb-6 pointer-events-none">
+            <div className="absolute bottom-0 inset-x-0 h-1/3 bg-gradient-to-t from-scrim/80 to-transparent z-20 flex items-end justify-center pb-6 pointer-events-none">
               <div className="flex gap-2">
                 {galleryImages.map((_, idx) => (
                   <button
                     key={idx}
                     onClick={(e) => { e.stopPropagation(); setCurrentPhotoIndex(idx); }}
-                    className={`h-1.5 rounded-full transition-[width,background-color,box-shadow,opacity] duration-500 pointer-events-auto ${currentPhotoIndex === idx ? 'w-8 md:w-10 bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)]' : 'w-2 bg-white/30 hover:bg-white/60'}`}
+                    className={`h-1.5 rounded-full transition-[width,background-color,box-shadow,opacity] duration-500 pointer-events-auto ${currentPhotoIndex === idx ? 'w-8 md:w-10 bg-bright shadow-[0_0_10px_color-mix(in_srgb,var(--color-bright)_50%,transparent)]' : 'w-2 bg-bright/30 hover:bg-bright/60'}`}
                   />
                 ))}
               </div>
@@ -378,17 +378,17 @@ export default function Home() {
             
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-6">
               <div className="flex items-center gap-4">
-                <div className="w-2 h-2 rounded-full bg-[#8b5cf6] shadow-[0_0_10px_#8b5cf6] animate-pulse" />
-                <h2 className="font-mono text-xl md:text-2xl tracking-[0.3em] text-white uppercase">Spotlight</h2>
+                <div className="w-2 h-2 rounded-full bg-accent-2 shadow-[0_0_10px_var(--color-accent-2)] animate-pulse" />
+                <h2 className="font-mono text-xl md:text-2xl tracking-[0.3em] text-bright uppercase">Spotlight</h2>
               </div>
 
-              <div className="flex items-center bg-[#0a0a0a] border border-white/10 rounded-full p-1 shadow-lg w-full md:w-auto">
+              <div className="flex items-center bg-panel border border-bright/10 rounded-full p-1 shadow-lg w-full md:w-auto">
                 <button 
                   onClick={() => setSpotlightMode("TECH")}
                   className={`flex-1 md:flex-none px-6 py-2 rounded-full font-mono text-[11px] uppercase tracking-widest transition duration-300 ${
                     spotlightMode === "TECH" 
-                      ? "bg-[var(--accent-cyan)]/20 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/30 shadow-[0_0_15px_rgba(34,211,238,0.2)]" 
-                      : "text-white/40 hover:text-white"
+                      ? "bg-accent/20 text-accent border border-accent/30 shadow-[0_0_15px_color-mix(in_srgb,var(--color-accent)_20%,transparent)]" 
+                      : "text-bright/40 hover:text-bright"
                   }`}
                 >
                   Tech
@@ -397,8 +397,8 @@ export default function Home() {
                   onClick={() => setSpotlightMode("MUSIC")}
                   className={`flex-1 md:flex-none px-6 py-2 rounded-full font-mono text-[11px] uppercase tracking-widest transition duration-300 ${
                     spotlightMode === "MUSIC" 
-                      ? "bg-[#8b5cf6]/20 text-[#8b5cf6] border border-[#8b5cf6]/30 shadow-[0_0_15px_rgba(139,92,246,0.2)]" 
-                      : "text-white/40 hover:text-white"
+                      ? "bg-accent-2/20 text-accent-2 border border-accent-2/30 shadow-[0_0_15px_color-mix(in_srgb,var(--color-accent-2)_20%,transparent)]" 
+                      : "text-bright/40 hover:text-bright"
                   }`}
                 >
                   Music
@@ -408,7 +408,7 @@ export default function Home() {
 
             {/* Spotlight Display */}
             <div 
-              className="w-full h-[500px] md:h-[clamp(500px,calc(100svh-6rem),600px)] bg-[#050505] border border-white/10 rounded-2xl overflow-hidden relative shadow-[0_0_40px_rgba(0,0,0,0.8)] group"
+              className="w-full h-[500px] md:h-[clamp(500px,calc(100svh-6rem),600px)] bg-ink border border-bright/10 rounded-2xl overflow-hidden relative shadow-[0_0_40px_rgba(0,0,0,0.8)] group"
               onMouseEnter={() => setIsSpotlightHovered(true)}
               onMouseLeave={() => setIsSpotlightHovered(false)}
             >
@@ -416,10 +416,10 @@ export default function Home() {
               {/* Navigation Arrows (Only show if there are multiple items) */}
               {hasMultipleSpotlights && (
                 <>
-                  <button onClick={handlePrevSpotlight} className={`absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/10 transition duration-300 hover:bg-black/70 hover:scale-110 ${isSpotlightHovered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 pointer-events-none'}`}>
+                  <button onClick={handlePrevSpotlight} className={`absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-scrim/40 text-bright backdrop-blur-md border border-bright/10 transition duration-300 hover:bg-scrim/70 hover:scale-110 ${isSpotlightHovered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 pointer-events-none'}`}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                   </button>
-                  <button onClick={handleNextSpotlight} className={`absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-black/40 text-white backdrop-blur-md border border-white/10 transition duration-300 hover:bg-black/70 hover:scale-110 ${isSpotlightHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'}`}>
+                  <button onClick={handleNextSpotlight} className={`absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-scrim/40 text-bright backdrop-blur-md border border-bright/10 transition duration-300 hover:bg-scrim/70 hover:scale-110 ${isSpotlightHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 pointer-events-none'}`}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                   </button>
                 </>
@@ -440,7 +440,7 @@ export default function Home() {
                     <div className="absolute inset-0 z-0">
                       {featuredProjects[featuredTechIndex].mediaOrientation === 'portrait' ? (
                         <div 
-                          className="w-full h-full bg-cover bg-center blur-2xl scale-125 opacity-30"
+                          className="w-full h-full bg-cover bg-center blur-2xl scale-125 opacity-50"
                           style={{ backgroundImage: `url('${featuredProjects[featuredTechIndex].imageUrl}')` }}
                         />
                       ) : featuredProjects[featuredTechIndex].videoUrl ? (
@@ -448,66 +448,66 @@ export default function Home() {
                           src={featuredProjects[featuredTechIndex].videoUrl}
                           preload="metadata"
                           autoPlay muted loop playsInline 
-                          className="w-full h-full object-cover opacity-40"
+                          className="w-full h-full object-cover opacity-70"
                         />
                       ) : (
                         <div 
-                          className="w-full h-full bg-cover bg-center opacity-30"
+                          className="w-full h-full bg-cover bg-center opacity-70"
                           style={{ backgroundImage: `url('${featuredProjects[featuredTechIndex].imageUrl}')` }}
                         />
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-[#020202]/80 to-transparent" />
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#020202] via-[#020202]/50 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-scrim via-scrim/50 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-scrim/90 via-scrim/40 to-transparent" />
                       {featuredProjects[featuredTechIndex].mediaOrientation === 'portrait' && (
-                        <div className="hidden md:block absolute right-10 lg:right-20 top-1/2 -translate-y-1/2 h-[380px] lg:h-[440px] aspect-[9/19] rounded-[2rem] overflow-hidden border border-[var(--accent-cyan)]/20 shadow-[0_0_50px_rgba(34,211,238,0.15)] bg-[#050505] z-[5] pointer-events-none">
+                        <div className="hidden md:block absolute right-10 lg:right-20 top-1/2 -translate-y-1/2 h-[380px] lg:h-[440px] aspect-[9/19] rounded-[2rem] overflow-hidden border border-accent/20 shadow-[0_0_50px_color-mix(in_srgb,var(--color-accent)_15%,transparent)] bg-ink z-[5] pointer-events-none">
                           {featuredProjects[featuredTechIndex].videoUrl ? (
                             <video src={featuredProjects[featuredTechIndex].videoUrl} autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" />
                           ) : (
                             <div className="absolute inset-0 w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('${featuredProjects[featuredTechIndex].imageUrl}')` }} />
                           )}
-                          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none" />
+                          <div className="absolute inset-0 bg-[linear-gradient(color-mix(in_srgb,var(--color-bright)_2%,transparent)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none" />
                         </div>
                       )}
                     </div>
 
                     <div className="absolute inset-0 z-10 flex flex-col justify-end p-6 md:p-12">
                       <div className={`max-w-3xl ${featuredProjects[featuredTechIndex].mediaOrientation === 'portrait' ? 'md:max-w-[52%] lg:max-w-[55%]' : ''}`}>
-                        <div className="font-mono text-[11px] text-[var(--accent-cyan)] tracking-widest mb-4 flex items-center gap-3 flex-wrap">
+                        <div className="font-mono text-[11px] text-accent tracking-widest mb-4 flex items-center gap-3 flex-wrap">
                           {featuredProjects[featuredTechIndex].isInternship && (
                             <>
-                              <span className="text-[#8b5cf6] font-bold tracking-widest bg-[#8b5cf6]/10 px-2 py-0.5 rounded border border-[#8b5cf6]/20">INTERNSHIP</span>
-                              <span className="text-white/20">//</span>
+                              <span className="text-accent-2 font-bold tracking-widest bg-accent-2/10 px-2 py-0.5 rounded border border-accent-2/20">INTERNSHIP</span>
+                              <span className="text-bright/20">//</span>
                             </>
                           )}
                           {asCats(featuredProjects[featuredTechIndex].category).map((c, i) => (
                             <React.Fragment key={c}>
-                              {i > 0 && <span className="text-white/20">//</span>}
+                              {i > 0 && <span className="text-bright/20">//</span>}
                               <span>{c}</span>
                             </React.Fragment>
                           ))}
                         </div>
                         
-                        <h3 className="text-3xl md:text-6xl font-bold text-white tracking-tight mb-4 drop-shadow-lg">
+                        <h3 className="text-3xl md:text-6xl font-bold text-bright tracking-tight mb-4 drop-shadow-lg">
                           {featuredProjects[featuredTechIndex].title}
                         </h3>
                         
-                        <p className="text-white/70 text-sm md:text-lg leading-relaxed font-light mb-8 line-clamp-3 md:line-clamp-none">
+                        <p className="text-bright/70 text-sm md:text-lg leading-relaxed font-light mb-8 line-clamp-3 md:line-clamp-none">
                           {featuredProjects[featuredTechIndex].description}
                         </p>
                         
                         <div className="flex flex-wrap gap-3 md:gap-4 pb-8 md:pb-0">
                           {featuredProjects[featuredTechIndex].caseStudyUrl && (
-                            <Link href={featuredProjects[featuredTechIndex].caseStudyUrl} className="px-5 py-2.5 md:px-6 md:py-3 bg-[#8b5cf6]/20 text-[#8b5cf6] border border-[#8b5cf6]/30 backdrop-blur-md rounded shadow-[0_0_15px_rgba(139,92,246,0.2)] text-[11px] md:text-xs uppercase font-mono tracking-widest hover:bg-[#8b5cf6]/30 hover:-translate-y-1 transition">
+                            <Link href={featuredProjects[featuredTechIndex].caseStudyUrl} className="px-5 py-2.5 md:px-6 md:py-3 bg-accent-2/20 text-accent-2 border border-accent-2/30 backdrop-blur-md rounded shadow-[0_0_15px_color-mix(in_srgb,var(--color-accent-2)_20%,transparent)] text-[11px] md:text-xs uppercase font-mono tracking-widest hover:bg-accent-2/30 hover:-translate-y-1 transition">
                               Read Case Study ↗
                             </Link>
                           )}
 
                           {featuredProjects[featuredTechIndex].liveUrl ? (
-                            <a href={featuredProjects[featuredTechIndex].liveUrl} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 md:px-6 md:py-3 bg-white/5 text-white border border-white/20 backdrop-blur-md rounded text-[11px] md:text-xs uppercase font-mono tracking-widest hover:bg-white/10 hover:-translate-y-1 transition">
+                            <a href={featuredProjects[featuredTechIndex].liveUrl} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 md:px-6 md:py-3 bg-bright/5 text-bright border border-bright/20 backdrop-blur-md rounded text-[11px] md:text-xs uppercase font-mono tracking-widest hover:bg-bright/10 hover:-translate-y-1 transition">
                               Live ↗
                             </a>
                           ) : featuredProjects[featuredTechIndex].githubUrl ? (
-                            <a href={featuredProjects[featuredTechIndex].githubUrl} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 md:px-6 md:py-3 bg-white/5 text-white border border-white/20 backdrop-blur-md rounded text-[11px] md:text-xs uppercase font-mono tracking-widest hover:bg-white/10 hover:-translate-y-1 transition">
+                            <a href={featuredProjects[featuredTechIndex].githubUrl} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 md:px-6 md:py-3 bg-bright/5 text-bright border border-bright/20 backdrop-blur-md rounded text-[11px] md:text-xs uppercase font-mono tracking-widest hover:bg-bright/10 hover:-translate-y-1 transition">
                               View Source ↗
                             </a>
                           ) : null}
@@ -522,7 +522,7 @@ export default function Home() {
                             key={idx}
                             onClick={(e) => { e.stopPropagation(); setFeaturedTechIndex(idx); }}
                             className={`h-1.5 rounded-full transition duration-300 ${
-                              featuredTechIndex === idx ? 'w-8 bg-[var(--accent-cyan)] shadow-[0_0_10px_var(--accent-cyan)]' : 'w-2 bg-white/20 hover:bg-white/50 cursor-pointer'
+                              featuredTechIndex === idx ? 'w-8 bg-accent shadow-[0_0_10px_var(--color-accent)]' : 'w-2 bg-bright/20 hover:bg-bright/50 cursor-pointer'
                             }`}
                             aria-label={`Go to slide ${idx + 1}`}
                           />
@@ -547,32 +547,32 @@ export default function Home() {
                         src={featuredMusicTracks[featuredMusicIndex].videoUrl}
                         preload="metadata" 
                         autoPlay muted loop playsInline
-                        className="w-full h-full object-cover opacity-50 blur-[2px]"
+                        className="w-full h-full object-cover opacity-80 blur-[2px]"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-[#020202]/80 to-[#020202]/30" />
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#020202] via-[#020202]/60 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-scrim via-scrim/50 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-scrim/90 via-scrim/40 to-transparent" />
                     </div>
 
                     <div className="absolute inset-0 z-10 flex flex-col justify-end p-6 md:p-12">
                       <div className="max-w-3xl">
-                        <div className="font-mono text-[11px] text-[#8b5cf6] tracking-widest mb-4 flex items-center gap-3">
-                          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                        <div className="font-mono text-[11px] text-accent-2 tracking-widest mb-4 flex items-center gap-3">
+                          <span className="w-2 h-2 rounded-full bg-err animate-pulse" />
                           <span>LIVE SESSION</span>
                         </div>
                         
-                        <h3 className="text-3xl md:text-6xl font-bold text-white tracking-tight mb-2 drop-shadow-lg">
+                        <h3 className="text-3xl md:text-6xl font-bold text-bright tracking-tight mb-2 drop-shadow-lg">
                           {featuredMusicTracks[featuredMusicIndex].title}
                         </h3>
                         
-                        <p className="text-[#8b5cf6] font-mono text-[11px] md:text-sm tracking-widest uppercase mb-6">
+                        <p className="text-accent-2 font-mono text-[11px] md:text-sm tracking-widest uppercase mb-6">
                           Original By // {featuredMusicTracks[featuredMusicIndex].originalArtist}
                         </p>
 
-                        <p className="text-white/70 text-sm md:text-base leading-relaxed font-light mb-8 italic border-l border-white/20 pl-4 hidden md:block">
+                        <p className="text-bright/70 text-sm md:text-base leading-relaxed font-light mb-8 italic border-l border-bright/20 pl-4 hidden md:block">
                           "{featuredMusicTracks[featuredMusicIndex].notes}"
                         </p>
                         
-                        <Link href={`/music?track=${featuredMusicTracks[featuredMusicIndex].id}`} className="inline-flex px-5 py-2.5 md:px-6 md:py-3 bg-[var(--accent-cyan)]/20 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/30 backdrop-blur-md rounded shadow-[0_0_15px_rgba(34,211,238,0.2)] text-[11px] md:text-xs uppercase font-mono tracking-widest hover:bg-[var(--accent-cyan)]/30 hover:-translate-y-1 transition mb-4 md:mb-0">
+                        <Link href={`/music?track=${featuredMusicTracks[featuredMusicIndex].id}`} className="inline-flex px-5 py-2.5 md:px-6 md:py-3 bg-accent/20 text-accent border border-accent/30 backdrop-blur-md rounded shadow-[0_0_15px_color-mix(in_srgb,var(--color-accent)_20%,transparent)] text-[11px] md:text-xs uppercase font-mono tracking-widest hover:bg-accent/30 hover:-translate-y-1 transition mb-4 md:mb-0">
                           View in Music Vault ↗
                         </Link>
                       </div>
@@ -585,7 +585,7 @@ export default function Home() {
                             key={idx}
                             onClick={(e) => { e.stopPropagation(); setFeaturedMusicIndex(idx); }}
                             className={`h-1.5 rounded-full transition duration-300 ${
-                              featuredMusicIndex === idx ? 'w-8 bg-[#8b5cf6] shadow-[0_0_10px_#8b5cf6]' : 'w-2 bg-white/20 hover:bg-white/50 cursor-pointer'
+                              featuredMusicIndex === idx ? 'w-8 bg-accent-2 shadow-[0_0_10px_var(--color-accent-2)]' : 'w-2 bg-bright/20 hover:bg-bright/50 cursor-pointer'
                             }`}
                             aria-label={`Go to slide ${idx + 1}`}
                           />
@@ -600,14 +600,14 @@ export default function Home() {
   
 
           <div className="flex items-center gap-4 mb-8 md:mb-12">
-            <div className="w-2 h-2 rounded-full bg-[var(--accent-cyan)] shadow-[0_0_10px_var(--accent-cyan)]" />
-            <h1 className="font-mono text-xl md:text-2xl tracking-[0.3em] text-white uppercase">PROJECTS AND HACKATHONS</h1>
-            <div className="h-[1px] flex-1 bg-white/5" />
+            <div className="w-2 h-2 rounded-full bg-accent shadow-[0_0_10px_var(--color-accent)]" />
+            <h1 className="font-mono text-xl md:text-2xl tracking-[0.3em] text-bright uppercase">PROJECTS AND HACKATHONS</h1>
+            <div className="h-[1px] flex-1 bg-bright/5" />
           </div>
 
           <div id="projects" className="flex flex-col items-start gap-6 w-full pb-20 scroll-mt-6">
-            <div className="flex flex-row items-center gap-3 w-full overflow-x-auto pb-4 scrollbar-hide border-b border-white/5">
-              <span className="hidden md:block font-mono text-[13px] text-[var(--text-muted)] tracking-widest uppercase mr-2">// Filter Projects</span>
+            <div className="flex flex-row items-center gap-3 w-full overflow-x-auto pb-4 scrollbar-hide border-b border-bright/5">
+              <span className="hidden md:block font-mono text-[13px] text-muted tracking-widest uppercase mr-2">// Filter Projects</span>
               {categories.map((category) => (
                 <button
                   key={category}
@@ -618,8 +618,8 @@ export default function Home() {
                   }}
                   className={`shrink-0 px-5 py-2 font-mono text-[11px] md:text-xs uppercase tracking-widest transition duration-300 rounded-full border ${
                     activeCategory === category
-                      ? 'bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] border-[var(--accent-cyan)] shadow-[0_0_15px_rgba(34,211,238,0.2)]'
-                      : 'bg-transparent text-[var(--text-muted)] border-white/10 hover:text-white hover:bg-white/5 hover:border-white/30'
+                      ? 'bg-accent/10 text-accent border-accent shadow-[0_0_15px_color-mix(in_srgb,var(--color-accent)_20%,transparent)]'
+                      : 'bg-transparent text-muted border-bright/10 hover:text-bright hover:bg-bright/5 hover:border-bright/30'
                   }`}
                 >
                   {category}
@@ -627,26 +627,26 @@ export default function Home() {
               ))}
             </div>
 
-            <div className="w-full relative min-h-[550px] md:h-[600px] bg-[#0a0a0a] border border-[var(--accent-cyan)]/30 rounded-xl overflow-hidden flex flex-col shadow-[0_0_40px_rgba(34,211,238,0.1)] transition-shadow duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.2)]">
+            <div className="w-full relative min-h-[550px] md:h-[600px] bg-panel border border-accent/30 rounded-xl overflow-hidden flex flex-col shadow-[0_0_40px_color-mix(in_srgb,var(--color-accent)_10%,transparent)] transition-shadow duration-500 hover:shadow-[0_0_60px_color-mix(in_srgb,var(--color-accent)_20%,transparent)]">
               <div className="absolute top-4 right-4 md:top-6 md:right-6 z-50 flex gap-2 md:gap-3">
                 {filteredProjects.length > 0 && filteredProjects[currentProjectIndex].caseStudyUrl && (
-                  <Link href={filteredProjects[currentProjectIndex].caseStudyUrl} className="px-4 py-2 bg-[#8b5cf6]/20 text-[#fdfdfd] border border-[#8b5cf6]/30 backdrop-blur-md rounded-full text-[11px] uppercase font-mono tracking-widest hover:bg-[#8b5cf6]/30 transition shadow-[0_0_15px_rgba(139,92,246,0.2)]">
+                  <Link href={filteredProjects[currentProjectIndex].caseStudyUrl} className="px-4 py-2 bg-accent-2/20 text-bright border border-accent-2/30 backdrop-blur-md rounded-full text-[11px] uppercase font-mono tracking-widest hover:bg-accent-2/30 transition shadow-[0_0_15px_color-mix(in_srgb,var(--color-accent-2)_20%,transparent)]">
                     View More 
                   </Link>
                 )}
                 {filteredProjects.length > 0 && filteredProjects[currentProjectIndex].liveUrl && (
-                  <a href={filteredProjects[currentProjectIndex].liveUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-[var(--accent-cyan)]/20 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/30 backdrop-blur-md rounded-full text-[11px] uppercase font-mono tracking-widest hover:bg-[var(--accent-cyan)]/30 transition shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+                  <a href={filteredProjects[currentProjectIndex].liveUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-accent/20 text-accent border border-accent/30 backdrop-blur-md rounded-full text-[11px] uppercase font-mono tracking-widest hover:bg-accent/30 transition shadow-[0_0_15px_color-mix(in_srgb,var(--color-accent)_20%,transparent)]">
                     Live ↗
                   </a>
                 )}
                 {filteredProjects.length > 0 && filteredProjects[currentProjectIndex].githubUrl && (
-                  <a href={filteredProjects[currentProjectIndex].githubUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-black/40 text-white border border-white/20 backdrop-blur-md rounded-full text-[11px] uppercase font-mono tracking-widest hover:bg-black/60 hover:border-white/40 transition">
+                  <a href={filteredProjects[currentProjectIndex].githubUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-scrim/40 text-bright border border-bright/20 backdrop-blur-md rounded-full text-[11px] uppercase font-mono tracking-widest hover:bg-scrim/60 hover:border-bright/40 transition">
                     GitHub ↗
                   </a>
                 )}
               </div>
 
-              <div className="flex-1 p-6 pt-16 md:p-10 md:pt-10 relative z-10 md:overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/20">
+              <div className="flex-1 p-6 pt-16 md:p-10 md:pt-10 relative z-10 md:overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-bright/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-bright/20">
                 <AnimatePresence mode="wait">
                   {filteredProjects.length > 0 && (
                     <motion.div
@@ -669,38 +669,38 @@ export default function Home() {
                       }}
                     >
                       <div className="flex-1 flex flex-col justify-start w-full pointer-events-none">
-                        <div className="font-mono text-[11px] text-[var(--accent-cyan)] tracking-widest mb-4 flex items-center gap-3 mt-1 flex-wrap">
+                        <div className="font-mono text-[11px] text-accent tracking-widest mb-4 flex items-center gap-3 mt-1 flex-wrap">
                           <span>{filteredProjects[currentProjectIndex].id}</span>
                           {filteredProjects[currentProjectIndex].isInternship && (
                             <>
-                              <span className="text-white/20">//</span>
-                              <span className="text-[#8b5cf6] font-bold tracking-widest bg-[#8b5cf6]/10 px-2 py-0.5 rounded border border-[#8b5cf6]/20">INTERNSHIP</span>
+                              <span className="text-bright/20">//</span>
+                              <span className="text-accent-2 font-bold tracking-widest bg-accent-2/10 px-2 py-0.5 rounded border border-accent-2/20">INTERNSHIP</span>
                             </>
                           )}
-                          <span className="text-white/20">//</span>
+                          <span className="text-bright/20">//</span>
                           {asCats(filteredProjects[currentProjectIndex].category).map((c, i) => (
                             <React.Fragment key={c}>
-                              {i > 0 && <span className="text-white/20">//</span>}
+                              {i > 0 && <span className="text-bright/20">//</span>}
                               <span>{c}</span>
                             </React.Fragment>
                           ))}
                         </div>
-                        <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4 md:mb-6">
+                        <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-bright tracking-tight mb-4 md:mb-6">
                           {filteredProjects[currentProjectIndex].title}
                         </h3>
-                        <p className="text-white/70 text-sm md:text-base leading-relaxed max-w-2xl font-light mb-6">
+                        <p className="text-bright/70 text-sm md:text-base leading-relaxed max-w-2xl font-light mb-6">
                           {filteredProjects[currentProjectIndex].description}
                         </p>
                         <div className="flex flex-wrap gap-2 mt-auto">
                           {filteredProjects[currentProjectIndex].stack.map((tech, idx) => (
-                            <span key={idx} className="px-3 py-1 bg-white/5 border border-white/10 rounded font-mono text-[11px] md:text-xs text-[var(--accent-violet)] transition duration-300">
+                            <span key={idx} className="px-3 py-1 bg-bright/5 border border-bright/10 rounded font-mono text-[11px] md:text-xs text-accent-2 transition duration-300">
                               {tech}
                             </span>
                           ))}
                         </div>
                       </div>
 
-                      <div className={`${filteredProjects[currentProjectIndex].mediaOrientation === 'portrait' ? 'w-auto h-[380px] md:h-[440px] lg:h-[480px] aspect-[9/19] mx-auto rounded-[2rem]' : 'w-full lg:w-[50%] xl:w-[55%] aspect-video rounded-xl'} overflow-hidden border border-[var(--accent-cyan)]/20 shadow-[0_0_40px_rgba(34,211,238,0.1)] relative group shrink-0 bg-[#050505] transition duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.2)] hover:border-[var(--accent-cyan)]/40 mt-1 pointer-events-auto`}>
+                      <div className={`${filteredProjects[currentProjectIndex].mediaOrientation === 'portrait' ? 'w-auto h-[380px] md:h-[440px] lg:h-[480px] aspect-[9/19] mx-auto rounded-[2rem]' : 'w-full lg:w-[50%] xl:w-[55%] aspect-video rounded-xl'} overflow-hidden border border-accent/20 shadow-[0_0_40px_color-mix(in_srgb,var(--color-accent)_10%,transparent)] relative group shrink-0 bg-ink transition duration-500 hover:shadow-[0_0_60px_color-mix(in_srgb,var(--color-accent)_20%,transparent)] hover:border-accent/40 mt-1 pointer-events-auto`}>
                         {filteredProjects[currentProjectIndex].videoUrl ? (
                           <video src={filteredProjects[currentProjectIndex].videoUrl} playsInline className="absolute inset-0 w-full h-full object-cover z-10" {...(filteredProjects[currentProjectIndex].mediaOrientation === 'portrait' ? { autoPlay: true, muted: true, loop: true } : { controls: true, preload: "metadata" })} />
                         ) : filteredProjects[currentProjectIndex].imageUrl ? (
@@ -713,19 +713,19 @@ export default function Home() {
                             }}
                           />
                         ) : (
-                          <div className="absolute inset-0 w-full h-full z-10 flex flex-col items-center justify-center p-6 text-center border border-dashed border-white/10 m-4 rounded pointer-events-none">
-                            <span className="font-mono text-xs text-[var(--text-muted)] animate-pulse">AWAITING_MEDIA_PAYLOAD...</span>
+                          <div className="absolute inset-0 w-full h-full z-10 flex flex-col items-center justify-center p-6 text-center border border-dashed border-bright/10 m-4 rounded pointer-events-none">
+                            <span className="font-mono text-xs text-muted animate-pulse">AWAITING_MEDIA_PAYLOAD...</span>
                           </div>
                         )}
-                        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none z-20" />
+                        <div className="absolute inset-0 bg-[linear-gradient(color-mix(in_srgb,var(--color-bright)_2%,transparent)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none z-20" />
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
 
-              <div className="h-28 md:h-36 w-full relative flex items-center justify-center overflow-hidden border-t border-white/5 bg-gradient-to-t from-[#0a0a0a] to-transparent shrink-0">
-                <div className="absolute w-[2px] h-full bg-[var(--accent-cyan)]/20 z-0 pointer-events-none" />
+              <div className="h-28 md:h-36 w-full relative flex items-center justify-center overflow-hidden border-t border-bright/5 bg-gradient-to-t from-panel to-transparent shrink-0">
+                <div className="absolute w-[2px] h-full bg-accent/20 z-0 pointer-events-none" />
                 <div className="relative w-full h-full flex items-center justify-center mt-2">
                   {filteredProjects.map((project, index) => {
                     const style = getDialStyle(index);
@@ -736,12 +736,12 @@ export default function Home() {
                         transition={{ type: "spring", stiffness: 200, damping: 25 }}
                         onClick={() => setCurrentProjectIndex(index)}
                         className={`absolute w-32 h-16 md:w-36 md:h-20 rounded-lg cursor-pointer flex flex-col items-center justify-center p-3 transition-colors duration-300 ${
-                          currentProjectIndex === index ? 'bg-[#0a0a0a] border border-[var(--accent-cyan)] shadow-[0_0_20px_rgba(34,211,238,0.2)]' : 'bg-[#111] border border-white/5 hover:border-white/20'
+                          currentProjectIndex === index ? 'bg-panel border border-accent shadow-[0_0_20px_color-mix(in_srgb,var(--color-accent)_20%,transparent)]' : 'bg-panel-2 border border-bright/5 hover:border-bright/20'
                         }`}
                         style={{ originX: 0.5, originY: 0.5 }}
                       >
-                        <span className={`font-mono text-[11px] tracking-widest mb-1 ${currentProjectIndex === index ? 'text-[var(--accent-cyan)]' : 'text-[var(--text-muted)]'}`}>{project.id}</span>
-                        <span className={`text-[11px] font-bold text-center line-clamp-2 ${currentProjectIndex === index ? 'text-white' : 'text-white/40'}`}>{project.title}</span>
+                        <span className={`font-mono text-[11px] tracking-widest mb-1 ${currentProjectIndex === index ? 'text-accent' : 'text-muted'}`}>{project.id}</span>
+                        <span className={`text-[11px] font-bold text-center line-clamp-2 ${currentProjectIndex === index ? 'text-bright' : 'text-bright/40'}`}>{project.title}</span>
                       </motion.div>
                     );
                   })}
@@ -750,47 +750,47 @@ export default function Home() {
             </div>
           </div>
 
-          <div id="contact" className="w-full flex flex-col items-center justify-center pb-32 pt-20 border-t border-white/5 scroll-mt-24 relative">
-             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-[1px] bg-gradient-to-r from-transparent via-[var(--accent-cyan)] to-transparent opacity-50" />
-             <span className="font-mono text-[11px] text-[var(--accent-cyan)] tracking-[0.3em] uppercase mb-4">// Lets Work Together</span>
-             <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 tracking-tight">Contact Information</h2>
+          <div id="contact" className="w-full flex flex-col items-center justify-center pb-32 pt-20 border-t border-bright/5 scroll-mt-24 relative">
+             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-[1px] bg-gradient-to-r from-transparent via-accent to-transparent opacity-50" />
+             <span className="font-mono text-[11px] text-accent tracking-[0.3em] uppercase mb-4">// Lets Work Together</span>
+             <h2 className="text-3xl md:text-4xl font-bold text-bright mb-12 tracking-tight">Contact Information</h2>
 
              <div className="flex flex-wrap justify-center gap-6 md:gap-10 max-w-[280px] sm:max-w-[400px] md:max-w-none mx-auto">
                <a href="mailto:oj.magbadelo@gmail.com" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                   <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-panel border border-bright/10 flex items-center justify-center shadow-lg transition duration-300 group-hover:-translate-y-2 group-hover:border-accent group-hover:shadow-[0_0_25px_color-mix(in_srgb,var(--color-accent)_20%,transparent)] overflow-hidden">
+                   <svg className="w-8 h-8 md:w-10 md:h-10 text-muted group-hover:text-accent group-hover:scale-110 transition duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                  </div>
-                 <span className="font-mono text-[11px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">Email</span>
+                 <span className="font-mono text-[11px] text-muted tracking-widest uppercase group-hover:text-accent transition-colors">Email</span>
                </a>
                <a href="https://www.linkedin.com/in/oladele-magbadelo" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                   <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-panel border border-bright/10 flex items-center justify-center shadow-lg transition duration-300 group-hover:-translate-y-2 group-hover:border-accent group-hover:shadow-[0_0_25px_color-mix(in_srgb,var(--color-accent)_20%,transparent)] overflow-hidden">
+                   <svg className="w-8 h-8 md:w-10 md:h-10 text-muted group-hover:text-accent group-hover:scale-110 transition duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                  </div>
-                 <span className="font-mono text-[11px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">LinkedIn</span>
+                 <span className="font-mono text-[11px] text-muted tracking-widest uppercase group-hover:text-accent transition-colors">LinkedIn</span>
                </a>
                <a href="https://github.com/Omjnr06" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                   <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-panel border border-bright/10 flex items-center justify-center shadow-lg transition duration-300 group-hover:-translate-y-2 group-hover:border-accent group-hover:shadow-[0_0_25px_color-mix(in_srgb,var(--color-accent)_20%,transparent)] overflow-hidden">
+                   <svg className="w-8 h-8 md:w-10 md:h-10 text-muted group-hover:text-accent group-hover:scale-110 transition duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                  </div>
-                 <span className="font-mono text-[11px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">GitHub</span>
+                 <span className="font-mono text-[11px] text-muted tracking-widest uppercase group-hover:text-accent transition-colors">GitHub</span>
                </a>
                <a href="https://devpost.com/oj-magbadelo" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                   <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"></polygon></svg>
+                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-panel border border-bright/10 flex items-center justify-center shadow-lg transition duration-300 group-hover:-translate-y-2 group-hover:border-accent group-hover:shadow-[0_0_25px_color-mix(in_srgb,var(--color-accent)_20%,transparent)] overflow-hidden">
+                   <svg className="w-8 h-8 md:w-10 md:h-10 text-muted group-hover:text-accent group-hover:scale-110 transition duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"></polygon></svg>
                  </div>
-                 <span className="font-mono text-[11px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">Devpost</span>
+                 <span className="font-mono text-[11px] text-muted tracking-widest uppercase group-hover:text-accent transition-colors">Devpost</span>
                </a>
                <a href="https://www.instagram.com/magbadelojr/" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                   <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-panel border border-bright/10 flex items-center justify-center shadow-lg transition duration-300 group-hover:-translate-y-2 group-hover:border-accent group-hover:shadow-[0_0_25px_color-mix(in_srgb,var(--color-accent)_20%,transparent)] overflow-hidden">
+                   <svg className="w-8 h-8 md:w-10 md:h-10 text-muted group-hover:text-accent group-hover:scale-110 transition duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                  </div>
-                 <span className="font-mono text-[11px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">Instagram</span>
+                 <span className="font-mono text-[11px] text-muted tracking-widest uppercase group-hover:text-accent transition-colors">Instagram</span>
                </a>
                <a href="https://x.com/magbadelojr" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-4">
-                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-[#0a0a0a] border border-white/10 flex items-center justify-center shadow-lg transition duration-300 group-hover:-translate-y-2 group-hover:border-[var(--accent-cyan)] group-hover:shadow-[0_0_25px_rgba(34,211,238,0.2)] overflow-hidden">
-                   <svg className="w-8 h-8 md:w-10 md:h-10 text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] group-hover:scale-110 transition duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
+                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-panel border border-bright/10 flex items-center justify-center shadow-lg transition duration-300 group-hover:-translate-y-2 group-hover:border-accent group-hover:shadow-[0_0_25px_color-mix(in_srgb,var(--color-accent)_20%,transparent)] overflow-hidden">
+                   <svg className="w-8 h-8 md:w-10 md:h-10 text-muted group-hover:text-accent group-hover:scale-110 transition duration-300" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
                  </div>
-                 <span className="font-mono text-[11px] text-[var(--text-muted)] tracking-widest uppercase group-hover:text-[var(--accent-cyan)] transition-colors">X</span>
+                 <span className="font-mono text-[11px] text-muted tracking-widest uppercase group-hover:text-accent transition-colors">X</span>
                </a>
              </div>
           </div>
@@ -803,7 +803,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               onClick={(e) => handleScroll(e, 'home')}
-              className="group fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex items-center justify-center p-3 md:p-4 rounded-full bg-black/60 border border-white/10 text-[var(--accent-cyan)] shadow-lg backdrop-blur-md hover:bg-black hover:border-[var(--accent-cyan)] transition overflow-hidden"
+              className="group fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 flex items-center justify-center p-3 md:p-4 rounded-full bg-scrim/60 border border-bright/10 text-accent shadow-lg backdrop-blur-md hover:bg-scrim hover:border-accent transition overflow-hidden"
               aria-label="Back to top"
             >
               <svg className="shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
@@ -822,7 +822,7 @@ export default function Home() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.25 }}
-                className="fixed inset-0 z-[200] overflow-y-auto bg-black/90 backdrop-blur-md"
+                className="fixed inset-0 z-[200] overflow-y-auto bg-scrim/90 backdrop-blur-md"
                 onClick={() => setSelectedImage(null)}
               >
                 <div className="min-h-full flex items-center justify-center p-6">
@@ -834,8 +834,8 @@ export default function Home() {
                     className="relative max-w-5xl w-full"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <img src={selectedImage} alt="Project preview" className="w-full h-auto object-contain rounded-xl border border-[var(--accent-cyan)]/20 shadow-[0_0_60px_rgba(34,211,238,0.15)]" />
-                    <button onClick={() => setSelectedImage(null)} className="absolute -top-4 -right-4 w-9 h-9 flex items-center justify-center rounded-full bg-[#0a0a0a] border border-white/10 text-[var(--text-muted)] hover:text-white hover:border-[var(--accent-cyan)] transition">
+                    <img src={selectedImage} alt="Project preview" className="w-full h-auto object-contain rounded-xl border border-accent/20 shadow-[0_0_60px_color-mix(in_srgb,var(--color-accent)_15%,transparent)]" />
+                    <button onClick={() => setSelectedImage(null)} className="absolute -top-4 -right-4 w-9 h-9 flex items-center justify-center rounded-full bg-panel border border-bright/10 text-muted hover:text-bright hover:border-accent transition">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
                     </button>
                   </motion.div>

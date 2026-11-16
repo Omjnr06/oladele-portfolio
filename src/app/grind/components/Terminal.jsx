@@ -32,7 +32,7 @@ export function Terminal({ owner, onUnlocked }) {
           className="flex h-10 items-center gap-2 rounded-md transition-[color] duration-150 enabled:hover:text-fg disabled:cursor-default focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
           {prompt}
           {owner && <span className="text-accent-2">unlocked</span>}
-          <span aria-hidden className="inline-block h-4 w-2 animate-pulse bg-white/60 motion-reduce:animate-none" />
+          <span aria-hidden className="inline-block h-4 w-2 animate-pulse bg-bright/60 motion-reduce:animate-none" />
         </button>
       </div>
     );
@@ -48,7 +48,7 @@ export function Terminal({ owner, onUnlocked }) {
           aria-label="Dashboard key" placeholder="paste key, press enter"
           className="h-10 min-w-0 flex-1 bg-transparent text-base text-fg caret-accent outline-none placeholder:text-muted/60 md:text-sm" />
       </label>
-      {state.msg && <p role="status" className={`mt-1 text-xs ${state.error ? "text-red-300" : "text-muted"}`}>{state.msg}</p>}
+      {state.msg && <p role="status" className={`mt-1 text-xs ${state.error ? "text-err-soft" : "text-muted"}`}>{state.msg}</p>}
     </form>
   );
 }

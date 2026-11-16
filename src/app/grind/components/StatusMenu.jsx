@@ -57,7 +57,7 @@ export function StatusMenu({ value, onChange, disabled }) {
               return (
                 <li key={s} role="option" aria-selected={s === value} tabIndex={-1}
                   onClick={() => pick(s)} onPointerEnter={() => setIdx(i)}
-                  className={`flex h-10 cursor-pointer items-center gap-2 rounded-md px-3 text-sm outline-none ${i === idx ? "bg-white/[0.06]" : ""} ${s === value ? "text-fg" : "text-fg/70"}`}>
+                  className={`flex h-10 cursor-pointer items-center gap-2 rounded-md px-3 text-sm outline-none ${i === idx ? "bg-bright/[0.06]" : ""} ${s === value ? "text-fg" : "text-fg/70"}`}>
                   <span aria-hidden className="size-2 rounded-[2px]" style={{ background: sm.fill }} />
                   {sm.label}
                   {s === value && <svg aria-hidden className="ml-auto text-accent" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M20 6 9 17l-5-5" /></svg>}

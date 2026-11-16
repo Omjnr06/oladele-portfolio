@@ -68,7 +68,7 @@ export function Heatmap({ rows }) {
 
   return (
     <div className="grid gap-8 md:grid-cols-[auto_minmax(0,1fr)] md:items-start">
-      <div className="relative max-w-full overflow-x-auto pb-1 [scrollbar-color:rgb(255_255_255/.15)_transparent] [scrollbar-width:thin]">
+      <div className="relative max-w-full overflow-x-auto pb-1 [scrollbar-color:color-mix(in_srgb,var(--color-bright)_15%,transparent)_transparent] [scrollbar-width:thin]">
         <div className="relative ml-8" style={{ width }}>
           <div className="relative mb-2 h-4 font-mono text-[11px] text-muted">
             {months.map((m) => <span key={`${m.w}-${m.label}`} className="absolute" style={{ left: m.w * (CELL + GAP) }}>{m.label}</span>)}
@@ -81,7 +81,7 @@ export function Heatmap({ rows }) {
               <span key={c.k} aria-hidden
                 onPointerEnter={() => c.n !== null && setHover({ ...c, x: Math.floor(i / 7) * (CELL + GAP), y: (i % 7) * (CELL + GAP) })}
                 className="rounded-[2px]"
-                style={{ background: c.n === null ? "transparent" : HEAT[step(c.n)], boxShadow: c.n === 0 ? "inset 0 0 0 1px rgb(255 255 255 / 0.04)" : undefined }} />
+                style={{ background: c.n === null ? "transparent" : HEAT[step(c.n)], boxShadow: c.n === 0 ? "inset 0 0 0 1px color-mix(in srgb, var(--color-bright) 4%, transparent)" : undefined }} />
             ))}
           </div>
           {hover && (

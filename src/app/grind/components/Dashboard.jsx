@@ -65,7 +65,7 @@ export function Dashboard({ rows, error, loading, onRetry, onLock, onStatusChang
         </div>
       </div>
 
-      {error && <p className="py-4 text-sm text-red-300">Couldn&apos;t load applications: {error.replace(/\.$/, "")}. Check that NOTION_TOKEN and NOTION_DB_ID are set in Vercel, then refresh.</p>}
+      {error && <p className="py-4 text-sm text-err-soft">Couldn&apos;t load applications: {error.replace(/\.$/, "")}. Check that NOTION_TOKEN and NOTION_DB_ID are set in Vercel, then refresh.</p>}
       {loading && !rows && (
         <div aria-hidden className="grid gap-6">
           <div className="h-16 w-2/3 animate-pulse rounded-[10px] bg-panel motion-reduce:animate-none" />

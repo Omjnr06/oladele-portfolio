@@ -24,7 +24,7 @@ export function Toast({ toast, onDismiss }) {
             exit={{ opacity: 0, y: 8, transition: { duration: 0.14 } }}
             transition={{ type: "spring", stiffness: 500, damping: 36 }}
             className="pointer-events-auto flex max-w-md items-center gap-4 rounded-[10px] border border-line-strong bg-panel-2 py-3 pl-4 pr-3 text-sm text-fg shadow-[0_1px_2px_rgb(0_0_0/.3),0_8px_24px_-4px_rgb(0_0_0/.5)]">
-            <span className={toast.error ? "text-red-300" : ""}>{toast.msg}</span>
+            <span className={toast.error ? "text-err-soft" : ""}>{toast.msg}</span>
             {toast.action && (
               <button type="button" onClick={() => { toast.action.run(); onDismiss(); }}
                 className="h-8 shrink-0 rounded-md px-3 font-medium text-accent transition-[background-color] duration-150 hover:bg-accent/10 focus-visible:outline-2 focus-visible:outline-accent">

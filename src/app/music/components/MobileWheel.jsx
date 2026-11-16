@@ -107,7 +107,7 @@ export default function MobileWheel() {
               <button key={c.id} className="mvm-card" onClick={() => setClip(c)}>
                 {c.audioOnly ? (
                   <div className="mvm-card-img mvm-card-audio">
-                    <svg viewBox="0 0 100 100" className="mvm-card-audio-svg"><text x="50" y="44" textAnchor="middle" fontFamily="monospace" fontSize="34" fontWeight="900" fill="#8b5cf6">OMJ</text><text x="50" y="88" textAnchor="middle" fontFamily="monospace" fontSize="34" fontWeight="900" fill="#22d3ee">{">_"}</text></svg>
+                    <svg viewBox="0 0 100 100" className="mvm-card-audio-svg"><text x="50" y="44" textAnchor="middle" fontFamily="monospace" fontSize="34" fontWeight="900" className="fill-accent-2">OMJ</text><text x="50" y="88" textAnchor="middle" fontFamily="monospace" fontSize="34" fontWeight="900" className="fill-accent">{">_"}</text></svg>
                   </div>
                 ) : (
                   <img src={c.thumb} alt={c.title} className="mvm-card-img" />
