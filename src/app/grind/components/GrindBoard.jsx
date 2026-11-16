@@ -23,7 +23,7 @@ function LiveDot({ live }) {
   return (
     <span className="relative flex size-2" aria-hidden>
       {live && <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60 motion-reduce:hidden" />}
-      <span className={`relative inline-flex size-2 rounded-full ${live ? "bg-accent" : "bg-white/30"}`} />
+      <span className={`relative inline-flex size-2 rounded-full ${live ? "bg-accent" : "bg-bright/30"}`} />
     </span>
   );
 }
@@ -343,9 +343,9 @@ export default function GrindBoard({ feed, owner, initial, unlockStatus }) {
               <Search ref={searchRef} value={f.q} onChange={(v) => set({ q: v })} shortcut />
               {owner && (
                 <button type="button" onClick={jumpToApps}
-                  className="flex h-10 shrink-0 items-center gap-2 rounded-lg border border-accent-2/40 bg-accent-2/10 px-3 text-sm font-medium text-[#ddd6fe] transition-[background-color,transform] duration-150 hover:bg-accent-2/20 active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+                  className="flex h-10 shrink-0 items-center gap-2 rounded-lg border border-accent-2/40 bg-accent-2/10 px-3 text-sm font-medium text-accent-2-200 transition-[background-color,transform] duration-150 hover:bg-accent-2/20 active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
                   My applications
-                  {applied.rows && <span className="font-mono text-[11px] tabular-nums text-[#c4b5fd]">{activeApps} active</span>}
+                  {applied.rows && <span className="font-mono text-[11px] tabular-nums text-accent-2-300">{activeApps} active</span>}
                   <span aria-hidden className="hidden md:inline-flex"><Kbd>m</Kbd></span>
                 </button>
               )}

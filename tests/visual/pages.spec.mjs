@@ -2,6 +2,8 @@ import { test, expect } from "@playwright/test";
 import { ROUTES, SIZES } from "../routes.mjs";
 
 const VIEWPORT_ONLY = new Set(["music", "grind"]);
+const NOISY = new Set(["music", "grind"]);
+const STRICT = !!process.env.VISUAL_STRICT;
 
 for (const size of SIZES) {
   test.describe(size.name, () => {
@@ -18,7 +20,8 @@ for (const size of SIZES) {
           animations: "disabled",
           caret: "hide",
           mask,
-          maxDiffPixelRatio: route.name === "grind" ? 0.05 : 0.01,
+          maxDiffPixelRatio: route.name === "grind" ? 0.05 : STRICT && !NOISY.has(route.name) ? 0.0005 : 0.01,
+          threshold: STRICT && !NOISY.has(route.name) ? 0.05 : 0.2,
         });
       });
     }

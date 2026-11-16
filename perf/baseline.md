@@ -40,7 +40,7 @@ All pages static (`○`) except `/grind` (`ƒ`, reads the owner cookie on every 
 
 1. **`template.js` hides every page until hydration.** It server-renders `opacity: 0` + `blur(15px)`,
    so LCP waits for ~260KB of JS to download, parse and hydrate. Main cause of the 8.7s mobile LCP.
-   Fixed when packs replace `template.js` (pass 2).
+   Fixed in pass 1a (CSS keyframe, see below).
 2. **Home loads all 12 gallery photos (~1.9MB) at once.** They're stacked in the same box, so
    lazy loading never kicks in. Load the current + next photo only (pass 1b).
 3. **Every page is one big client component** (home 850 lines + all of `musicLibrary`); TBT
@@ -52,12 +52,33 @@ All pages static (`○`) except `/grind` (`ƒ`, reads the owner cookie on every 
 6. `/music` thumbnails ~1.6MB on first load — check sizes/formats in pass 4.
 7. `metadataBase` not set (build warning) — set it in pass 1b so OG image URLs are absolute.
 
+## After pass 1a (Nov 16 2026, local `next start`, Lighthouse mobile, 2 runs each)
+
+| Page | Before (score / LCP) | After (score / LCP) |
+| --- | --- | --- |
+| `/` | 44–49 / 8.9–9.0s | 49–71 / 7.9–8.6s |
+| `/projects/jam` | 73–75 / 3.6–3.9s | 73–93 / 3.1–3.5s |
+| `/resume` | — | 95–96 / 2.8–2.9s |
+
+- `template.js` is now a server component with a CSS keyframe. Pages paint at first paint
+  instead of after hydration. Real-browser LCP on home (4× CPU throttle) went from ~1.3–1.7s
+  (live site) to ~0.5–0.9s, and now lands before the JS finishes.
+- The keyframe starts at `opacity: 0.001`, not 0. Chrome skips LCP for anything painted at
+  exactly 0, which pushed LCP to the first paint after hydration. 0.001 looks identical.
+- Home's lab LCP is now the first gallery photo, which competes with all 12 photos loading at
+  once (item 2 below, pass 1b).
+- Scripts +3KB per route (prefs store + preview gate). The theme chooser is a lazy chunk that
+  only loads with `?preview=packs`.
+- Lighthouse TBT swings a lot run to run on this machine; compare LCP and the real-browser
+  numbers, not single scores.
+
 ## How to re-measure
 
 ```
 npm run build
 npm run test:smoke            # 30 checks, desktop 1366×600 + phone 390×700
 npm run test:visual           # compares 7 routes × 5 sizes to the local baseline
+VISUAL_STRICT=1 npm run test:visual   # near pixel-exact (music/grind keep normal tolerance)
 npx next start -p 3100 & npm run perf <label>
 ```
 Lighthouse: `npx lighthouse@12.8.2 <url> --only-categories=performance [--preset=desktop]`.

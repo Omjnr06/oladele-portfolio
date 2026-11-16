@@ -93,40 +93,40 @@ const THEME_KEYS = ["midnight", "mono", "neon", "pink", "daylight"];
 function SectionTitle({ color, children }) {
   return (
     <h2 className="font-bold text-lg mb-5 flex items-center gap-2" style={{ color }}>
-      <span className="text-white/50">{">"}</span> {children}
+      <span className="text-bright/50">{">"}</span> {children}
     </h2>
   );
 }
 
 function SafeToSpendHero() {
   return (
-    <div className="rounded-2xl border border-[var(--accent-cyan)]/20 bg-gradient-to-br from-[#0F1535] to-[#0a0e22] p-6 md:p-8 max-w-xl">
+    <div data-colors="fixed" className="rounded-2xl border border-accent/20 bg-gradient-to-br from-[#0F1535] to-[#0a0e22] p-6 md:p-8 max-w-xl">
       <div className="flex items-center justify-between mb-2">
-        <span className="font-mono text-[11px] text-white/50 tracking-wide">Safe to spend · week</span>
+        <span className="font-mono text-[11px] text-bright/50 tracking-wide">Safe to spend · week</span>
         <div className="flex gap-1 font-mono text-[11px]">
-          <span className="px-2 py-0.5 rounded text-white/40">Day</span>
-          <span className="px-2 py-0.5 rounded bg-[var(--accent-cyan)] text-black">Week</span>
-          <span className="px-2 py-0.5 rounded text-white/40">Month</span>
+          <span className="px-2 py-0.5 rounded text-bright/40">Day</span>
+          <span className="px-2 py-0.5 rounded bg-accent text-on-accent">Week</span>
+          <span className="px-2 py-0.5 rounded text-bright/40">Month</span>
         </div>
       </div>
-      <div className="text-5xl md:text-6xl font-bold tracking-tight text-white mb-4">CA$800.00</div>
+      <div className="text-5xl md:text-6xl font-bold tracking-tight text-bright mb-4">CA$800.00</div>
       <div className="flex items-center gap-4 text-[13px]">
-        <span className="text-white/50">Balance <span className="text-white/80 font-semibold">CA$5,700</span></span>
-        <div className="flex-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
-          <div className="h-full w-[14%] bg-[var(--accent-cyan)]" />
+        <span className="text-bright/50">Balance <span className="text-bright/80 font-semibold">CA$5,700</span></span>
+        <div className="flex-1 h-1.5 rounded-full bg-bright/10 overflow-hidden">
+          <div className="h-full w-[14%] bg-accent" />
         </div>
-        <span className="text-white/50">Threshold <span className="text-white/80 font-semibold">CA$4,000</span></span>
+        <span className="text-bright/50">Threshold <span className="text-bright/80 font-semibold">CA$4,000</span></span>
       </div>
-      <div className="font-mono text-[11px] text-white/55 mt-2">14% of your balance is safe to spend</div>
+      <div className="font-mono text-[11px] text-bright/55 mt-2">14% of your balance is safe to spend</div>
     </div>
   );
 }
 
 function FlowBox({ label, sub, color }) {
   return (
-    <div className="rounded-lg border bg-black/40 px-3 py-2 text-center" style={{ borderColor: `${color}55` }}>
+    <div className="rounded-lg border bg-scrim/40 px-3 py-2 text-center" style={{ borderColor: `${color}55` }}>
       <div className="font-mono text-[11px]" style={{ color }}>{label}</div>
-      {sub && <div className="font-mono text-[11px] text-white/55 mt-0.5">{sub}</div>}
+      {sub && <div className="font-mono text-[11px] text-bright/55 mt-0.5">{sub}</div>}
     </div>
   );
 }
@@ -137,12 +137,12 @@ export default function VaultCaseStudy() {
   const t = THEMES[theme];
 
   return (
-    <main className="min-h-screen w-full bg-[#050505] text-white font-sans selection:bg-[var(--accent-cyan)] selection:text-black relative overflow-x-hidden">
+    <main className="min-h-screen w-full bg-ink text-bright font-sans selection:bg-accent selection:text-on-accent relative overflow-x-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none bg-journal-dots opacity-80" />
-      <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-[var(--accent-cyan)] opacity-[0.03] rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-accent opacity-[0.03] rounded-full blur-[120px] pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-16 md:py-24">
-        <Link href="/#projects" className="inline-flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--accent-cyan)] transition-colors mb-12 font-mono text-[11px] uppercase tracking-widest">
+        <Link href="/#projects" className="inline-flex items-center gap-2 text-muted hover:text-accent transition-colors mb-12 font-mono text-[11px] uppercase tracking-widest">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
           Back to Projects
         </Link>
@@ -153,17 +153,17 @@ export default function VaultCaseStudy() {
             <span className="font-mono text-[11px] text-[#2CD9FF] tracking-[0.3em] uppercase bg-[#2CD9FF]/10 px-3 py-1 rounded border border-[#2CD9FF]/20">
               Team Project · Led by me
             </span>
-            <span className="font-mono text-[11px] text-[var(--accent-cyan)] tracking-[0.3em] uppercase">
+            <span className="font-mono text-[11px] text-accent tracking-[0.3em] uppercase">
               // Next.js · FastAPI · Plaid
             </span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 text-white">The Vault</h1>
-          <p className="text-xl text-white/60 font-light leading-relaxed max-w-2xl">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 text-bright">The Vault</h1>
+          <p className="text-xl text-bright/60 font-light leading-relaxed max-w-2xl">
             A personal finance dashboard that connects to real bank accounts and answers one question the others don&apos;t: how much is actually safe to spend today, after bills, savings goals, and a buffer are already accounted for.
           </p>
 
-          <div className="mt-6 inline-flex items-center gap-2 font-mono text-[11px] tracking-wide px-4 py-2 rounded-full border border-yellow-400/30 bg-yellow-400/5 text-yellow-300">
-            <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
+          <div className="mt-6 inline-flex items-center gap-2 font-mono text-[11px] tracking-wide px-4 py-2 rounded-full border border-warn/30 bg-warn/5 text-warn-soft">
+            <span className="w-2 h-2 rounded-full bg-warn animate-pulse" />
             CURRENT STAGE: In active development · Plaid integration built · production bank connections rolling out
           </div>
 
@@ -173,12 +173,12 @@ export default function VaultCaseStudy() {
         </motion.div>
 
         {/* Pill switcher */}
-        <div className="mb-8 flex flex-wrap gap-2 p-1.5 rounded-xl bg-[#0a0a0a] border border-white/10 w-fit">
+        <div className="mb-8 flex flex-wrap gap-2 p-1.5 rounded-xl bg-panel border border-bright/10 w-fit">
           {SEGMENTS.map((seg) => (
             <button key={seg} onClick={() => setActive(seg)}
-              className={`relative px-4 py-2 rounded-lg font-mono text-xs tracking-wide transition-colors ${active === seg ? "text-black" : "text-white/50 hover:text-white/80"}`}>
+              className={`relative px-4 py-2 rounded-lg font-mono text-xs tracking-wide transition-colors ${active === seg ? "text-on-accent" : "text-bright/50 hover:text-bright/80"}`}>
               {active === seg && (
-                <motion.span layoutId="activePill" className="absolute inset-0 rounded-lg bg-[var(--accent-cyan)]" transition={{ type: "spring", stiffness: 400, damping: 32 }} />
+                <motion.span layoutId="activePill" className="absolute inset-0 rounded-lg bg-accent" transition={{ type: "spring", stiffness: 400, damping: 32 }} />
               )}
               <span className="relative z-10">{seg}</span>
             </button>
@@ -186,23 +186,23 @@ export default function VaultCaseStudy() {
         </div>
 
         {/* Content panel */}
-        <div className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl shadow-2xl overflow-hidden">
-          <div className="h-10 bg-[#111] border-b border-white/5 flex items-center px-4 gap-2">
+        <div className="w-full bg-panel border border-bright/10 rounded-xl shadow-2xl overflow-hidden">
+          <div className="h-10 bg-panel-2 border-b border-bright/5 flex items-center px-4 gap-2">
             <div className="w-3 h-3 rounded-full bg-red-500/80" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
             <div className="w-3 h-3 rounded-full bg-green-500/80" />
-            <span className="ml-4 font-mono text-[11px] text-white/50 tracking-widest">
+            <span className="ml-4 font-mono text-[11px] text-bright/50 tracking-widest">
               vault__{active.toLowerCase().replace(/[^a-z]/g, "_")}.tsx
             </span>
           </div>
 
-          <div className="p-6 md:p-10 font-mono text-sm leading-relaxed text-white/80 min-h-[420px]">
+          <div className="p-6 md:p-10 font-mono text-sm leading-relaxed text-bright/80 min-h-[420px]">
             <AnimatePresence mode="wait">
               <motion.div key={active} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
 
                 {active === "Overview" && (
                   <section>
-                    <SectionTitle color="var(--accent-cyan)">The Directive</SectionTitle>
+                    <SectionTitle color="var(--color-accent)">The Directive</SectionTitle>
                     <p className="mb-4">
                       Most budgeting apps are backward looking calculators. They tell you that you overspent after the money is already gone. The Vault flips that: it connects to your bank/banks, subtracts what&apos;s already committed &mdash; bills, savings goals, a safety buffer &mdash; and shows a single &quot;Safe to Spend&quot; number.
                     </p>
@@ -212,7 +212,7 @@ export default function VaultCaseStudy() {
                     <SectionTitle color="#2CD9FF">Stack</SectionTitle>
                     <div className="flex flex-wrap gap-2">
                       {STACK.map((s) => (
-                        <span key={s} className="font-mono text-[11px] px-3 py-1 rounded border border-white/10 bg-white/[0.03] text-white/70 transition-colors cursor-default hover:border-[var(--accent-cyan)]/50 hover:bg-[var(--accent-cyan)]/10 hover:text-[var(--accent-cyan)]">{s}</span>
+                        <span key={s} className="font-mono text-[11px] px-3 py-1 rounded border border-bright/10 bg-bright/[0.03] text-bright/70 transition-colors cursor-default hover:border-accent/50 hover:bg-accent/10 hover:text-accent">{s}</span>
                       ))}
                     </div>
                   </section>
@@ -220,23 +220,23 @@ export default function VaultCaseStudy() {
 
                 {active === "Problem" && (
                   <section>
-                    <SectionTitle color="var(--accent-cyan)">Why existing budgeting apps have low usage rates.</SectionTitle>
+                    <SectionTitle color="var(--color-accent)">Why existing budgeting apps have low usage rates.</SectionTitle>
                     <ul className="space-y-4 list-none">
-                      <li className="pl-4 border-l-2 border-white/10">
-                        <span className="text-white font-bold">They report whats already happened.</span><br />
-                        <span className="text-white/70">Traditional apps categorize what you already spent. This feature is useful, however by the time you see &quot;you overspent on dining,&quot; the money&apos;s gone..</span>
+                      <li className="pl-4 border-l-2 border-bright/10">
+                        <span className="text-bright font-bold">They report whats already happened.</span><br />
+                        <span className="text-bright/70">Traditional apps categorize what you already spent. This feature is useful, however by the time you see &quot;you overspent on dining,&quot; the money&apos;s gone..</span>
                       </li>
-                      <li className="pl-4 border-l-2 border-white/10">
-                        <span className="text-white font-bold">A raw balance is misleading.</span><br />
-                        <span className="text-white/70">Your account might show CA$5,700, but rent, subscriptions, and a savings goal are all coming out of it. Spending against the raw number is how people end up short at the end of the month.</span>
+                      <li className="pl-4 border-l-2 border-bright/10">
+                        <span className="text-bright font-bold">A raw balance is misleading.</span><br />
+                        <span className="text-bright/70">Your account might show CA$5,700, but rent, subscriptions, and a savings goal are all coming out of it. Spending against the raw number is how people end up short at the end of the month.</span>
                       </li>
-                        <li className="pl-4 border-l-2 border-white/10">
-                        <span className="text-white font-bold">Many Banks, hard to keep track</span><br />
-                        <span className="text-white/70">Nowadays, most people have multiple bank accounts, multiple credit cards, multiple savings accounts. It becomes hard to track and stay on top of everything and get a big picture of idea of how your doing financially.</span>
+                        <li className="pl-4 border-l-2 border-bright/10">
+                        <span className="text-bright font-bold">Many Banks, hard to keep track</span><br />
+                        <span className="text-bright/70">Nowadays, most people have multiple bank accounts, multiple credit cards, multiple savings accounts. It becomes hard to track and stay on top of everything and get a big picture of idea of how your doing financially.</span>
                       </li>
-                      <li className="pl-4 border-l-2 border-white/10">
-                        <span className="text-white font-bold">Manual entry doesn&apos;t survive contact with real life.</span><br />
-                        <span className="text-white/70">Apps that need you to log all your transactions leave room for users to miss a log or to stop using the app entirely. The Vault syncs automatically through Plaid, so the data stays the same with minimal effort.</span>
+                      <li className="pl-4 border-l-2 border-bright/10">
+                        <span className="text-bright font-bold">Manual entry doesn&apos;t survive contact with real life.</span><br />
+                        <span className="text-bright/70">Apps that need you to log all your transactions leave room for users to miss a log or to stop using the app entirely. The Vault syncs automatically through Plaid, so the data stays the same with minimal effort.</span>
                       </li>
                     </ul>
                   </section>
@@ -244,30 +244,30 @@ export default function VaultCaseStudy() {
 
                 {active === "Architecture" && (
                   <section>
-                    <SectionTitle color="var(--accent-cyan)">Engineering Decisions</SectionTitle>
+                    <SectionTitle color="var(--color-accent)">Engineering Decisions</SectionTitle>
                     <ul className="space-y-5 list-none mb-10">
                       {HIGHLIGHTS.map((h) => (
-                        <li key={h.title} className="pl-4 border-l-2 border-[var(--accent-cyan)]/30">
-                          <span className="text-white font-bold">{h.title}.</span><br />
-                          <span className="text-white/70">{h.body}</span>
+                        <li key={h.title} className="pl-4 border-l-2 border-accent/30">
+                          <span className="text-bright font-bold">{h.title}.</span><br />
+                          <span className="text-bright/70">{h.body}</span>
                         </li>
                       ))}
                     </ul>
 
                     <SectionTitle color="#2CD9FF">Plaid Sync Pipeline</SectionTitle>
-                    <p className="mb-4 text-white/60">A webhook is never trusted on arrival. It&apos;s verified, then the cursor drives an idempotent diff.</p>
-                    <div className="rounded-lg border border-white/10 bg-black/40 p-4 mb-3 grid grid-cols-2 md:grid-cols-5 gap-2 items-center">
+                    <p className="mb-4 text-bright/60">A webhook is never trusted on arrival. It&apos;s verified, then the cursor drives an idempotent diff.</p>
+                    <div className="rounded-lg border border-bright/10 bg-scrim/40 p-4 mb-3 grid grid-cols-2 md:grid-cols-5 gap-2 items-center">
                       <FlowBox label="Plaid Link" sub="user connects bank" color="#2CD9FF" />
                       <FlowBox label="Webhook" sub="sync event" color="#2CD9FF" />
                       <FlowBox label="JWT verify" sub="reject forged" color="#E01E5A" />
                       <FlowBox label="Cursor sync" sub="added/mod/removed" color="#2EB67D" />
                       <FlowBox label="Recompute" sub="Safe to Spend" color="#2CD9FF" />
                     </div>
-                    <p className="mb-10 text-white/40 text-[12px]">Cursor persistence on the plaiditem means each sync only pulls the delta, and redelivered webhooks never double count.</p>
+                    <p className="mb-10 text-bright/40 text-[12px]">Cursor persistence on the plaiditem means each sync only pulls the delta, and redelivered webhooks never double count.</p>
 
                     <SectionTitle color="#2CD9FF">Cross Language Auth</SectionTitle>
-                    <p className="mb-4 text-white/60">One session store, two languages. Better Auth issues; FastAPI verifies via the shared DB.</p>
-                    <div className="rounded-lg border border-white/10 bg-black/40 p-4 mb-10 grid grid-cols-2 md:grid-cols-4 gap-2 items-center">
+                    <p className="mb-4 text-bright/60">One session store, two languages. Better Auth issues; FastAPI verifies via the shared DB.</p>
+                    <div className="rounded-lg border border-bright/10 bg-scrim/40 p-4 mb-10 grid grid-cols-2 md:grid-cols-4 gap-2 items-center">
                       <FlowBox label="Better Auth" sub="TS / Next.js" color="#2CD9FF" />
                       <FlowBox label="ba_session" sub="token in Postgres" color="#2EB67D" />
                       <FlowBox label="FastAPI" sub="shared-DB lookup" color="#2CD9FF" />
@@ -275,25 +275,25 @@ export default function VaultCaseStudy() {
                     </div>
 
                     <SectionTitle color="#2CD9FF">Data Model</SectionTitle>
-                    <p className="mb-6 text-white/60">
+                    <p className="mb-6 text-bright/60">
                       Neon Postgres via SQLModel + Alembic. Better Auth owns the identity tables (managed, not seeded). All money is stored in integer cents.
                     </p>
                     <div className="space-y-8">
                       {SCHEMA.map((grp) => (
                         <div key={grp.group}>
                           <div className="flex items-center gap-2 mb-3">
-                            <span className="font-mono text-[11px] uppercase tracking-widest text-white/40">{grp.group}</span>
-                            {grp.managed && <span className="font-mono text-[11px] px-2 py-0.5 rounded border border-yellow-400/30 text-yellow-300/80">Better Auth · not seeded</span>}
+                            <span className="font-mono text-[11px] uppercase tracking-widest text-bright/40">{grp.group}</span>
+                            {grp.managed && <span className="font-mono text-[11px] px-2 py-0.5 rounded border border-warn/30 text-warn-soft/80">Better Auth · not seeded</span>}
                           </div>
                           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                             {grp.tables.map((tb) => (
-                              <div key={tb.name} className="rounded-lg border border-white/10 bg-black/40 overflow-hidden transition-colors hover:border-[var(--accent-cyan)]/40">
-                                <div className="px-3 py-1.5 bg-white/[0.04] border-b border-white/10 font-mono text-[12px] text-[var(--accent-cyan)]">{tb.name}</div>
+                              <div key={tb.name} className="rounded-lg border border-bright/10 bg-scrim/40 overflow-hidden transition-colors hover:border-accent/40">
+                                <div className="px-3 py-1.5 bg-bright/[0.04] border-b border-bright/10 font-mono text-[12px] text-accent">{tb.name}</div>
                                 <div className="p-3 space-y-1">
                                   {tb.cols.map(([c, ty]) => (
                                     <div key={c} className="flex justify-between gap-3 font-mono text-[11px]">
-                                      <span className="text-white/70">{c}</span>
-                                      <span className="text-white/55">{ty}</span>
+                                      <span className="text-bright/70">{c}</span>
+                                      <span className="text-bright/55">{ty}</span>
                                     </div>
                                   ))}
                                 </div>
@@ -308,29 +308,29 @@ export default function VaultCaseStudy() {
 
                 {active === "Design" && (
                   <section>
-                    <SectionTitle color="var(--accent-cyan)">The Dashboard</SectionTitle>
-                    <p className="mb-4 text-white/60">A bento grid anchored by the dominant Safe to Spend tile, dark navy with a cyan accent. Kumar One Outline wordmark, Inter for data.</p>
-                    <div className="rounded-lg overflow-hidden border border-white/10 mb-10 transition-colors hover:border-[var(--accent-cyan)]/40">
+                    <SectionTitle color="var(--color-accent)">The Dashboard</SectionTitle>
+                    <p className="mb-4 text-bright/60">A bento grid anchored by the dominant Safe to Spend tile, dark navy with a cyan accent. Kumar One Outline wordmark, Inter for data.</p>
+                    <div className="rounded-lg overflow-hidden border border-bright/10 mb-10 transition-colors hover:border-accent/40">
                       <img src={DESKTOP_SHOT} alt="The Vault desktop dashboard" className="w-full block" />
                     </div>
 
                     <SectionTitle color="#2CD9FF">Dual Layout, User-Switchable</SectionTitle>
-                    <p className="mb-4 text-white/60">Reimagining the &quot;boring bank sidebar.&quot; The same dashboard renders as a horizontal pill nav or a vertical icon rail &mdash; the user picks, and it&apos;s persisted on their profile (layoutId).</p>
+                    <p className="mb-4 text-bright/60">Reimagining the &quot;boring bank sidebar.&quot; The same dashboard renders as a horizontal pill nav or a vertical icon rail &mdash; the user picks, and it&apos;s persisted on their profile (layoutId).</p>
                     <div className="grid grid-cols-2 gap-3 mb-10">
                       {[["/assets/images/financial-dashboard/dashboard-pill.png", "Horizontal pill nav"], ["/assets/images/financial-dashboard/dashboard-rail.png", "Vertical icon rail"]].map(([src, label]) => (
-                        <div key={src} className="rounded-lg overflow-hidden border border-white/10 bg-black/40 transition-colors hover:border-[var(--accent-cyan)]/40">
+                        <div key={src} className="rounded-lg overflow-hidden border border-bright/10 bg-scrim/40 transition-colors hover:border-accent/40">
                           <img src={src} alt={label} className="w-full block" />
-                          <div className="px-2 py-1.5 font-mono text-[11px] text-white/40 text-center border-t border-white/5">{label}</div>
+                          <div className="px-2 py-1.5 font-mono text-[11px] text-bright/40 text-center border-t border-bright/5">{label}</div>
                         </div>
                       ))}
                     </div>
 
                     <SectionTitle color="#2CD9FF">Theme System</SectionTitle>
-                    <p className="mb-4 text-white/60">Five themes driven by CSS variables and semantic tokens (surface, accent, danger, success&hellip;) &mdash; not hardcoded colors. Persisted per user as themeId. Try them:</p>
-                    <div className="flex flex-wrap gap-2 mb-4">
+                    <p className="mb-4 text-bright/60">Five themes driven by CSS variables and semantic tokens (surface, accent, danger, success&hellip;) &mdash; not hardcoded colors. Persisted per user as themeId. Try them:</p>
+                    <div data-colors="fixed" className="flex flex-wrap gap-2 mb-4">
                       {THEME_KEYS.map((k) => (
                         <button key={k} onClick={() => setTheme(k)}
-                          className={`font-mono text-[11px] px-3 py-1.5 rounded border transition-colors capitalize ${theme === k ? "text-black" : "text-white/60 hover:text-white/90 border-white/10"}`}
+                          className={`font-mono text-[11px] px-3 py-1.5 rounded border transition-colors capitalize ${theme === k ? "text-on-accent" : "text-bright/60 hover:text-bright/90 border-bright/10"}`}
                           style={theme === k ? { background: THEMES[k].accent, borderColor: THEMES[k].accent } : {}}>
                           {k}
                         </button>
@@ -359,23 +359,23 @@ export default function VaultCaseStudy() {
 
                 {active === "What's Next" && (
                   <section>
-                    <SectionTitle color="var(--accent-cyan)">Roadmap</SectionTitle>
+                    <SectionTitle color="var(--color-accent)">Roadmap</SectionTitle>
                     <ul className="space-y-5 list-none">
-                      <li className="pl-4 border-l-2 border-[var(--accent-cyan)]/30">
-                        <span className="text-white font-bold">Production bank connections.</span><br />
-                        <span className="text-white/70">Moving Plaid from sandbox to live institutions &mdash; the security layer (encrypted tokens, JWT-verified webhooks, idempotent cursor sync) is already built for it.</span>
+                      <li className="pl-4 border-l-2 border-accent/30">
+                        <span className="text-bright font-bold">Production bank connections.</span><br />
+                        <span className="text-bright/70">Moving Plaid from sandbox to live institutions &mdash; the security layer (encrypted tokens, JWT-verified webhooks, idempotent cursor sync) is already built for it.</span>
                       </li>
-                      <li className="pl-4 border-l-2 border-[var(--accent-cyan)]/30">
-                        <span className="text-white font-bold">ML insights layer.</span><br />
-                        <span className="text-white/70">Scikit-Learn for transaction anomaly detection (the isAnomaly flag is already in the schema) and spending-habit clustering, surfaced as plain-language insights.</span>
+                      <li className="pl-4 border-l-2 border-accent/30">
+                        <span className="text-bright font-bold">ML insights layer.</span><br />
+                        <span className="text-bright/70">Scikit-Learn for transaction anomaly detection (the isAnomaly flag is already in the schema) and spending-habit clustering, surfaced as plain-language insights.</span>
                       </li>
-                      <li className="pl-4 border-l-2 border-[var(--accent-cyan)]/30">
-                        <span className="text-white font-bold">Grounded chatbot.</span><br />
-                        <span className="text-white/70">A conversational layer over the user&apos;s finances via whitelisted function-calling &mdash; it can only answer from the user&apos;s own data, never invent numbers.</span>
+                      <li className="pl-4 border-l-2 border-accent/30">
+                        <span className="text-bright font-bold">Grounded chatbot.</span><br />
+                        <span className="text-bright/70">A conversational layer over the user&apos;s finances via whitelisted function-calling &mdash; it can only answer from the user&apos;s own data, never invent numbers.</span>
                       </li>
-                      <li className="pl-4 border-l-2 border-white/10">
-                        <span className="text-white font-bold">Docker + CI.</span><br />
-                        <span className="text-white/70">Containerizing the FastAPI service and adding a CI pipeline for the move toward a production deployment.</span>
+                      <li className="pl-4 border-l-2 border-bright/10">
+                        <span className="text-bright font-bold">Docker + CI.</span><br />
+                        <span className="text-bright/70">Containerizing the FastAPI service and adding a CI pipeline for the move toward a production deployment.</span>
                       </li>
                     </ul>
                   </section>
@@ -384,19 +384,19 @@ export default function VaultCaseStudy() {
                 {active === "Docs & Code" && (
                   <section>
                     <SectionTitle color="#2EB67D">Docs & Code</SectionTitle>
-                    <p className="mb-6 text-white/60">Next.js + Tailwind v4 frontend on Vercel; FastAPI backend on Render; Neon Postgres with SQLModel + Alembic migrations.</p>
+                    <p className="mb-6 text-bright/60">Next.js + Tailwind v4 frontend on Vercel; FastAPI backend on Render; Neon Postgres with SQLModel + Alembic migrations.</p>
                     <div className="space-y-3">
-                      <a href={REPO} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-5 py-3 rounded border border-white/10 bg-white/[0.03] hover:border-[var(--accent-cyan)]/50 transition-colors">
-                        <span className="font-mono text-xs text-white/80">GitHub Repository</span>
-                        <span className="font-mono text-[11px] text-white/40 ml-auto">github.com/Omjnr06/ai-financial-dashboard →</span>
+                      <a href={REPO} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-5 py-3 rounded border border-bright/10 bg-bright/[0.03] hover:border-accent/50 transition-colors">
+                        <span className="font-mono text-xs text-bright/80">GitHub Repository</span>
+                        <span className="font-mono text-[11px] text-bright/40 ml-auto">github.com/Omjnr06/ai-financial-dashboard →</span>
                       </a>
-                      <div className="px-5 py-3 rounded border border-white/10 bg-white/[0.03]">
-                        <span className="font-mono text-xs text-white/60">Live demo: </span>
-                        <span className="font-mono text-xs text-yellow-300/80">coming soon</span>
+                      <div className="px-5 py-3 rounded border border-bright/10 bg-bright/[0.03]">
+                        <span className="font-mono text-xs text-bright/60">Live demo: </span>
+                        <span className="font-mono text-xs text-warn-soft/80">coming soon</span>
                       </div>
-                    <a href= {doc} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-5 py-3 rounded border border-white/10 bg-white/[0.03] hover:border-[var(--accent-cyan)]/50 transition-colors">
-                        <span className="font-mono text-xs text-white/80">Planning Document</span>
-                        <span className="font-mono text-[11px] text-white/40 ml-auto">Click to read the planning doc</span>
+                    <a href= {doc} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-5 py-3 rounded border border-bright/10 bg-bright/[0.03] hover:border-accent/50 transition-colors">
+                        <span className="font-mono text-xs text-bright/80">Planning Document</span>
+                        <span className="font-mono text-[11px] text-bright/40 ml-auto">Click to read the planning doc</span>
                       </a>
                     </div>
                   </section>
@@ -407,9 +407,9 @@ export default function VaultCaseStudy() {
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-white/5 flex items-center gap-2 text-white/40 font-mono text-sm">
+        <div className="mt-8 pt-8 border-t border-bright/5 flex items-center gap-2 text-bright/40 font-mono text-sm">
           <span>omj@vault:~$</span>
-          <span className="animate-pulse bg-white/60 w-2 h-4 inline-block" />
+          <span className="animate-pulse bg-bright/60 w-2 h-4 inline-block" />
         </div>
       </div>
     </main>

@@ -42,8 +42,8 @@ export default function ClipNode({ item, hoveredId, onHover, onOpen, focusX, foc
         {item.audioOnly ? (
           <div className="mv-clip-audio">
             <svg viewBox="0 0 100 100" className="mv-clip-audio-svg">
-              <text x="50" y="44" textAnchor="middle" fontFamily="monospace" fontSize="34" fontWeight="900" fill="#8b5cf6">OMJ</text>
-              <text x="50" y="88" textAnchor="middle" fontFamily="monospace" fontSize="34" fontWeight="900" fill="#22d3ee">{">_"}</text>
+              <text x="50" y="44" textAnchor="middle" fontFamily="monospace" fontSize="34" fontWeight="900" className="fill-accent-2">OMJ</text>
+              <text x="50" y="88" textAnchor="middle" fontFamily="monospace" fontSize="34" fontWeight="900" className="fill-accent">{">_"}</text>
             </svg>
           </div>
         ) : (

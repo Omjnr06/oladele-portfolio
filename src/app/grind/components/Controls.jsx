@@ -36,7 +36,7 @@ export function Segmented({ id, options, value, onChange, label }) {
 }
 
 export function Chip({ active, onClick, children, count, tone = "accent" }) {
-  const on = tone === "accent" ? "border-accent/50 bg-accent/10 text-accent" : "border-accent-2/50 bg-accent-2/10 text-[#c4b5fd]";
+  const on = tone === "accent" ? "border-accent/50 bg-accent/10 text-accent" : "border-accent-2/50 bg-accent-2/10 text-accent-2-300";
   return (
     <button type="button" aria-pressed={active} onClick={onClick}
       className={`h-8 shrink-0 whitespace-nowrap rounded-full border px-3 text-sm transition-[color,background-color,border-color,transform] duration-150 active:scale-[0.97] ${focusRing} ${active ? on : "border-line bg-panel text-muted hover:border-line-strong hover:text-fg"}`}>

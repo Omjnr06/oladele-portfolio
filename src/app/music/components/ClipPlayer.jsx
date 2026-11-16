@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import { clipItemsForCategory } from "../data/boardItems";
+import { tokenRgb, rgba, onThemeChange } from "@/lib/themeColor";
 
 export default function ClipPlayer({ clip, onClose }) {
   const list = useMemo(() => clipItemsForCategory(clip.categoryId), [clip.categoryId]);
@@ -10,6 +11,7 @@ export default function ClipPlayer({ clip, onClose }) {
 
   const containerRef = useRef(null);
   const videoRef = useRef(null);
+  const themeOffRef = useRef(null);
   const canvasRef = useRef(null);
   const audioCtxRef = useRef(null);
   const analyserRef = useRef(null);
@@ -98,6 +100,15 @@ export default function ClipPlayer({ clip, onClose }) {
     const bufferLength = analyserRef.current.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
     let timePhase = 0;
+    let accent = tokenRgb("accent");
+    let barTop = rgba(accent, 0.6);
+    let barBottom = rgba(accent, 0);
+    themeOffRef.current?.();
+    themeOffRef.current = onThemeChange(() => {
+      accent = tokenRgb("accent");
+      barTop = rgba(accent, 0.6);
+      barBottom = rgba(accent, 0);
+    });
     const draw = () => {
       rafRef.current = requestAnimationFrame(draw);
       const c = canvasRef.current;
@@ -126,8 +137,8 @@ export default function ClipPlayer({ clip, onClose }) {
           }
         }
         const g = ctx.createLinearGradient(0, h, 0, h - barHeight);
-        g.addColorStop(0, "rgba(34, 211, 238, 0.6)");
-        g.addColorStop(1, "rgba(34, 211, 238, 0)");
+        g.addColorStop(0, barTop);
+        g.addColorStop(1, barBottom);
         ctx.fillStyle = g;
         ctx.fillRect(x, h - barHeight, barWidth, barHeight);
         x += barWidth + 2;
@@ -136,7 +147,7 @@ export default function ClipPlayer({ clip, onClose }) {
     draw();
   }, []);
 
-  useEffect(() => () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); }, []);
+  useEffect(() => () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); themeOffRef.current?.(); }, []);
 
   const onMeta = () => {
     const v = videoRef.current;
@@ -191,8 +202,8 @@ export default function ClipPlayer({ clip, onClose }) {
                 onTimeUpdate={onTimeUpdate} onLoadedMetadata={onMeta} autoPlay playsInline />
               <div className="mv-cp-audio-overlay">
                 <svg viewBox="0 0 100 100" className="mv-cp-audio-svg">
-                  <text x="50" y="44" textAnchor="middle" fontFamily="monospace" fontSize="44" fontWeight="900" fill="#8b5cf6">OMJ</text>
-                  <text x="50" y="90" textAnchor="middle" fontFamily="monospace" fontSize="44" fontWeight="900" fill="#22d3ee">{">_"}</text>
+                  <text x="50" y="44" textAnchor="middle" fontFamily="monospace" fontSize="44" fontWeight="900" className="fill-accent-2">OMJ</text>
+                  <text x="50" y="90" textAnchor="middle" fontFamily="monospace" fontSize="44" fontWeight="900" className="fill-accent">{">_"}</text>
                 </svg>
                 <span className="mv-cp-audio-label">Audio Only</span>
               </div>

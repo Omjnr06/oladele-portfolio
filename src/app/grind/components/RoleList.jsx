@@ -38,14 +38,14 @@ export const RoleRow = memo(function RoleRow({ role: r, now, since, open, onTogg
     <li className="border-b border-line last:border-b-0 [contain-intrinsic-size:auto_48px] [content-visibility:auto]">
       <div className="flex items-stretch">
         <button type="button" data-nav data-row={r.id} aria-expanded={open} onClick={() => onToggle(r.id)}
-          className={`group flex min-h-12 min-w-0 flex-1 items-center gap-3 py-2 text-left transition-[background-color] duration-150 hover:bg-white/[0.025] active:bg-white/[0.04] ${nested ? "pl-8" : "pl-4"} pr-2 ${focusRing}`}>
+          className={`group flex min-h-12 min-w-0 flex-1 items-center gap-3 py-2 text-left transition-[background-color] duration-150 hover:bg-bright/[0.025] active:bg-bright/[0.04] ${nested ? "pl-8" : "pl-4"} pr-2 ${focusRing}`}>
           <span aria-hidden className={`size-1.5 shrink-0 rounded-full ${isNew ? "bg-accent" : "bg-transparent"}`} />
           <span className="grid min-w-0 flex-1 gap-1 md:grid-cols-[minmax(0,11rem)_minmax(0,1fr)_minmax(0,9rem)_5.5rem] md:items-center md:gap-4">
             <span className="flex min-w-0 items-center gap-2">
               <span className={`truncate text-sm font-semibold ${applied ? "text-fg/60" : "text-fg"}`}>{r.company}</span>
               {r.tier === "A" && <span className="shrink-0 rounded border border-line-strong px-1 font-mono text-[11px] leading-4 text-muted">top</span>}
               {r.track === "pm" && <span className="shrink-0 rounded border border-line-strong px-1 font-mono text-[11px] leading-4 text-muted">pm</span>}
-              {applied && <span className="shrink-0 rounded border border-accent-2/40 px-1 font-mono text-[11px] leading-4 text-[#c4b5fd]">applied</span>}
+              {applied && <span className="shrink-0 rounded border border-accent-2/40 px-1 font-mono text-[11px] leading-4 text-accent-2-300">applied</span>}
             </span>
             <span className={`line-clamp-2 text-sm md:line-clamp-none md:truncate ${applied ? "text-fg/40" : "text-fg/70"}`}>{r.title}</span>
             <span className="truncate font-mono text-[11px] text-muted md:text-xs">{placeLabel(r)}</span>
@@ -55,7 +55,7 @@ export const RoleRow = memo(function RoleRow({ role: r, now, since, open, onTogg
           <Chevron open={open} />
         </button>
         <a href={r.url} target="_blank" rel="noopener noreferrer" aria-label={`Open ${r.company} posting in a new tab`}
-          className={`flex w-12 shrink-0 items-center justify-center text-muted transition-[color,background-color] duration-150 hover:bg-white/[0.025] hover:text-accent ${focusRing}`}>
+          className={`flex w-12 shrink-0 items-center justify-center text-muted transition-[color,background-color] duration-150 hover:bg-bright/[0.025] hover:text-accent ${focusRing}`}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7 17 17 7M8 7h9v9" /></svg>
         </a>
       </div>
@@ -75,10 +75,10 @@ export const RoleRow = memo(function RoleRow({ role: r, now, since, open, onTogg
                     Unmark applied
                   </button>
                 ) : (
-                  <span className="flex h-10 items-center rounded-lg border border-accent-2/30 px-4 text-sm text-[#c4b5fd]">{applied.pending ? "Saving…" : `Applied ${applied.dateApplied || ""}`}</span>
+                  <span className="flex h-10 items-center rounded-lg border border-accent-2/30 px-4 text-sm text-accent-2-300">{applied.pending ? "Saving…" : `Applied ${applied.dateApplied || ""}`}</span>
                 )
               ) : (
-                <button type="button" onClick={() => onMark(r)} className={`h-10 rounded-lg border border-accent-2/40 px-4 text-sm text-[#c4b5fd] transition-[background-color,transform] duration-150 hover:bg-accent-2/10 active:scale-[0.97] ${focusRing}`}>
+                <button type="button" onClick={() => onMark(r)} className={`h-10 rounded-lg border border-accent-2/40 px-4 text-sm text-accent-2-300 transition-[background-color,transform] duration-150 hover:bg-accent-2/10 active:scale-[0.97] ${focusRing}`}>
                   Mark applied<span aria-hidden className="ml-1 hidden md:inline-flex"><Kbd>a</Kbd></span>
                 </button>
               )
@@ -115,7 +115,7 @@ function Rollup({ label, count, sub, open, onToggle, children, top }) {
   return (
     <li className="border-b border-line last:border-b-0">
       <button type="button" data-nav aria-expanded={open} onClick={onToggle}
-        className={`flex min-h-12 w-full items-center gap-3 py-2 pl-4 pr-4 text-left transition-[background-color] duration-150 hover:bg-white/[0.025] active:bg-white/[0.04] ${focusRing}`}>
+        className={`flex min-h-12 w-full items-center gap-3 py-2 pl-4 pr-4 text-left transition-[background-color] duration-150 hover:bg-bright/[0.025] active:bg-bright/[0.04] ${focusRing}`}>
         <span aria-hidden className="size-1.5 shrink-0" />
         <span className="flex min-w-0 flex-1 items-center gap-2">
           <span className={`truncate text-sm ${muted ? "text-muted" : "font-semibold text-fg"}`}>{label}</span>
