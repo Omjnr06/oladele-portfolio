@@ -191,7 +191,33 @@ html[data-theme-switching]::view-transition-new(root) {
   will-change: transform, opacity, filter;
 }
 
+@keyframes rise-in {
+  from {
+    opacity: 0.001;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise-in {
+  animation: rise-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.rise-in-1 {
+  animation-delay: 0.1s;
+}
+
+.rise-in-2 {
+  animation-delay: 0.2s;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .rise-in {
+    animation: none;
+  }
   .page-enter {
     animation: none;
     filter: blur(0px);

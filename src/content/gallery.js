@@ -1,0 +1,14 @@
+export const gallery = [
+  { id: "headshot", src: "/assets/images/junior-headshot.JPG", caption: "Headshot" },
+  { id: "tsi-team", src: "/assets/images/tsi-full-team-photo.png", caption: "TSI full team photo" },
+  { id: "wfn-team-2027", src: "/assets/images/wfn-full-team-2027.JPG", caption: "Western Founders Network team" },
+  { id: "wfn-projects", src: "/assets/images/junior-WFNProjects.jpg", caption: "Presenting WFN projects" },
+  { id: "statue", src: "/assets/images/junior-statue.jpeg", caption: "By a statue" },
+  { id: "wfn-kathy-jr", src: "/assets/images/wfn-kathy-jr-team.JPG", caption: "WFN team" },
+  { id: "ozen-food", src: "/assets/images/junior-food.jpeg", caption: "Food" },
+  { id: "basketball", src: "/assets/images/junior-basketball.jpg", caption: "Basketball" },
+  { id: "guitar", src: "/assets/images/junior-guitar.jpeg", caption: "Guitar" },
+  { id: "boat", src: "/assets/images/junior-boat.jpeg", caption: "On a boat" },
+  { id: "soccer", src: "/assets/images/junior-soccer.JPG", caption: "Soccer" },
+  { id: "wfn-construction", src: "/assets/images/wfn-team-construction.JPG", caption: "WFN team at a construction site" },
+];
