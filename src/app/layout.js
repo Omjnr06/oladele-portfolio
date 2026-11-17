@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://www.magbadelojr.com"),
   title: "Oladele Magbadelo | Developer and Musician",
   description: "A digital station to see all the cool things I engage in!",
 };

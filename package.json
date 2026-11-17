@@ -11,7 +11,9 @@
     "test:smoke": "playwright test --project=smoke-desktop --project=smoke-phone",
     "test:visual": "playwright test --project=visual",
     "test:visual:baseline": "playwright test --project=visual --update-snapshots",
-    "perf": "node scripts/perf.mjs"
+    "perf": "node scripts/perf.mjs",
+    "check-content": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-content.mjs",
+    "prebuild": "npm run check-content"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

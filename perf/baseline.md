@@ -41,8 +41,7 @@ All pages static (`○`) except `/grind` (`ƒ`, reads the owner cookie on every 
 1. **`template.js` hides every page until hydration.** It server-renders `opacity: 0` + `blur(15px)`,
    so LCP waits for ~260KB of JS to download, parse and hydrate. Main cause of the 8.7s mobile LCP.
    Fixed in pass 1a (CSS keyframe, see below).
-2. **Home loads all 12 gallery photos (~1.9MB) at once.** They're stacked in the same box, so
-   lazy loading never kicks in. Load the current + next photo only (pass 1b).
+2. **Home loads all 12 gallery photos (~1.9MB) at once.** Fixed in pass 1b (current + next only).
 3. **Every page is one big client component** (home 850 lines + all of `musicLibrary`); TBT
    1–8s on mobile. Thin server pages + small client islands (pass 1b).
 4. **Ghost-scan animates `text-shadow`/`color` on 16 letters forever** → constant repaints.
@@ -71,6 +70,39 @@ All pages static (`○`) except `/grind` (`ƒ`, reads the owner cookie on every 
   only loads with `?preview=packs`.
 - Lighthouse TBT swings a lot run to run on this machine; compare LCP and the real-browser
   numbers, not single scores.
+
+## After pass 1b (Nov 16 2026)
+
+**A/B in a real browser** (`main` vs `theme-packs-pass1b` built side by side, 412px phone,
+4× CPU throttle, fast network, median of 5–9 runs):
+
+| Page | LCP before | LCP after | Main-thread blocking before | after |
+| --- | --- | --- | --- | --- |
+| `/` | 816ms | 804ms | 2,643ms | 1,568ms |
+| `/resume` | 1,328ms | 1,136ms | 1,769ms | 1,772ms |
+| `/projects/jam` | 3,272ms | 932ms | 1,091ms | 1,363ms |
+| `/projects/pimplenet` | 3,904ms | 968ms | 1,358ms | 1,226ms |
+| `/projects/vault` | 3,676ms | 1,072ms | 1,783ms | 1,736ms |
+
+- Case studies: the hero used framer-motion starting at `opacity: 0`, so it stayed invisible
+  until hydration. Now a CSS keyframe → LCP ~3.5s → ~1s.
+- Home: gallery loads the current + next photo only. Images on first load 1,953KB → 610KB.
+  Lighthouse mobile LCP on `/` ~8s → ~4.3s (lab; the gallery photo was the LCP element).
+- Home no longer ships `musicLibrary` (only 5 fields of the featured tracks).
+- Lighthouse scores on this machine swing 20+ points between runs (TBT especially); use the A/B
+  numbers above for decisions.
+
+| route | document | script | stylesheet | font | image | other |
+| --- | --- | --- | --- | --- | --- | --- |
+| / | 13 | 248 | 20 | 52 | 610 | 15 |
+| /resume | 17 | 248 | 20 | 52 | 0 | 22 |
+| /projects/jam | 8 | 264 | 15 | 52 | 0 | 9 |
+| /projects/pimplenet | 9 | 264 | 15 | 52 | 60 | 9 |
+| /projects/vault | 10 | 264 | 15 | 52 | 0 | 9 |
+
+Case-study script went up ~40KB (224 → 264) on first load: the shared block renderer + tab
+island is bigger than each old page bundle. LCP still dropped ~2.5s because nothing waits for it
+any more. Candidate trim later: load `VideoBlock`/`ThemeDemo` only for tabs that use them.
 
 ## How to re-measure
 
