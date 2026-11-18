@@ -1,7 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { scrollToId } from "@/lib/scroll";
 
 export default function Gallery({ images }) {
   const count = images.length;
@@ -19,6 +20,33 @@ export default function Gallery({ images }) {
     });
   };
 
+  const showRef = useRef(show);
+  useEffect(() => {
+    showRef.current = show;
+  });
+
+  useEffect(() => {
+    const open = (id) => {
+      const i = images.findIndex((img) => img.id === id);
+      if (i < 0) return;
+      showRef.current(i);
+      setPaused(true);
+    };
+    const onPhoto = (e) => open(e.detail);
+    window.addEventListener("omj:photo", onPhoto);
+    const id = new URLSearchParams(window.location.search).get("photo");
+    const t = id
+      ? setTimeout(() => {
+          open(id);
+          scrollToId("gallery");
+        }, 150)
+      : null;
+    return () => {
+      window.removeEventListener("omj:photo", onPhoto);
+      clearTimeout(t);
+    };
+  }, [images]);
+
   useEffect(() => {
     if (paused) return;
     const t = setInterval(() => show(current + 1), 5000);
@@ -27,7 +55,8 @@ export default function Gallery({ images }) {
 
   return (
     <motion.div
-      className="mb-32 relative w-full h-[450px] md:h-[clamp(420px,calc(100svh-8rem),550px)] border border-bright/10 bg-ink rounded-xl overflow-hidden group shadow-2xl cursor-grab active:cursor-grabbing"
+      id="gallery"
+      className="scroll-mt-24 mb-32 relative w-full h-[450px] md:h-[clamp(420px,calc(100svh-8rem),550px)] border border-bright/10 bg-ink rounded-xl overflow-hidden group shadow-2xl cursor-grab active:cursor-grabbing"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       drag="x"

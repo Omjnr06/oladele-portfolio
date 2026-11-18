@@ -254,7 +254,7 @@ export default function GrindBoard({ feed, owner, initial, unlockStatus }) {
     const onKey = (e) => {
       const tag = e.target.tagName;
       const typing = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
-      if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || (e.key === "/" && !typing)) {
+      if (e.key === "/" && !typing) {
         e.preventDefault();
         // Context-aware: once the applications section reaches the top half of the screen, '/' targets its search.
         const apps = document.getElementById("applications");

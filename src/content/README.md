@@ -25,6 +25,7 @@ Inline formatting in text fields: `*words*` = emphasis, `[label](https://link)` 
 | A social link | `contact.js` | Needs an `icon` the site knows: email, linkedin, github, devpost, instagram, x |
 | A case study (e.g. Grand Theatre) | `caseStudies/` | See below |
 | A music clip | `src/app/music/data/musicLibrary.js` | Music keeps its own data for now |
+| A search synonym (e.g. "llm" should find "OpenAI") | `searchAliases.js` | Add the word to the right group, or add a group |
 
 ## Collections
 
@@ -54,10 +55,17 @@ resume page plus an `id`. `project: "the-vault"` (optional) connects a role or r
 to its entry in `projects.js`.
 
 ### `gallery.js`
-`{ id, src, caption }`. The caption isn't shown yet; it's for accessibility and Ask Junior.
+`{ id, src, caption }`. The caption is what search shows (and finds), plus Ask Junior later.
 
 ### `contact.js`
 `{ id, label, href, icon }`.
+
+### `searchAliases.js`
+`{ id, words: ["llm", "ai", "openai", …] }`. Searching any word in a group also finds the
+others, so "llm" finds projects that only say "OpenAI". Lowercase only; a word can only be in
+one group. Everything else in these files is searchable automatically (Ctrl K / ⌘K): project
+stacks and summaries, case-study tags, resume skills and bullet points, music clips, photo
+captions.
 
 ## Case studies
 

@@ -52,7 +52,7 @@ export default function ResumePage() {
               <div className="absolute top-0 left-0 h-full bg-accent w-0 group-hover:w-full transition duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] opacity-10" />
             </a>
 
-            <div>
+            <div id="skills" className="scroll-mt-24">
               <div className="flex items-center gap-4 mb-6">
                 <span className="font-mono text-[11px] text-muted">SKILLS</span>
                 <div className="h-[1px] flex-1 bg-bright/5" />
@@ -77,7 +77,7 @@ export default function ResumePage() {
               <Heading>EXPERIENCE</Heading>
               <div className="space-y-12 relative border-l border-bright/10 ml-1">
                 {experience.map((exp) => (
-                  <div key={exp.id} className="relative pl-8">
+                  <div key={exp.id} id={exp.id} className="relative pl-8 scroll-mt-24">
                     <Node />
                     <div className="mb-2 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                       <h3 className="text-xl font-bold text-bright tracking-tight">{exp.role}</h3>
@@ -94,7 +94,7 @@ export default function ResumePage() {
               <Heading>PROJECTS</Heading>
               <div className="space-y-12 relative border-l border-bright/10 ml-1">
                 {resumeProjects.map((prj) => (
-                  <div key={prj.id} className="relative pl-8">
+                  <div key={prj.id} id={prj.id} className="relative pl-8 scroll-mt-24">
                     <Node />
                     <div className="mb-2 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                       <h3 className="text-xl font-bold text-bright tracking-tight">{prj.title}</h3>
@@ -111,7 +111,7 @@ export default function ResumePage() {
               <Heading dot="accent-2">EDUCATION</Heading>
               <div className="space-y-10 relative border-l border-bright/10 ml-1">
                 {education.map((edu) => (
-                  <div key={edu.id} className="relative pl-8">
+                  <div key={edu.id} id={edu.id} className="relative pl-8 scroll-mt-24">
                     <Node hover="accent-2" />
                     <div className="mb-2 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                       <h3 className="text-lg font-bold text-bright tracking-tight">{edu.degree}</h3>

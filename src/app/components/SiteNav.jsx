@@ -51,6 +51,7 @@ function HomeNav() {
 }
 
 function ResumeNav() {
+  useHashOnLoad();
   return (
     <NavRail
       active="resume"

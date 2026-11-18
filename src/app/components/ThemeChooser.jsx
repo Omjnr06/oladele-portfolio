@@ -5,6 +5,7 @@ import { PACKS, THEMES } from "@/lib/themes";
 import { applyTheme, setPrefs, usePrefs } from "@/lib/prefs";
 import { themeTransition } from "@/lib/themeTransition";
 import { isHandheld } from "@/lib/device";
+import { track } from "@/lib/track";
 
 const spring = { type: "spring", stiffness: 520, damping: 38 };
 
@@ -89,7 +90,7 @@ export default function ThemeChooser() {
                       type="button"
                       disabled={!ready || blocked}
                       aria-pressed={selected}
-                      onClick={(e) => !selected && choose(e, { pack: pack.id, variant: variants[0]?.id })}
+                      onClick={(e) => { if (selected) return; track("pack_selected", pack.id); choose(e, { pack: pack.id, variant: variants[0]?.id }); }}
                       className="flex min-h-11 w-full items-start gap-3 rounded-lg px-3 py-2 text-left transition-[background-color,transform] duration-150 enabled:hover:bg-bright/5 enabled:active:scale-[0.98] disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
                       <span className="flex-1">
@@ -116,7 +117,7 @@ export default function ThemeChooser() {
                               onFocus={() => preview(v.id)}
                               onBlur={endPreview}
                               onKeyDown={(e) => onVariantKeys(e, variants, i)}
-                              onClick={(e) => !on && choose(e, { variant: v.id })}
+                              onClick={(e) => { if (on) return; track("variant_selected", v.id); choose(e, { variant: v.id }); }}
                               className={`flex size-10 items-center justify-center rounded-full border transition-[border-color,transform] duration-150 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${on ? "border-accent" : "border-transparent hover:border-line-strong"}`}
                             >
                               <Swatch colors={v.swatch} />
