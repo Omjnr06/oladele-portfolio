@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { DEFAULT_THEME, NO_FLASH_SCRIPT } from "@/lib/themes";
 import PreviewGate from "./components/PreviewGate";
+import PaletteHost from "./components/palette/PaletteHost";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col">
         {children}
         <PreviewGate />
+        <PaletteHost />
         <Analytics />
         <SpeedInsights/>
       </body>

@@ -116,3 +116,17 @@ npx next start -p 3100 & npm run perf <label>
 Lighthouse: `npx lighthouse@12.8.2 <url> --only-categories=performance [--preset=desktop]`.
 Visual baseline images are local only (`tests/visual/.baseline/`, gitignored). Regenerate them
 from `main` with `npm run test:visual:baseline` before a pass if they're missing.
+
+## After pass 1c (Nov 17 2026)
+
+JS transferred on first load (Chromium, cold, same machine, main vs pass 1c):
+
+| Route | main | 1c |
+| --- | --- | --- |
+| / | 247.6 KB | 248.1 KB |
+| /resume | 247.6 KB | 248.1 KB |
+| /projects/vault | 263.8 KB | 264.3 KB |
+| /grind | 280.2 KB | 280.6 KB |
+
+The always-loaded palette listener is ~0.5 KB. The palette UI (~6 KB gz) and `/palette-index.json` (~32 KB raw, static) load only on first Ctrl K / Cmd K. No LCP-path changes.
+

@@ -6,6 +6,7 @@ import { contact } from "../src/content/contact.js";
 import { projects } from "../src/content/projects.js";
 import { skills, experience, resumeProjects, education } from "../src/content/resume.js";
 import { caseStudies } from "../src/content/caseStudies/index.js";
+import { searchAliases } from "../src/content/searchAliases.js";
 
 const BLOCK_TYPES = ["heading", "text", "tags", "points", "schema", "video", "screens", "compare", "image", "figure", "flow", "note", "link", "resources", "themeDemo"];
 const ICONS = ["email", "linkedin", "github", "devpost", "instagram", "x"];
@@ -209,6 +210,19 @@ caseStudies.forEach((c, i) => {
     str(s.label, `${at}.sections[${j}].label`);
     list(s.blocks, `${at}.sections[${j}].blocks`) && s.blocks.forEach((b, k) => block(b, `${at}.sections[${j}].blocks[${k}]`));
   });
+});
+
+uniqueIds(searchAliases, "searchAliases");
+const aliasSeen = new Map();
+searchAliases.forEach((g, i) => {
+  const at = `searchAliases[${i}]`;
+  if (list(g.words, `${at}.words`, { min: 2 })) {
+    g.words.forEach((w, j) => {
+      if (typeof w !== "string" || w !== w.toLowerCase() || !w.trim()) return fail(`${at}.words[${j}]`, "must be a lowercase word or phrase");
+      if (aliasSeen.has(w)) fail(`${at}.words[${j}]`, `"${w}" is already in ${aliasSeen.get(w)} (a word can only be in one group)`);
+      aliasSeen.set(w, g.id);
+    });
+  }
 });
 
 if (errors.length) {
