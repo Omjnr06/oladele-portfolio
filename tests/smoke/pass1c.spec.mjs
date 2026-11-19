@@ -72,7 +72,7 @@ test("Escape closes only the palette on /grind, and / still focuses grind search
   await page.keyboard.press("j");
   await page.keyboard.press("Escape");
   await expect(palette(page)).toHaveCount(0);
-  expect(await page.evaluate(() => document.activeElement?.closest("[data-nav]"))).toBeNull();
+  expect(await page.evaluate(() => document.activeElement?.closest("li [data-nav]"))).toBeNull();
 });
 
 test("palette restores scroll and focus when closed", async ({ page }, info) => {

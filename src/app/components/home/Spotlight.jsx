@@ -94,6 +94,7 @@ export default function Spotlight({ projects, tracks }) {
 
       <div
         ref={boxRef}
+        data-surface="media"
         className="w-full h-[500px] md:h-[clamp(500px,calc(100svh-6rem),600px)] bg-ink border border-bright/10 rounded-2xl overflow-hidden relative shadow-[0_0_40px_rgba(0,0,0,0.8)] group"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}

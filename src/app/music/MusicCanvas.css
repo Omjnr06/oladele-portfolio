@@ -138,6 +138,19 @@
 }
 .mv-sidebar-dock:hover .mv-sidebar { transform: translateX(0); }
 
+html[data-nav="pill"] .mv-sidebar-dock { width: 100%; height: 10px; }
+html[data-nav="pill"] .mv-sidebar-edge {
+  width: 100%; height: 100%;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-accent) 25%, transparent), transparent);
+}
+html[data-nav="pill"] .mv-sidebar {
+  left: 50%; top: 12px; width: auto; height: auto;
+  transform: translate(-50%, calc(-100% - 24px));
+}
+html[data-nav="pill"] .mv-sidebar-dock:hover .mv-sidebar,
+html[data-nav="pill"] .mv-sidebar-dock:focus-within .mv-sidebar { transform: translate(-50%, 0); }
+.mv-sidebar-dock:focus-within .mv-sidebar { transform: translateX(0); }
+
 
 .mv-zoom-controls {
   position: absolute;

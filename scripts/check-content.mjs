@@ -52,6 +52,7 @@ str(profile.firstName, "profile.firstName");
 str(profile.lastName, "profile.lastName");
 str(profile.title, "profile.title");
 str(profile.status, "profile.status");
+str(profile.now, "profile.now", { optional: true });
 list(profile.intro, "profile.intro") && profile.intro.forEach((p, i) => str(p.text, `profile.intro[${i}].text`));
 asset(profile.resumePdf?.href, "profile.resumePdf.href");
 

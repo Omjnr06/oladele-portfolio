@@ -2,6 +2,7 @@ import Link from "next/link";
 import Blocks, { colorValue } from "./Blocks";
 import CaseStudyTabs from "./CaseStudyTabs";
 import Showcase from "./Showcase";
+import SiteNav from "../SiteNav";
 
 const TOKEN_BADGE = {
   accent: "text-accent bg-accent/10 border-accent/20",
@@ -43,7 +44,9 @@ export default function CaseStudy({ study }) {
   const single = modern.layout === "single";
 
   return (
-    <main className="min-h-screen w-full bg-ink text-bright font-sans selection:bg-accent selection:text-on-accent relative overflow-x-hidden">
+    <main className="min-h-screen w-full flex flex-row bg-ink text-bright font-sans selection:bg-accent selection:text-on-accent relative">
+      <SiteNav page="case" />
+      <div className="flex-1 min-w-0 relative overflow-x-clip">
       <div className="absolute inset-0 z-0 pointer-events-none bg-journal-dots opacity-80" />
       <div className={`absolute top-[10%] right-[-10%] w-[500px] h-[500px] ${modern.glow === "accent" ? "bg-accent" : "bg-accent-2"} opacity-[0.03] rounded-full blur-[120px] pointer-events-none`} />
 
@@ -114,6 +117,7 @@ export default function CaseStudy({ study }) {
             <Prompt text={modern.prompt} className="mt-8 pt-8 border-t border-bright/5 flex items-center gap-2 text-bright/40 font-mono text-sm" />
           </>
         )}
+      </div>
       </div>
     </main>
   );

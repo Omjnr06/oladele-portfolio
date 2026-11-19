@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import NavRail from "./NavRail";
+import Nav from "./nav/Nav";
 import { onScroll, scrollToId } from "@/lib/scroll";
 
 const jump = (id) => (e) => {
@@ -33,18 +33,20 @@ function useHashOnLoad() {
   }, []);
 }
 
+const item = (key, label, href, onClick) => ({ key, label, href, onClick });
+
 function HomeNav() {
   const active = useHomeSection();
   useHashOnLoad();
   return (
-    <NavRail
+    <Nav
       active={active}
       items={[
-        { key: "home", label: "Home", href: "#home", onClick: jump("home") },
-        { key: "projects", label: "Projects", href: "#projects", onClick: jump("projects") },
-        { key: "resume", label: "Resume", href: "/resume" },
-        { key: "music", label: "Music", href: "/music" },
-        { key: "contact", label: "Contact", href: "#contact", onClick: jump("contact") },
+        item("home", "Home", "#home", jump("home")),
+        item("projects", "Projects", "#projects", jump("projects")),
+        item("resume", "Resume", "/resume"),
+        item("music", "Music", "/music"),
+        item("contact", "Contact", "#contact", jump("contact")),
       ]}
     />
   );
@@ -53,19 +55,24 @@ function HomeNav() {
 function ResumeNav() {
   useHashOnLoad();
   return (
-    <NavRail
+    <Nav
       active="resume"
       items={[
-        { key: "home", label: "Home", href: "/#home" },
-        { key: "projects", label: "Projects", href: "/#projects" },
-        { key: "resume", label: "Resume", href: "/resume" },
-        { key: "music", label: "Music", href: "/music" },
-        { key: "contact", label: "Contact", href: "#contact", onClick: jump("contact") },
+        item("home", "Home", "/#home"),
+        item("projects", "Projects", "/#projects"),
+        item("resume", "Resume", "/resume"),
+        item("music", "Music", "/music"),
+        item("contact", "Contact", "#contact", jump("contact")),
       ]}
     />
   );
 }
 
+const OTHER = [item("home", "Home", "/#home"), item("projects", "Projects", "/#projects"), item("resume", "Resume", "/resume"), item("music", "Music", "/music"), item("contact", "Contact", "/#contact")];
+
 export default function SiteNav({ page }) {
-  return page === "home" ? <HomeNav /> : <ResumeNav />;
+  if (page === "home") return <HomeNav />;
+  if (page === "resume") return <ResumeNav />;
+  if (page === "music") return <Nav active="music" items={OTHER} shape="dock" />;
+  return <Nav active={page === "case" ? "projects" : null} items={OTHER} />;
 }

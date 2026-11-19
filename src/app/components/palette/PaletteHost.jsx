@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export const PALETTE_EVENT = "omj:palette";
+import { PALETTE_EVENT } from "@/lib/events";
 
 export default function PaletteHost() {
   const [Palette, setPalette] = useState(null);

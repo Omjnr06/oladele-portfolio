@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant pill (&:where([data-nav="pill"] *));
+
 @theme static {
   --color-ink: #050505;
   --color-panel: #0b0b0c;
@@ -44,19 +46,10 @@
   --mv-violet-deep: rgb(20 14 32);
 }
 
-[data-colors="fixed"] {
-  --color-ink: #050505;
-  --color-panel: #0b0b0c;
-  --color-panel-2: #121214;
-  --color-line: rgb(255 255 255 / 0.08);
-  --color-line-strong: rgb(255 255 255 / 0.16);
-  --color-fg: #f4f6f8;
-  --color-bright: #ffffff;
-  --color-muted: #8a94a3;
-  --color-accent: #22d3ee;
-  --color-accent-2: #8b5cf6;
-  --color-on-accent: #000000;
-  --color-scrim: #020202;
+@media (max-width: 767px) {
+  body:has([data-site-nav]:not([data-shape="rail"])) {
+    padding-bottom: 80px;
+  }
 }
 
 body {
@@ -159,6 +152,35 @@ html {
   }
 }
 
+html[data-nav-morph] [data-vt="nav"] { view-transition-name: nav-shell; }
+html[data-nav-morph] [data-vt="brand"] { view-transition-name: nav-brand; }
+html[data-nav-morph] [data-vt="home"] { view-transition-name: nav-home; }
+html[data-nav-morph] [data-vt="projects"] { view-transition-name: nav-projects; }
+html[data-nav-morph] [data-vt="resume"] { view-transition-name: nav-resume; }
+html[data-nav-morph] [data-vt="music"] { view-transition-name: nav-music; }
+html[data-nav-morph] [data-vt="contact"] { view-transition-name: nav-contact; }
+html[data-nav-morph] [data-vt="tools"] { view-transition-name: nav-tools; }
+
+html[data-nav-morph]::view-transition-group(*) {
+  animation-duration: 0.46s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html[data-nav-morph]::view-transition-old(nav-home), html[data-nav-morph]::view-transition-new(nav-home),
+html[data-nav-morph]::view-transition-old(nav-projects), html[data-nav-morph]::view-transition-new(nav-projects),
+html[data-nav-morph]::view-transition-old(nav-resume), html[data-nav-morph]::view-transition-new(nav-resume),
+html[data-nav-morph]::view-transition-old(nav-music), html[data-nav-morph]::view-transition-new(nav-music),
+html[data-nav-morph]::view-transition-old(nav-contact), html[data-nav-morph]::view-transition-new(nav-contact),
+html[data-nav-morph]::view-transition-old(nav-tools), html[data-nav-morph]::view-transition-new(nav-tools) {
+  height: 100%;
+  object-fit: none;
+  overflow: clip;
+}
+
+html[data-nav-morph]::view-transition-old(nav-brand) {
+  animation-duration: 0.15s;
+}
+
 html[data-theme-switching]::view-transition-old(root),
 html[data-theme-switching]::view-transition-new(root) {
   animation: none;
@@ -181,14 +203,13 @@ html[data-theme-switching]::view-transition-new(root) {
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0px);
+    transform: none;
+    filter: none;
   }
 }
 
 .page-enter {
-  animation: page-enter 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-  will-change: transform, opacity, filter;
+  animation: page-enter 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
 @keyframes rise-in {
@@ -251,7 +272,6 @@ html[data-theme-switching]::view-transition-new(root) {
   }
   .page-enter {
     animation: none;
-    filter: blur(0px);
   }
   .animate-scan, .animate-pulse, .animate-ping, .animate-spin, .animate-bounce {
     animation: none !important;
