@@ -44,3 +44,6 @@ next-env.d.ts
 /tests/.results/
 /tests/visual/.baseline/
 /playwright-report/
+
+# compressed uploads
+/media-out/

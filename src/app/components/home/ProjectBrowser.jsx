@@ -164,7 +164,7 @@ export default function ProjectBrowser({ projects, categories }) {
 
                 <div className={`${p.media.orientation === "portrait" ? "w-auto h-[380px] md:h-[440px] lg:h-[480px] aspect-[9/19] mx-auto rounded-[2rem]" : "w-full lg:w-[50%] xl:w-[55%] aspect-video rounded-xl"} overflow-hidden border border-accent/20 shadow-[0_0_40px_color-mix(in_srgb,var(--color-accent)_10%,transparent)] relative group shrink-0 bg-ink transition duration-500 hover:shadow-[0_0_60px_color-mix(in_srgb,var(--color-accent)_20%,transparent)] hover:border-accent/40 mt-1 pointer-events-auto`}>
                   {p.media.video ? (
-                    <video src={p.media.video} playsInline className="absolute inset-0 w-full h-full object-cover z-10" {...(p.media.orientation === "portrait" ? { autoPlay: true, muted: true, loop: true } : { controls: true, preload: "metadata" })} />
+                    <video src={p.media.video} playsInline className="absolute inset-0 w-full h-full object-cover z-10" {...(p.media.orientation === "portrait" ? { autoPlay: true, muted: true, loop: true } : { controls: true, preload: p.media.poster ? "none" : "metadata", poster: p.media.poster })} />
                   ) : p.media.image ? (
                     <div
                       className={`absolute inset-0 w-full h-full bg-center bg-no-repeat z-10 cursor-zoom-in ${p.media.fit === "contain" ? "bg-contain p-6" : "bg-cover"}`}

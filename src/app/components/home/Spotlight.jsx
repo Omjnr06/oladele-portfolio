@@ -124,7 +124,7 @@ export default function Spotlight({ projects, tracks }) {
                 {p.media.orientation === "portrait" ? (
                   <div className="w-full h-full bg-cover bg-center blur-2xl scale-125 opacity-50" style={{ backgroundImage: `url('${p.media.image}')` }} />
                 ) : p.media.video ? (
-                  <BgVideo src={p.media.video} reduce={reduce} className="w-full h-full object-cover opacity-70" />
+                  <BgVideo src={p.media.loop ?? p.media.video} reduce={reduce} className="w-full h-full object-cover opacity-70" />
                 ) : (
                   <div className="w-full h-full bg-cover bg-center opacity-70" style={{ backgroundImage: `url('${p.media.image}')` }} />
                 )}
@@ -133,7 +133,7 @@ export default function Spotlight({ projects, tracks }) {
                 {p.media.orientation === "portrait" && (
                   <div className="hidden md:block absolute right-10 lg:right-20 top-1/2 -translate-y-1/2 h-[380px] lg:h-[440px] aspect-[9/19] rounded-[2rem] overflow-hidden border border-accent/20 shadow-[0_0_50px_color-mix(in_srgb,var(--color-accent)_15%,transparent)] bg-ink z-[5] pointer-events-none">
                     {p.media.video ? (
-                      <BgVideo src={p.media.video} reduce={reduce} className="absolute inset-0 w-full h-full object-cover" />
+                      <BgVideo src={p.media.loop ?? p.media.video} reduce={reduce} className="absolute inset-0 w-full h-full object-cover" />
                     ) : (
                       <div className="absolute inset-0 w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('${p.media.image}')` }} />
                     )}
@@ -207,7 +207,7 @@ export default function Spotlight({ projects, tracks }) {
               className="absolute inset-0 w-full h-full"
             >
               <div className="absolute inset-0 z-0">
-                <BgVideo src={t.videoUrl} reduce={reduce} className="w-full h-full object-cover opacity-80 blur-[2px]" />
+                <BgVideo src={t.loop ?? t.videoUrl} reduce={reduce} className="w-full h-full object-cover opacity-80 blur-[2px]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-scrim via-scrim/50 to-transparent" />
                 <div className="absolute inset-0 bg-gradient-to-r from-scrim/90 via-scrim/40 to-transparent" />
               </div>

@@ -84,6 +84,11 @@ projects.forEach((p, i) => {
   else {
     if (p.media.image) asset(p.media.image, `${at}.media.image`);
     if (p.media.video) asset(p.media.video, `${at}.media.video`);
+    if (p.media.poster !== undefined) asset(p.media.poster, `${at}.media.poster`);
+    if (p.media.loop !== undefined) {
+      asset(p.media.loop, `${at}.media.loop`);
+      if (!p.media.video) fail(`${at}.media.loop`, "needs a video to loop from");
+    }
     if (p.media.fit && !["cover", "contain"].includes(p.media.fit)) fail(`${at}.media.fit`, 'must be "cover" or "contain"');
     if (p.media.orientation && p.media.orientation !== "portrait") fail(`${at}.media.orientation`, 'can only be "portrait" (leave it out for landscape)');
   }

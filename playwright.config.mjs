@@ -14,6 +14,7 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${PORT}`,
     trace: "retain-on-failure",
+    launchOptions: { args: ["--host-resolver-rules=MAP *.supabase.co ~NOTFOUND"] },
   },
   webServer: {
     command: `npx next start -p ${PORT}`,
