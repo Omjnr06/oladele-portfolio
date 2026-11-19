@@ -263,7 +263,181 @@ html[data-theme-switching]::view-transition-new(root) {
   animation: palette-fade 0.12s ease-out both;
 }
 
+.boot {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+}
+
+.boot[data-auto] {
+  display: none;
+}
+
+html[data-boot] .boot[data-auto] {
+  display: flex;
+  animation: boot-failsafe 0.2s calc(var(--boot) + 4s) forwards;
+}
+
+.boot-cmd {
+  display: inline-block;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+  animation: boot-type calc(var(--boot) * 0.22) steps(var(--n), end) calc(var(--boot) * 0.04) forwards;
+}
+
+.boot-caret {
+  animation: boot-blink 0.9s steps(1) infinite;
+}
+
+.boot-caret[data-first] {
+  animation: boot-blink 0.9s steps(1) infinite, boot-hide 0s calc(var(--boot) * 0.28) forwards;
+}
+
+.boot-line {
+  opacity: 0;
+  animation: boot-line 0.16s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--boot) * var(--at)) forwards;
+}
+
+.boot-bar {
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: boot-bar calc(var(--boot) * 0.66) cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
+}
+
+.dot-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: var(--s);
+  height: var(--s);
+  pointer-events: none;
+  opacity: 0;
+  background-image: radial-gradient(circle, var(--color-accent) 1.5px, transparent 2.5px);
+  background-size: 26px 26px;
+  background-position: calc(var(--s) / 2 - var(--x, 0px)) calc(var(--s) / 2 - var(--y, 0px));
+  transform: translate(calc(var(--x, 0px) - var(--s) / 2), calc(var(--y, 0px) - var(--s) / 2));
+  mask-image: radial-gradient(closest-side, #000 20%, transparent);
+  transition: opacity 0.2s ease-out;
+}
+
+.dot-glow[data-on] {
+  opacity: 1;
+}
+
+.reveal[data-armed] > :not(#projects),
+.reveal[data-armed] #projects > * {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.reveal[data-armed][data-in] > :not(#projects),
+.reveal[data-armed][data-in] #projects > * {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal[data-in] #projects > :nth-child(1) {
+  transition-delay: 60ms;
+}
+
+.reveal[data-in] #projects > :nth-child(2) {
+  transition-delay: 120ms;
+}
+
+.reveal[data-in] #projects > :nth-child(n + 3) {
+  transition-delay: 180ms;
+}
+
+.cd-veil {
+  animation: cd-wipe 0.28s cubic-bezier(0.65, 0, 0.35, 1) 0.68s forwards;
+}
+
+html[data-cd] [data-site-nav] {
+  z-index: 80;
+}
+
+.cd-cmd {
+  display: inline-block;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+  animation: boot-type 0.3s steps(var(--n), end) 0.06s forwards;
+}
+
+.cd-caret {
+  animation: boot-blink 0.5s steps(1) infinite;
+}
+
+.cd-out {
+  opacity: 0;
+  animation: boot-line 0.16s cubic-bezier(0.16, 1, 0.3, 1) 0.42s forwards;
+}
+
+.cd-bar {
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: boot-bar 0.24s cubic-bezier(0.3, 0.6, 0.4, 1) 0.42s forwards;
+}
+
+@keyframes cd-wipe {
+  to {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+@keyframes boot-type {
+  to {
+    width: calc(var(--n) * 1ch);
+  }
+}
+
+@keyframes boot-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes boot-hide {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes boot-line {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes boot-bar {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes boot-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html[data-boot] .boot[data-auto] {
+    display: none;
+  }
   .rise-in {
     animation: none;
   }

@@ -1,14 +1,17 @@
 "use client";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { profile } from "@/content/profile";
 import { contact } from "@/content/contact";
+import { BOOT_DONE_EVENT } from "@/lib/events";
 
 const TEXT = "OMJ";
 const GLYPHS = "<>/\\_#$%&*01";
 const BUILT = process.env.NEXT_PUBLIC_BUILT_AT;
 const COMMIT = process.env.NEXT_PUBLIC_COMMIT;
 const github = contact.find((c) => c.id === "github")?.href;
+let Boot = null;
 
 const noop = () => () => {};
 const useNow = () => useSyncExternalStore(noop, () => Math.floor(Date.now() / 60000), () => null);
@@ -73,6 +76,18 @@ export default function OmjMark({ className = "" }) {
   const since = (iso) => (now != null && iso ? Math.max(0, now - Math.floor(Date.parse(iso) / 60000)) : null);
   const minutes = since(activity?.at ?? BUILT);
   const fresh = minutes != null && minutes < 24 * 60;
+  const [replay, setReplay] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener(BOOT_DONE_EVENT, scramble);
+    return () => window.removeEventListener(BOOT_DONE_EVENT, scramble);
+  });
+
+  const replayBoot = () => {
+    setOpen(false);
+    const load = Boot ? Promise.resolve() : import("../boot/Boot").then((m) => (Boot = m.default));
+    load.then(() => setReplay(true));
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -150,7 +165,18 @@ export default function OmjMark({ className = "" }) {
               )}
             </p>
           )}
-          <div className="mt-4 flex gap-2 border-t border-line pt-3">
+          <button
+            type="button"
+            onClick={replayBoot}
+            className="mt-3 -ml-1.5 flex h-8 items-center gap-1.5 rounded-md px-1.5 font-mono text-[11px] text-muted transition-[color,background-color,transform] duration-150 hover:bg-bright/5 hover:text-accent active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:hidden"
+          >
+            <svg aria-hidden width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+              <path d="M3 3v5h5" />
+            </svg>
+            Replay boot
+          </button>
+          <div className="mt-3 flex gap-2 border-t border-line pt-3">
             <a href={profile.resumePdf.href} target="_blank" rel="noopener noreferrer" className="flex h-9 flex-1 items-center justify-center rounded-md bg-accent text-sm font-medium text-on-accent transition-transform duration-150 active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
               Open resume
             </a>
@@ -162,6 +188,7 @@ export default function OmjMark({ className = "" }) {
           </div>
         </div>
       )}
+      {replay && Boot && createPortal(<Boot onDone={() => { setReplay(false); btn.current?.focus(); }} />, document.body)}
     </div>
   );
 }

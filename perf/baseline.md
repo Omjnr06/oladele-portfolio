@@ -147,3 +147,18 @@ because `<Link>` prefetch pulls other routes' chunks afterwards.
 Resume drops framer-motion entirely (BackToTop is CSS now). Home's +8.4 KB is the new nav,
 which Turbopack copies into three chunks. Theme CSS for all 10 variants is ~7 KB raw in the
 cached stylesheet.
+
+## After pass 2b (Nov 19 2026)
+
+JS/CSS transferred up to `load` (Chromium, cold, best of 3, Supabase blocked). main = 2a + media-egress.
+
+| Route | main JS | 2b JS | main CSS | 2b CSS |
+| --- | --- | --- | --- | --- |
+| / | 213.8 KB | 217.6 KB | 18.9 KB | 19.5 KB |
+| /resume | 162.8 KB | 165.0 KB | 18.9 KB | 19.5 KB |
+| /projects/vault | 211.8 KB | 214.5 KB | 18.9 KB | 19.5 KB |
+| /grind | 228.2 KB | 230.4 KB | 18.9 KB | 19.5 KB |
+| /music | 236.7 KB | 238.9 KB | 23.8 KB | 24.4 KB |
+
+Boot overlay is server-rendered and CSS-timed (JS only runs the collapse). The cd veil, dot glow
+and projects reveal are small client islands. Boot replay is lazy-loaded from the OMJ card.
