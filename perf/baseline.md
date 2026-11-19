@@ -130,3 +130,20 @@ JS transferred on first load (Chromium, cold, same machine, main vs pass 1c):
 
 The always-loaded palette listener is ~0.5 KB. The palette UI (~6 KB gz) and `/palette-index.json` (~32 KB raw, static) load only on first Ctrl K / Cmd K. No LCP-path changes.
 
+
+## After pass 2a (Nov 18 2026)
+
+JS/CSS transferred up to the `load` event (Chromium, cold, main vs pass 2a). Counted up to `load`
+because `<Link>` prefetch pulls other routes' chunks afterwards.
+
+| Route | main JS | 2a JS | main CSS | 2a CSS |
+| --- | --- | --- | --- | --- |
+| / | 248.1 KB | 256.5 KB | 20.4 KB | 23.6 KB |
+| /resume | 200.8 KB | 155.4 KB | 15.5 KB | 18.8 KB |
+| /projects/vault | 202.8 KB | 204.7 KB | 15.5 KB | 18.8 KB |
+| /grind | 219.2 KB | 220.9 KB | 15.5 KB | 18.8 KB |
+| /music | 228.0 KB | 229.4 KB | 20.4 KB | 23.6 KB |
+
+Resume drops framer-motion entirely (BackToTop is CSS now). Home's +8.4 KB is the new nav,
+which Turbopack copies into three chunks. Theme CSS for all 10 variants is ~7 KB raw in the
+cached stylesheet.

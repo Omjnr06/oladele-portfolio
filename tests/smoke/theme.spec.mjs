@@ -40,23 +40,39 @@ test("?theme= link applies for the tab and ignores unknown values", async ({ pag
   expect(await attrs(page)).toEqual({ pack: "modern", theme: "cyan" });
 });
 
-test("theme chooser only appears in preview", async ({ page }) => {
+test("theme menu opens from the nav, switches colour and closes with Escape", async ({ page }) => {
   await page.goto("/resume");
-  await page.waitForTimeout(500);
-  await expect(page.getByRole("button", { name: "Theme" })).toHaveCount(0);
-
-  await page.goto("/resume?preview=packs");
-  const trigger = page.getByRole("button", { name: "Theme" });
-  await expect(trigger).toBeVisible();
-  await trigger.click();
+  const trigger = page.getByRole("navigation", { name: "Site" }).getByRole("button", { name: "Theme" });
   const dialog = page.getByRole("dialog", { name: "Choose a theme" });
-  await expect(dialog).toBeVisible();
+  await expect(async () => {
+    if (!(await dialog.count())) await trigger.click();
+    await expect(dialog).toBeVisible({ timeout: 1000 });
+  }).toPass();
   await expect(dialog.getByRole("radio", { name: "Cyan" })).toHaveAttribute("aria-checked", "true");
+  await dialog.getByRole("radio", { name: "Neon" }).click();
+  await expect.poll(() => attrs(page)).toEqual({ pack: "modern", theme: "neon" });
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("omj-prefs")).variant)).toBe("neon");
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveCount(0);
   await expect(trigger).toBeFocused();
+  await page.reload();
+  expect(await attrs(page)).toEqual({ pack: "modern", theme: "neon" });
+});
 
-  await page.goto("/resume?preview=off");
-  await page.waitForTimeout(500);
-  await expect(page.getByRole("button", { name: "Theme" })).toHaveCount(0);
+test("saved nav style is applied before first paint", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("omj-prefs", JSON.stringify({ pack: "modern", variant: "cyan", navMode: "pill" }));
+    document.addEventListener("readystatechange", () => {
+      if (document.readyState === "interactive") window.__navAtParse = document.documentElement.getAttribute("data-nav");
+    });
+  });
+  await page.goto("/");
+  expect(await page.evaluate(() => window.__navAtParse)).toBe("pill");
+});
+
+test("variant links apply new colours", async ({ page }) => {
+  await page.goto("/?theme=modern-daylight");
+  expect(await attrs(page)).toEqual({ pack: "modern", theme: "daylight" });
+  const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+  expect(bg).toBe("rgb(247, 248, 250)");
 });

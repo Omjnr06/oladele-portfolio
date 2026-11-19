@@ -14,6 +14,7 @@ import { Kbd } from "./Kbd";
 import { ACTIVE } from "../lib/status";
 import { Toast } from "./Toast";
 import { Terminal } from "./Terminal";
+import SiteNav from "../../components/SiteNav";
 
 const VISIT_LAST = "grind_visit_last";
 const VISIT_PREV = "grind_visit_prev";
@@ -306,7 +307,9 @@ export default function GrindBoard({ feed, owner, initial, unlockStatus }) {
 
   return (
     <MotionConfig reducedMotion="user">
-      <main className="relative min-h-screen w-full overflow-x-clip bg-ink text-fg selection:bg-accent selection:text-ink">
+      <main className="relative flex min-h-screen w-full flex-row bg-ink text-fg selection:bg-accent selection:text-ink">
+        <SiteNav page="grind" />
+        <div className="relative min-w-0 flex-1 overflow-x-clip">
         <div aria-hidden className="bg-journal-dots pointer-events-none absolute inset-0 opacity-60" />
         <div ref={wrapRef} className="relative mx-auto max-w-6xl px-4 pb-24 pt-12 md:px-8 md:pt-16">
           <Link href="/#projects" className="mb-12 inline-flex h-10 items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-muted transition-[color] duration-150 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent">
@@ -334,7 +337,7 @@ export default function GrindBoard({ feed, owner, initial, unlockStatus }) {
             </div>
           </header>
 
-          <div ref={barRef} className="sticky top-0 z-20 -mx-4 border-b border-line bg-ink/85 px-4 py-3 backdrop-blur-md md:-mx-8 md:px-8">
+          <div ref={barRef} className="sticky top-0 z-20 md:pill:top-[76px] -mx-4 border-b border-line bg-ink/85 px-4 py-3 backdrop-blur-md md:-mx-8 md:px-8">
             <div className="flex flex-wrap items-center gap-2">
               <Segmented id="track" label="Track" value={f.track} onChange={(v) => set({ track: v })}
                 options={[{ value: "all", label: "All", count: trackCounts.all }, { value: "swe", label: "SWE", count: trackCounts.swe }, { value: "pm", label: "PM", count: trackCounts.pm }]} />
@@ -410,6 +413,7 @@ export default function GrindBoard({ feed, owner, initial, unlockStatus }) {
           <Terminal owner={owner} onUnlocked={() => { try { localStorage.removeItem("grind_key"); } catch {} showToast({ msg: "Unlocked on this device for a year." }); router.refresh(); }} />
         </div>
         <Toast toast={toast} onDismiss={dismiss} />
+        </div>
       </main>
     </MotionConfig>
   );

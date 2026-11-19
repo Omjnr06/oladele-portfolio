@@ -20,6 +20,7 @@ export default function VideoBlock({ src, caption }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            data-surface="media"
             className="fixed inset-0 z-50 bg-scrim/90 flex items-center justify-center p-6"
             onClick={() => setExpanded(false)}
           >

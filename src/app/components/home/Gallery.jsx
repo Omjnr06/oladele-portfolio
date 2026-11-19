@@ -56,6 +56,7 @@ export default function Gallery({ images }) {
   return (
     <motion.div
       id="gallery"
+      data-surface="media"
       className="scroll-mt-24 mb-32 relative w-full h-[450px] md:h-[clamp(420px,calc(100svh-8rem),550px)] border border-bright/10 bg-ink rounded-xl overflow-hidden group shadow-2xl cursor-grab active:cursor-grabbing"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}

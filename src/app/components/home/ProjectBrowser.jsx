@@ -39,6 +39,7 @@ function ImageModal({ src, onClose }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
+          data-surface="media"
           className="fixed inset-0 z-[200] overflow-y-auto bg-scrim/90 backdrop-blur-md"
           onClick={onClose}
         >

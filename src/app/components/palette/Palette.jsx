@@ -3,7 +3,8 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { prepare, search, parseCommand } from "@/lib/search";
 import { lockScroll, scrollToId, scrollToTop } from "@/lib/scroll";
-import { THEMES, PREVIEW_KEY } from "@/lib/themes";
+import { THEMES } from "@/lib/themes";
+import { themeTransition } from "@/lib/themeTransition";
 import { setPrefs } from "@/lib/prefs";
 import { track } from "@/lib/track";
 
@@ -47,11 +48,10 @@ const saveRecent = (id) => {
 
 function clientActions() {
   const out = [{ id: "action-top", type: "action", title: "Back to top", sub: "Scroll this page to the top", act: "top", keys: ["scroll", "top", "up"] }];
-  let preview = false;
-  try {
-    preview = sessionStorage.getItem(PREVIEW_KEY) === "1";
-  } catch {}
-  if (!preview) return out;
+  out.push(
+    { id: "action-nav-rail", type: "action", title: "Nav: side rail", sub: "Show the navigation as a side rail", act: "nav", value: "rail", keys: ["nav", "rail", "sidebar", "layout"] },
+    { id: "action-nav-pill", type: "action", title: "Nav: top bar", sub: "Show the navigation as a floating top bar", act: "nav", value: "pill", keys: ["nav", "pill", "top", "bar", "layout"] },
+  );
   for (const [pack, t] of Object.entries(THEMES)) {
     for (const v of t.variants) {
       out.push({ id: `theme-${pack}-${v.id}`, type: "action", title: `Theme: ${t.label} ${v.label}`, sub: "Switch the site's look", act: "theme", value: { pack, variant: v.id }, keys: ["theme", pack, v.id] });
@@ -202,7 +202,10 @@ export default function Palette({ onClose }) {
     release();
     onClose();
     if (item.act === "top") scrollToTop();
-    else if (item.act === "theme") setPrefs(item.value);
+    else if (item.act === "theme") {
+      track("variant_selected", item.value.variant);
+      themeTransition(null, () => setPrefs(item.value));
+    } else if (item.act === "nav") setPrefs({ navMode: item.value });
     else if (item.external) window.open(item.href, "_blank", "noopener,noreferrer");
     else if (item.href) go(item.href);
   };

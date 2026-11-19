@@ -1,9 +1,10 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "./themes.generated.css";
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import { DEFAULT_THEME, NO_FLASH_SCRIPT } from "@/lib/themes";
-import PreviewGate from "./components/PreviewGate";
+import { DEFAULT_THEME } from "@/lib/themes";
+import { NO_FLASH_SCRIPT } from "@/lib/themeScript";
 import PaletteHost from "./components/palette/PaletteHost";
 
 const geistSans = Geist({
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
       lang="en"
       data-pack={DEFAULT_THEME.pack}
       data-theme={DEFAULT_THEME.variant}
+      data-nav="rail"
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
@@ -36,7 +38,6 @@ export default function RootLayout({ children }) {
       </head>
       <body className="min-h-full flex flex-col">
         {children}
-        <PreviewGate />
         <PaletteHost />
         <Analytics />
         <SpeedInsights/>

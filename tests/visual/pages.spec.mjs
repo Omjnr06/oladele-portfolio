@@ -13,8 +13,9 @@ for (const size of SIZES) {
       test(route.name, async ({ page }) => {
         await page.goto(route.path, { waitUntil: "load" });
         await page.waitForTimeout(route.name === "music" ? 3000 : 2000);
-        const mask = [page.locator("video"), page.locator('img[alt^="Gallery snapshot"]'), page.locator('#spotlight [style*="background-image"]')];
+        const mask = [page.locator('[aria-label="About Oladele"]'), page.locator("video"), page.locator('img[alt^="Gallery snapshot"]'), page.locator('#spotlight [style*="background-image"]')];
         if (route.name === "grind") mask.push(page.locator("main ul, main ol, time"));
+        if (process.env.MASK_NAV) mask.push(page.locator("[data-site-nav]"));
         await expect(page).toHaveScreenshot(`${route.name}-${size.name}.png`, {
           fullPage: !VIEWPORT_ONLY.has(route.name),
           animations: "disabled",

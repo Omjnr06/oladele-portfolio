@@ -4,7 +4,7 @@ export const metadata = {
 };
 export default function MusicLayout({ children }) {
   return (
-    <div style={{ position: "relative", width: "100vw", height: "100vh", overflow: "hidden" }}>
+    <div data-surface="stage" style={{ position: "relative", width: "100vw", height: "100vh", overflow: "hidden" }}>
       {children}
     </div>
   );
