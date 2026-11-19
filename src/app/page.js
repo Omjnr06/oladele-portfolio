@@ -1,7 +1,10 @@
 import { profile } from "@/content/profile";
 import { gallery } from "@/content/gallery";
 import { projects, featuredProjects, projectCategories, caseStudyHref } from "@/content/projects";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { musicLibrary } from "./music/data/musicLibrary";
+import { clipSlug } from "./music/data/boardItems";
 import SiteNav from "./components/SiteNav";
 import Rich from "./components/Rich";
 import BackToTop from "./components/BackToTop";
@@ -15,7 +18,10 @@ const withHref = (p) => ({ ...p, caseStudyHref: p.caseStudy ? caseStudyHref(p.ca
 function featuredTracks() {
   const all = musicLibrary.flatMap((c) => c.tracks);
   const featured = all.filter((t) => t.isFeatured);
-  return (featured.length ? featured : [all[0]]).map(({ id, title, originalArtist, notes, videoUrl }) => ({ id, title, originalArtist, notes, videoUrl }));
+  return (featured.length ? featured : [all[0]]).map(({ id, title, originalArtist, notes, videoUrl }) => {
+    const loop = `/assets/music/generated/${clipSlug(id)}-loop.mp4`;
+    return { id, title, originalArtist, notes, videoUrl, loop: existsSync(join(process.cwd(), "public", loop)) ? loop : null };
+  });
 }
 
 function Letters({ word, offset }) {

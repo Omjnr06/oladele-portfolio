@@ -7,7 +7,7 @@ export const projects = [
     stack: ["Spotify API", "Supabase", "Express.js", "React", "SQL"],
     summary: "Data driven social platform integrating the Spotify Web API with a Supabase backend. Shows Univeristy community-level music trends and insights by complex SQL aggregation.",
     links: { github: "https://github.com/tudor-filimon/mustangs-wrapped" },
-    media: { video: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/mustang-demo.mp4", fit: "cover" },
+    media: { video: "https://cgfgtbyzpztzfuqdqnzh.supabase.co/storage/v1/object/public/portfolio-media/mustang-demo.mp4", loop: "/assets/media/mustang-loop.mp4", poster: "/assets/media/mustang-poster.jpg", fit: "cover" },
   },
   {
     id: "distributed-url-shortener",

@@ -98,6 +98,10 @@ hand-place.
    npm run gen-media
    ```
    (Skips clips already generated. audioOnly clips are skipped by design.)
+   Featured clips (`isFeatured: true`) also get a 12s `-loop.mp4` for the home Spotlight,
+   so the home page never streams the full clip from Supabase.
+   Before uploading a new clip to Supabase, shrink it: `npm run compress-media -- <file name>`
+   (writes to `media-out/`).
 3. Commit `public/assets/music/generated/`. The clip auto-places in its instrument's ring.
 
 ### Add a PHOTO

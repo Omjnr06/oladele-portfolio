@@ -45,6 +45,8 @@ Name, title line, status, the two intro lines on home, and the resume PDF.
   caseStudy: "pimplenet",           // optional, slug of a file in caseStudies/
   links: { live: "https://…", github: "https://…" },   // both optional, use {} for none
   media: { image: "/assets/…", video: "/assets/….mp4", fit: "cover" | "contain", orientation: "portrait" },
+                                    // big videos on Supabase: add loop (12s, 720p, no audio) for the Spotlight
+                                    // and poster (jpg) so the full video only downloads when someone presses play
   featured: 1,                      // optional, shows in the home Spotlight in this order
 }
 ```

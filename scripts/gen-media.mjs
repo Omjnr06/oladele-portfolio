@@ -14,6 +14,8 @@ const THUMB_AT = "00:00:01";
 const SNIPPET_START = "00:00:02";
 const SNIPPET_DUR = "5";
 const SNIPPET_HEIGHT = 480;
+const LOOP_DUR = "12";
+const LOOP_HEIGHT = 720;
 
 function haveFfmpeg() {
   const r = spawnSync("ffmpeg", ["-version"], { stdio: "ignore" });
@@ -54,6 +56,13 @@ function makeThumb(input, output) {
   );
 }
 
+function makeLoop(input, output) {
+  execSync(
+    `ffmpeg -y -i "${input}" -t ${LOOP_DUR} -an -vf "scale=-2:'min(${LOOP_HEIGHT},ih)'" -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 26 -preset slow -movflags +faststart "${output}"`,
+    { stdio: "ignore" }
+  );
+}
+
 function makeSnippet(input, output) {
   execSync(
     `ffmpeg -y -ss ${SNIPPET_START} -i "${input}" -t ${SNIPPET_DUR} -an -vf "scale=-2:${SNIPPET_HEIGHT}" -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 26 -preset veryfast -movflags +faststart "${output}"`,
@@ -77,12 +86,13 @@ async function main() {
     const id = slug(clip.id);
     const thumb = join(OUT_DIR, `${id}.jpg`);
     const snippet = join(OUT_DIR, `${id}.mp4`);
+    const loop = clip.featured ? join(OUT_DIR, `${id}-loop.mp4`) : null;
 
     if (clip.audioOnly) {
       audioSkipped++;
       continue;
     }
-    if (existsSync(thumb) && existsSync(snippet)) {
+    if (existsSync(thumb) && existsSync(snippet) && (!loop || existsSync(loop))) {
       skipped++;
       continue;
     }
@@ -98,6 +108,7 @@ async function main() {
       await download(clip.videoUrl, tmp);
       if (!existsSync(thumb)) makeThumb(tmp, thumb);
       if (!existsSync(snippet)) makeSnippet(tmp, snippet);
+      if (loop && !existsSync(loop)) makeLoop(tmp, loop);
       made++;
       console.log(`  -> ${id}.jpg + ${id}.mp4`);
     } catch (e) {

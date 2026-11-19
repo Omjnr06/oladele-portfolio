@@ -17,7 +17,7 @@ function autoPlace(index, total, clipCount) {
   return { x: Math.round(Math.cos(angle) * radius), y: Math.round(Math.sin(angle) * radius) };
 }
 
-function clipSlug(id) {
+export function clipSlug(id) {
   return id.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 }
 
