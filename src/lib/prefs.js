@@ -57,10 +57,12 @@ function compute() {
   return override ? { ...saved, ...override, override: true } : { ...saved, override: false };
 }
 
-export function applyTheme({ pack, variant }) {
+export function applyTheme({ pack, variant, navMode }) {
   const d = document.documentElement;
   if (d.getAttribute("data-pack") !== pack) d.setAttribute("data-pack", pack);
   if (d.getAttribute("data-theme") !== variant) d.setAttribute("data-theme", variant);
+  if (pack === "paper") d.setAttribute("data-nav", "tabs");
+  else if (d.getAttribute("data-nav") === "tabs") d.setAttribute("data-nav", navMode ?? getPrefs().navMode);
 }
 
 function refresh() {

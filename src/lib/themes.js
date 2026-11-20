@@ -14,6 +14,15 @@ export const THEMES = {
       { id: "linen", label: "Linen", light: true, swatch: ["#F4F1EA", "#7D6430", "#4A6B7A"] },
     ],
   },
+  paper: {
+    label: "Paper",
+    preview: true,
+    variants: [
+      { id: "cream", label: "Cream ruled", light: true, swatch: ["#F6F1E7", "#1E40AF", "#B42318"] },
+      { id: "graph", label: "Graph", light: true, swatch: ["#FAFAF6", "#1D4ED8", "#B45309"] },
+      { id: "kraft", label: "Kraft", light: true, swatch: ["#D9C49F", "#1E3A8A", "#8B1D1D"] },
+    ],
+  },
 };
 
 export const PACKS = [
@@ -26,11 +35,22 @@ export const DEFAULT_THEME = { pack: "modern", variant: "cyan" };
 
 export const PREFS_KEY = "omj-prefs";
 export const OVERRIDE_KEY = "omj-theme";
+export const PREVIEW_KEY = "omj-preview";
+
+export function packOpen(pack) {
+  if (!THEMES[pack]) return false;
+  if (!THEMES[pack].preview) return true;
+  try {
+    return typeof window !== "undefined" && sessionStorage.getItem(PREVIEW_KEY) === pack;
+  } catch {
+    return false;
+  }
+}
 
 const variantIds = (pack) => THEMES[pack].variants.map((v) => v.id);
 
 export function resolveTheme(input) {
-  const pack = input && THEMES[input.pack] ? input.pack : DEFAULT_THEME.pack;
+  const pack = input && packOpen(input.pack) ? input.pack : DEFAULT_THEME.pack;
   const ids = variantIds(pack);
   const variant = input && ids.includes(input.variant) ? input.variant : ids[0];
   return { pack, variant };
@@ -40,6 +60,6 @@ export function parseThemeParam(value) {
   if (!value || typeof value !== "string") return null;
   const i = value.indexOf("-");
   const pack = i < 0 ? value : value.slice(0, i);
-  if (!THEMES[pack]) return null;
+  if (!packOpen(pack)) return null;
   return resolveTheme({ pack, variant: i < 0 ? "" : value.slice(i + 1) });
 }

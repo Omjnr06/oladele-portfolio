@@ -37,6 +37,12 @@ export const VARIANT_TOKENS = {
   linen: { light: true, ink: "#F4F1EA", panel: "#FDFBF6", line: "#DDD6C7", fg: "#2A2620", muted: "#5F584D", accent: "#7D6430", accent2: "#4A6B7A", ok: "#3F7A4D", warn: "#9A7425", err: "#B0452F" },
 };
 
+export const PAPER_TOKENS = {
+  cream: { light: true, ink: "#F6F1E7", panel: "#FBF8F1", line: "#D8CDB8", fg: "#1F2433", muted: "#5C574E", accent: "#1E40AF", accent2: "#B42318", ok: "#2F6B3A", warn: "#8A5A0B", err: "#B42318", rule: "#A9C1E6", margin: "#E07070", grid: "transparent" },
+  graph: { light: true, ink: "#FAFAF6", panel: "#FFFFFF", line: "#D6DAE0", fg: "#1A1F29", muted: "#575E6B", accent: "#1D4ED8", accent2: "#B45309", ok: "#2F6B3A", warn: "#8A5A0B", err: "#B42318", rule: "transparent", margin: "transparent", grid: "#C9DCE6" },
+  kraft: { light: true, ink: "#D9C49F", panel: "#E4D3B3", line: "#B39B72", fg: "#22180C", muted: "#4A3A22", accent: "#1E3A8A", accent2: "#8B1D1D", ok: "#2E5A28", warn: "#5E4108", err: "#8B1D1D", rule: "transparent", margin: "#9B2C2C", grid: "transparent" },
+};
+
 const hex = (h) => {
   const s = h.replace("#", "");
   return [0, 2, 4].map((i) => parseInt(s.slice(i, i + 2), 16) / 255);
@@ -85,15 +91,16 @@ const DERIVED_OTHER = "--grid-dot:color-mix(in srgb,var(--color-accent) 25%,tran
 const both = (ids) => ids.flatMap((id) => [`:root[data-theme="${id}"]`, `[data-theme="${id}"]`]).join(",");
 
 export function themeCss() {
-  const ids = Object.keys(VARIANT_TOKENS);
-  const lights = ids.filter((id) => VARIANT_TOKENS[id].light);
+  const all = { ...VARIANT_TOKENS, ...PAPER_TOKENS };
+  const ids = Object.keys(all);
+  const lights = ids.filter((id) => all[id].light);
   const stage = Object.fromEntries(Object.entries(CYAN).filter(([k]) => !["accent", "accent-2", "on-accent"].includes(k)));
   const out = [
     block(':root[data-theme="cyan"],[data-theme="cyan"],[data-colors="fixed"]', CYAN),
     `${both(ids)}{color-scheme:dark;${DERIVED_OTHER};${Object.entries(SHARED).map(([k, v]) => `--color-${k}:${v}`).join(";")}}`,
   ];
   for (const id of ids) {
-    const t = VARIANT_TOKENS[id];
+    const t = all[id];
     out.push(
       block(both([id]), {
         ink: t.ink,
@@ -111,10 +118,15 @@ export function themeCss() {
       }),
     );
   }
+  for (const [id, t] of Object.entries(PAPER_TOKENS)) out.push(`${both([id])}{--paper-rule:${t.rule};--paper-margin:${t.margin};--paper-grid:${t.grid}}`);
   if (lights.length) {
     out.push(`${block(both(lights), LIGHT).slice(0, -1)};color-scheme:light;--texture:none;--grid-line:color-mix(in srgb,var(--color-bright) 6%,transparent);--grid-dot:color-mix(in srgb,var(--color-accent) 35%,transparent)}`);
     const stageSel = lights.flatMap((id) => [`:root[data-theme="${id}"] [data-surface="stage"]`, `:root[data-theme="${id}"] [data-surface="media"]`]).join(",");
-    out.push(`${block(stageSel, { ...stage, accent: mix("accent", 55, "white"), "accent-2": mix("accent-2", 70, "white"), "on-accent": "#000000" }).slice(0, -1)};color-scheme:dark;--texture:url("/assets/textures/carbon-fibre.png")}`);
+    out.push(`${block(stageSel, { ...stage, "on-accent": "#000000" }).slice(0, -1)};color-scheme:dark;--texture:url("/assets/textures/carbon-fibre.png")}`);
+    for (const id of lights) {
+      const sel = [`:root[data-theme="${id}"] [data-surface="stage"]`, `:root[data-theme="${id}"] [data-surface="media"]`].join(",");
+      out.push(block(sel, { accent: `color-mix(in oklab,${all[id].accent} 55%,white)`, "accent-2": `color-mix(in oklab,${all[id].accent2} 70%,white)` }));
+    }
   }
   return out.join("\n") + "\n";
 }

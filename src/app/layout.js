@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Caveat, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./themes.generated.css";
 import { Analytics } from '@vercel/analytics/react';
@@ -6,6 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { DEFAULT_THEME } from "@/lib/themes";
 import { NO_FLASH_SCRIPT } from "@/lib/themeScript";
 import PaletteHost from "./components/palette/PaletteHost";
+import BookFlip from "./components/paper/BookFlip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,6 +16,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const caveat = Caveat({
+  variable: "--font-caveat",
+  subsets: ["latin"],
+  preload: false,
 });
 
 export const metadata = {
@@ -31,7 +38,7 @@ export default function RootLayout({ children }) {
       data-theme={DEFAULT_THEME.variant}
       data-nav="rail"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: NO_FLASH_SCRIPT }} />
@@ -39,6 +46,7 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col">
         {children}
         <PaletteHost />
+        <BookFlip />
         <Analytics />
         <SpeedInsights/>
       </body>

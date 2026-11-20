@@ -3,6 +3,8 @@ import { skills, experience, resumeProjects, education } from "@/content/resume"
 import SiteNav from "../components/SiteNav";
 import BackToTop from "../components/BackToTop";
 import { ContactSection } from "../components/ContactLinks";
+import ReportHeader from "../components/paper/ReportHeader";
+import MarginNote from "../components/paper/MarginNote";
 
 function Heading({ dot = "accent", children }) {
   return (
@@ -35,10 +37,11 @@ export default function ResumePage() {
     <main className="min-h-screen w-full flex flex-row bg-ink font-sans selection:bg-accent selection:text-on-accent relative">
       <SiteNav page="resume" />
 
-      <div className="flex-1 min-w-0 bg-ink relative overflow-x-clip">
+      <div className="paper-page flex-1 min-w-0 bg-ink relative overflow-x-clip">
         <div className="px-6 md:px-16 lg:px-24 py-16 md:py-24 max-w-7xl mx-auto w-full z-10 flex flex-col lg:flex-row gap-16">
           <div className="w-full lg:w-1/3 space-y-12 lg:sticky lg:top-24 h-fit lg:max-h-[calc(100svh-8rem)] lg:overflow-y-auto lg:pr-3 lg:-mr-3 lg:pb-6">
             <div>
+              <ReportHeader path="/resume" className="mb-8" />
               <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-bright mb-2">{profile.firstName} {profile.lastName}</h1>
               <p className="font-mono text-xs tracking-widest text-accent mb-4">{profile.title}</p>
               <div className="inline-block px-3 py-1 bg-bright/5 border border-bright/10 rounded-sm font-mono text-[11px] text-muted">{profile.status}</div>
@@ -74,6 +77,7 @@ export default function ResumePage() {
 
           <div className="w-full lg:w-2/3 lg:pl-10 lg:border-l border-bright/5 space-y-16 pb-12">
             <div>
+              <MarginNote id="resume" className="mb-3 rotate-[-2deg]" />
               <Heading>EXPERIENCE</Heading>
               <div className="space-y-12 relative border-l border-bright/10 ml-1">
                 {experience.map((exp) => (

@@ -1,4 +1,4 @@
-import { VARIANT_TOKENS, contrast, onAccent } from "../src/lib/themeTokens.js";
+import { VARIANT_TOKENS, PAPER_TOKENS, contrast, onAccent } from "../src/lib/themeTokens.js";
 
 const RULES = [
   ["fg", "ink", 7],
@@ -15,7 +15,7 @@ const RULES = [
 
 const errors = [];
 const rows = [];
-for (const [id, t] of Object.entries(VARIANT_TOKENS)) {
+for (const [id, t] of Object.entries({ ...VARIANT_TOKENS, ...PAPER_TOKENS })) {
   const cells = RULES.map(([a, b, min]) => {
     const r = contrast(t[a], t[b]);
     if (r < min) errors.push(`${id}: ${a} on ${b} is ${r.toFixed(2)}, needs ${min}`);
