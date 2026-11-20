@@ -31,6 +31,9 @@ Inline formatting in text fields: `*words*` = emphasis, `[label](https://link)` 
 
 ### `profile.js`
 Name, title line, status, the two intro lines on home, and the resume PDF.
+`now` is the NOW line in the OMJ card (delete it to hide the row).
+Paper theme only: `course` fills the report header, and `marginNotes` are the handwritten notes
+(`home`, `gallery`, `spotlight`, `projects`, `contact`, `resume`). Change the text freely; remove a key to hide that note.
 
 ### `projects.js`
 ```js

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { PACKS, THEMES } from "@/lib/themes";
+import { PACKS, THEMES, packOpen } from "@/lib/themes";
 import { setPrefs, usePrefs } from "@/lib/prefs";
 import { themeTransition } from "@/lib/themeTransition";
 import { isHandheld } from "@/lib/device";
@@ -106,7 +106,7 @@ export default function ThemeMenu({ anchor, triggerRef, onClose }) {
       <p className="px-2 pb-2 pt-1 font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Theme</p>
       <ul className="flex flex-col gap-1">
         {PACKS.map((pack) => {
-          const ready = !!THEMES[pack.id];
+          const ready = packOpen(pack.id);
           const blocked = pack.desktopOnly && handheld;
           const selected = prefs.pack === pack.id;
           const note = !ready ? "In progress" : blocked ? "Desktop only" : null;
@@ -168,7 +168,7 @@ export default function ThemeMenu({ anchor, triggerRef, onClose }) {
         })}
       </ul>
 
-      <div className="mt-2 border-t border-line px-2 pb-1 pt-3 max-md:hidden">
+      <div className={`mt-2 border-t border-line px-2 pb-1 pt-3 max-md:hidden ${prefs.pack === "paper" ? "hidden" : ""}`}>
         <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Navigation</p>
         <div role="radiogroup" aria-label="Navigation style" className="mt-2 grid grid-cols-2 gap-1 rounded-lg border border-line p-1">
           {[

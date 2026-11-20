@@ -97,7 +97,7 @@ export default function ProjectBrowser({ projects, categories }) {
         ))}
       </div>
 
-      <div className="w-full relative min-h-[550px] md:h-[600px] bg-panel border border-accent/30 rounded-xl overflow-hidden flex flex-col shadow-[0_0_40px_color-mix(in_srgb,var(--color-accent)_10%,transparent)] transition-shadow duration-500 hover:shadow-[0_0_60px_color-mix(in_srgb,var(--color-accent)_20%,transparent)]">
+      <div className="paper-card w-full relative min-h-[550px] md:h-[600px] bg-panel border border-accent/30 rounded-xl overflow-hidden flex flex-col shadow-[0_0_40px_color-mix(in_srgb,var(--color-accent)_10%,transparent)] transition-shadow duration-500 hover:shadow-[0_0_60px_color-mix(in_srgb,var(--color-accent)_20%,transparent)]">
         <div className="absolute top-4 right-4 md:top-6 md:right-6 z-50 flex gap-2 md:gap-3">
           {p?.caseStudyHref && (
             <Link href={p.caseStudyHref} className="px-4 py-2 bg-accent-2/20 text-bright border border-accent-2/30 backdrop-blur-md rounded-full text-[11px] uppercase font-mono tracking-widest hover:bg-accent-2/30 transition shadow-[0_0_15px_color-mix(in_srgb,var(--color-accent-2)_20%,transparent)]">
@@ -179,7 +179,7 @@ export default function ProjectBrowser({ projects, categories }) {
                       <span className="font-mono text-xs text-muted animate-pulse">AWAITING_MEDIA_PAYLOAD...</span>
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-[linear-gradient(color-mix(in_srgb,var(--color-bright)_2%,transparent)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none z-20" />
+                  <div className="absolute inset-0 bg-[linear-gradient(color-mix(in_srgb,var(--color-bright)_2%,transparent)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none z-20 paper:hidden" />
                 </div>
               </motion.div>
             )}

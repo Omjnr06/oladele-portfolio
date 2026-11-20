@@ -1,85 +1,117 @@
 "use client";
-import { useRef, useState } from "react";
+import Image from "next/image";
 import SiteNav from "../components/SiteNav";
-import Boot from "../components/boot/Boot";
+import { PAPER_TOKENS, contrast } from "@/lib/themeTokens";
+import { profile } from "@/content/profile";
 
-const CUTS = [
-  { ms: 1600, label: "1.6s cut", note: "Quick. The lines land almost together, the collapse is about half a second." },
-  { ms: 2200, label: "2.2s cut", note: "Each line gets a beat, and the collapse into OMJ is slower and easier to follow." },
+const TONES = [
+  { id: "cream", label: "Cream ruled", note: "The report. Blue ruled lines, red margin, blue pen. The main pages would use this." },
+  { id: "graph", label: "Graph", note: "The engineering notebook. Used for projects and case studies in every tone; as a main tone it is the cleanest." },
+  { id: "kraft", label: "Kraft", note: "Brown paper with dark ink and a red margin. Warmer and more crafty, no ruled lines." },
 ];
 
-function Mock({ markRef }) {
+const TABS = ["Home", "Projects", "Resume", "Music", "Contact"];
+
+function Circled({ children }) {
   return (
-    <div className="absolute inset-0 flex">
-      <div className="flex w-14 shrink-0 flex-col items-center border-r border-line bg-panel py-3">
-        <div ref={markRef} className="flex size-8 items-center justify-center rounded-lg border border-line font-mono text-[11px] font-bold text-fg/80">
-          OMJ
+    <span className="relative inline-block">
+      {children}
+      <svg aria-hidden viewBox="0 0 100 40" preserveAspectRatio="none" className="pointer-events-none absolute -inset-x-2 -inset-y-1.5 h-[calc(100%+12px)] w-[calc(100%+16px)] text-accent-2">
+        <path d="M8 22 C 6 8, 40 3, 70 5 S 98 14, 94 26 S 60 39, 30 36 S 4 30, 12 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+      </svg>
+    </span>
+  );
+}
+
+function Page({ id }) {
+  return (
+    <div data-pack="paper" data-theme={id} className="relative">
+      <div className="paper-page relative overflow-hidden rounded-sm border border-line text-fg shadow-[0_1px_2px_rgb(0_0_0/.12),0_12px_32px_-12px_rgb(0_0_0/.35)]" style={{ "--rule-top": "160px" }}>
+        <div className="py-6 pl-20 pr-14">
+          <div className="grid grid-cols-[1fr_auto] border border-line font-mono text-[11px] text-muted">
+            <span className="border-b border-r border-line px-2 py-1">NAME <span className="text-fg">{profile.firstName} {profile.lastName}</span></span>
+            <span className="border-b border-line px-2 py-1">PAGE <span className="text-fg">1 of 4</span></span>
+            <span className="border-r border-line px-2 py-1">COURSE <span className="text-fg">CS @ Western &apos;28</span></span>
+            <span className="px-2 py-1">DATE <span className="text-fg">2026.11.19</span></span>
+          </div>
+
+          <h3 className="mt-8 text-[2rem] font-extrabold leading-[32px] tracking-[-0.03em]">Oladele&apos;s Portfolio</h3>
+          <p className="mt-8 max-w-[34ch] text-[15px] leading-[32px]">
+            Pursuing Computer Science at Western University. Building <Circled>cool things</Circled>, jamming along the way.
+          </p>
+
+          <div className="mt-8 flex items-start gap-6">
+            <figure className="paper-tape w-28 shrink-0 rotate-[-3deg] bg-panel p-1.5 pb-6 shadow-[0_2px_6px_rgb(0_0_0/.18)]">
+              <Image src="/assets/images/junior-headshot.JPG" alt="" width={112} height={112} sizes="112px" className="aspect-square w-full object-cover" />
+              <figcaption className="mt-1 text-center font-hand text-lg leading-none text-fg/80">me, 2026</figcaption>
+            </figure>
+            <p className="mt-2 rotate-[-2deg] whitespace-nowrap font-hand text-[22px] leading-tight text-accent-2">
+              ← started guitar
+              <br />
+              before code!
+            </p>
+          </div>
         </div>
-        <div className="mt-auto mb-auto flex flex-col gap-3">
-          {[0, 1, 2, 3, 4].map((i) => (
-            <span key={i} className={`size-4 rounded ${i === 0 ? "bg-accent/40" : "bg-bright/10"}`} />
+
+        <nav aria-hidden className="absolute right-0 top-24 flex flex-col gap-1.5">
+          {TABS.map((t, i) => (
+            <span
+              key={t}
+              className={`translate-x-1 rounded-l-md border border-r-0 px-2 py-2 text-[11px] font-medium [writing-mode:vertical-rl] ${i === 0 ? "-translate-x-0 border-accent/50 bg-panel text-accent" : "border-line bg-[color-mix(in_srgb,var(--color-panel)_70%,var(--color-ink))] text-muted"}`}
+            >
+              {t}
+            </span>
           ))}
-        </div>
-      </div>
-      <div className="flex-1 p-6">
-        <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-accent">Explorer // Developer</p>
-        <p className="mt-2 text-2xl font-extrabold tracking-[-0.03em] text-bright">Oladele Magbadelo</p>
-        <div className="mt-6 h-28 rounded-lg border border-line bg-panel" />
+        </nav>
       </div>
     </div>
   );
 }
 
-function Cut({ ms, label, note, onFull }) {
-  const markRef = useRef(null);
-  const [run, setRun] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const play = () => {
-    setRun((r) => r + 1);
-    setPlaying(true);
-  };
+function Stats({ id }) {
+  const t = PAPER_TOKENS[id];
+  const rows = [
+    ["text", contrast(t.fg, t.ink)],
+    ["muted", contrast(t.muted, t.ink)],
+    ["blue pen", contrast(t.accent, t.ink)],
+    ["red pen", contrast(t.accent2, t.ink)],
+  ];
   return (
-    <div>
-      <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-line-strong bg-ink">
-        <Mock markRef={markRef} />
-        {playing && <Boot key={run} contained duration={ms} target={markRef} onDone={() => setPlaying(false)} />}
-      </div>
-      <div className="mt-4 flex flex-wrap items-center gap-2">
-        <h3 className="mr-auto text-sm font-semibold text-fg">{label}</h3>
-        <button type="button" onClick={play} disabled={playing} className="h-10 rounded-full border border-line-strong px-4 text-sm text-fg transition-[border-color,transform,opacity] duration-150 hover:border-accent/40 active:scale-[0.97] disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
-          Play in frame
-        </button>
-        <button type="button" onClick={() => onFull(ms)} className="h-10 rounded-full bg-accent px-4 text-sm font-medium text-on-accent transition-transform duration-150 active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
-          Play full screen
-        </button>
-      </div>
-      <p className="mt-2 text-sm leading-relaxed text-muted">{note}</p>
-    </div>
+    <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] text-muted">
+      {rows.map(([k, v]) => (
+        <span key={k}>
+          {k} <span className="text-fg">{v.toFixed(1)}</span>
+        </span>
+      ))}
+    </p>
   );
 }
 
 export default function Lab() {
-  const [full, setFull] = useState(null);
   return (
     <div className="flex min-h-screen bg-ink font-sans text-fg">
       <SiteNav />
       <main className="min-w-0 flex-1 px-6 pb-24 md:px-12">
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-6xl">
           <header className="py-16">
-            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-accent">Pass 2b lab</p>
-            <h1 className="mt-3 text-4xl font-extrabold tracking-[-0.03em] text-bright">Pick a boot length</h1>
+            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-accent">Pass 3a lab</p>
+            <h1 className="mt-3 text-4xl font-extrabold tracking-[-0.03em] text-bright">Pick the paper tones</h1>
             <p className="mt-3 max-w-2xl leading-relaxed text-muted">
-              Both cuts print real data (your status, theme, build and NOW line) and collapse into the OMJ mark. Full screen is exactly what a first-time visitor sees on the home page. In the top bar and on phones it collapses into the nav pill instead.
+              Each card is a mock title page in one tone: report header, typed text on the lines, a red-pen margin note in handwriting, a circled word, a taped photo, and the notebook tabs on the edge. Numbers are contrast against the paper (4.5 is the floor for text).
             </p>
           </header>
-          <div className="grid gap-10 md:grid-cols-2">
-            {CUTS.map((c) => (
-              <Cut key={c.ms} {...c} onFull={setFull} />
+          <div className="grid gap-12 lg:grid-cols-3">
+            {TONES.map((tone) => (
+              <div key={tone.id}>
+                <Page id={tone.id} />
+                <h3 className="mt-5 text-sm font-semibold text-fg">{tone.label}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-muted">{tone.note}</p>
+                <Stats id={tone.id} />
+              </div>
             ))}
           </div>
         </div>
       </main>
-      {full && <Boot key={full} duration={full} onDone={() => setFull(null)} />}
     </div>
   );
 }

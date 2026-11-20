@@ -13,6 +13,9 @@ import { ContactSection } from "./components/ContactLinks";
 import Gallery from "./components/home/Gallery";
 import Spotlight from "./components/home/Spotlight";
 import DotGlow from "./components/home/DotGlow";
+import ReportHeader from "./components/paper/ReportHeader";
+import MarginNote from "./components/paper/MarginNote";
+import PenSquiggle from "./components/paper/PenSquiggle";
 import Reveal from "./components/home/Reveal";
 import ProjectBrowser from "./components/home/ProjectBrowser";
 
@@ -47,17 +50,20 @@ export default function Home() {
       <Boot auto />
       <SiteNav page="home" />
 
-      <div className="flex-1 min-w-0 bg-journal-dots bg-ink relative overflow-x-hidden">
+      <div className="paper-page flex-1 min-w-0 bg-journal-dots bg-ink relative overflow-x-hidden">
         <DotGlow />
-        <div className="absolute left-10 h-full w-[1px] bg-accent opacity-20 pointer-events-none hidden md:block z-0" />
-        <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-accent-2 opacity-[0.03] rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[10%] left-[-5%] w-[400px] h-[400px] bg-accent opacity-[0.03] rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute left-10 h-full w-[1px] bg-accent opacity-20 pointer-events-none hidden md:block paper:hidden z-0" />
+        <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-accent-2 opacity-[0.03] rounded-full blur-[120px] pointer-events-none paper:hidden" />
+        <div className="absolute bottom-[10%] left-[-5%] w-[400px] h-[400px] bg-accent opacity-[0.03] rounded-full blur-[120px] pointer-events-none paper:hidden" />
 
         <div className="relative px-6 md:px-16 lg:px-24 w-full z-10 py-16 md:py-24 max-w-7xl mx-auto flex flex-col">
-          <div id="home" className="mb-16 scroll-mt-24">
-            <h1 className="text-[2.8rem] leading-[1.1] sm:text-5xl md:text-6xl lg:text-[5.5rem] xl:text-[7rem] font-extrabold mb-8 md:mb-10 tracking-tight flex flex-wrap gap-x-3 md:gap-x-5 overflow-visible pl-1 md:pl-2">
+          <div id="home" className="relative mb-16 scroll-mt-24">
+            <ReportHeader path="/" />
+            <MarginNote id="home" className="mb-2 rotate-[-2deg] lg:absolute lg:right-0 lg:top-24 lg:mb-0" />
+            <h1 className="relative text-[2.8rem] leading-[1.1] sm:text-5xl md:text-6xl lg:text-[5.5rem] xl:text-[7rem] font-extrabold mb-8 md:mb-10 tracking-tight flex flex-wrap gap-x-3 md:gap-x-5 overflow-visible pl-1 md:pl-2">
               <Letters word={profile.firstName} offset={0} />
               <Letters word={profile.lastName} offset={8} />
+              <PenSquiggle />
             </h1>
 
             <div className="max-w-3xl space-y-6 text-muted">
@@ -70,8 +76,12 @@ export default function Home() {
             </div>
           </div>
 
-          <Gallery images={gallery} />
+          <MarginNote id="gallery" className="mb-4 ml-2 rotate-[-1.5deg]" />
+          <div className="paper-taped paper-tilt-l">
+            <Gallery images={gallery} />
+          </div>
 
+          <MarginNote id="spotlight" className="mb-3 ml-2 rotate-[-2deg]" />
           <Spotlight projects={featuredProjects.map(withHref)} tracks={featuredTracks()} />
 
           <Reveal>
@@ -79,11 +89,15 @@ export default function Home() {
               <div className="w-2 h-2 rounded-full bg-accent shadow-[0_0_10px_var(--color-accent)]" />
               <h1 className="font-mono text-xl md:text-2xl tracking-[0.3em] text-bright uppercase">PROJECTS AND HACKATHONS</h1>
               <div className="h-[1px] flex-1 bg-bright/5" />
+              <div className="hidden lg:block">
+                <MarginNote id="projects" className="rotate-[-3deg]" />
+              </div>
             </div>
 
             <ProjectBrowser projects={projects.map(withHref)} categories={projectCategories} />
           </Reveal>
 
+          <MarginNote id="contact" className="mx-auto mb-2 rotate-[-2deg]" />
           <ContactSection compact />
         </div>
 

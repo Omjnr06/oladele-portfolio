@@ -162,3 +162,9 @@ JS/CSS transferred up to `load` (Chromium, cold, best of 3, Supabase blocked). m
 
 Boot overlay is server-rendered and CSS-timed (JS only runs the collapse). The cd veil, dot glow
 and projects reveal are small client islands. Boot replay is lazy-loaded from the OMJ card.
+
+## Pass 3a (Nov 20 2026)
+
+Modern visitor, JS/CSS to `load` vs pass 2b: JS +0.6 to +0.8 KB per route, CSS +2.7 KB (Paper rules and
+3 Paper tones in the shared stylesheet). Caveat is `preload: false` and only fetched when Paper text uses it
+(home still downloads 2 fonts).
