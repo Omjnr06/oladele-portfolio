@@ -86,6 +86,16 @@ const LIGHT = {
   scrim: "#0b0b0c",
 };
 
+const PAPER_RAMP = {
+  "accent-2-100": mix("accent-2", 55, "black"),
+  "accent-2-200": mix("accent-2", 70, "black"),
+  "accent-2-300": mix("accent-2", 85, "black"),
+  "accent-2-400": mix("accent-2", 92, "black"),
+  "accent-2-600": mix("accent-2", 75, "white"),
+  "accent-2-700": mix("accent-2", 50, "white"),
+  "accent-2-900": mix("accent-2", 22, "white"),
+};
+
 const DERIVED_OTHER = "--grid-dot:color-mix(in srgb,var(--color-accent) 25%,transparent);--grid-line:color-mix(in srgb,var(--color-bright) 3%,transparent);--scrollbar-thumb:color-mix(in srgb,var(--color-accent) 30%,transparent);--scrollbar-thumb-hover:color-mix(in srgb,var(--color-accent) 55%,transparent);--scrollbar-thumb-ff:color-mix(in srgb,var(--color-accent) 40%,transparent)";
 
 const both = (ids) => ids.flatMap((id) => [`:root[data-theme="${id}"]`, `[data-theme="${id}"]`]).join(",");
@@ -119,6 +129,7 @@ export function themeCss() {
     );
   }
   for (const [id, t] of Object.entries(PAPER_TOKENS)) out.push(`${both([id])}{--paper-rule:${t.rule};--paper-margin:${t.margin};--paper-grid:${t.grid}}`);
+  out.push(block(both(Object.keys(PAPER_TOKENS)), PAPER_RAMP));
   if (lights.length) {
     out.push(`${block(both(lights), LIGHT).slice(0, -1)};color-scheme:light;--texture:none;--grid-line:color-mix(in srgb,var(--color-bright) 6%,transparent);--grid-dot:color-mix(in srgb,var(--color-accent) 35%,transparent)}`);
     const stageSel = lights.flatMap((id) => [`:root[data-theme="${id}"] [data-surface="stage"]`, `:root[data-theme="${id}"] [data-surface="media"]`]).join(",");

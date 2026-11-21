@@ -1,12 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import { flushSync } from "react-dom";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { PAGE_EVENT } from "@/lib/events";
 import { usePrefs } from "@/lib/prefs";
 import { place } from "@/lib/places";
-import { profile } from "@/content/profile";
+import NotebookCover from "./NotebookCover";
 
 function waitForPage(path) {
   return new Promise((resolve) => {
@@ -73,20 +72,7 @@ export default function BookFlip() {
           <span className="book-dest font-hand">{dest}</span>
         </div>
       </div>
-      <div aria-hidden className="book-front">
-        <span className="book-spine" />
-        <span className="book-band" />
-        <div className="book-label">
-          <p className="book-title font-hand">Oladele&apos;s Portfolio</p>
-          <p className="book-sub font-mono">{profile.course}</p>
-        </div>
-        <p className="book-owner font-hand">property of {profile.firstName} {profile.lastName}</p>
-        {pack === "paper" && (
-          <figure className="book-photo">
-            <Image src="/assets/images/junior-headshot.JPG" alt="" width={180} height={180} sizes="180px" loading="eager" className="book-photo-img" />
-          </figure>
-        )}
-      </div>
+      <NotebookCover photo={pack === "paper"} className="book-front" />
     </>
   );
 }

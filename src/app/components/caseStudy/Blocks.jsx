@@ -11,6 +11,51 @@ const FLOW_COLS = { 2: "@min-[638px]:grid-cols-2", 3: "@min-[638px]:grid-cols-3"
 const POINT_BORDER = { accent: "border-accent/30", neutral: "border-bright/10", warn: "border-warn/30" };
 const POINT_GAP = { accent: "space-y-5", neutral: "space-y-4", warn: "space-y-6" };
 const SNUG_AFTER_LEAD = new Set(["flow", "image", "compare", "themeDemo"]);
+const FIG_TYPES = new Set(["image", "figure", "compare", "screens", "video", "schema"]);
+
+export function figureStarts(sections) {
+  let n = 1;
+  return sections.map((s) => {
+    const start = n;
+    n += s.blocks.filter((b) => FIG_TYPES.has(b.type)).length;
+    return start;
+  });
+}
+
+function figText(block) {
+  switch (block.type) {
+    case "compare":
+      return block.items.map((it) => it.label).join(" vs ");
+    case "screens":
+      return "App screens";
+    case "video":
+      return block.caption;
+    case "schema":
+      return "Data model";
+    default:
+      return block.alt;
+  }
+}
+
+function FigCaption({ n, block, className = "" }) {
+  if (!n) return null;
+  const text = figText(block);
+  return (
+    <p className={`hidden paper:block font-mono text-[11px] text-muted ${className}`}>
+      Fig. {n}
+      {text ? ` — ${text}` : ""}
+    </p>
+  );
+}
+
+export function SheetHead({ title, label }) {
+  return (
+    <div className="hidden paper:flex paper:mb-8 items-baseline justify-between gap-4 border-b-2 border-accent-2/50 pb-2 font-mono text-[11px] uppercase tracking-[0.06em] text-muted">
+      <span>{title} lab notebook</span>
+      <span>{label}</span>
+    </div>
+  );
+}
 
 function after(block, next) {
   if (!next) return "";
@@ -35,8 +80,8 @@ function after(block, next) {
 
 function Heading({ block, single }) {
   return (
-    <h2 className={`font-bold text-lg ${single ? "mb-4" : "mb-5"} flex items-center gap-2`} style={{ color: colorValue(block.color) }}>
-      <span className="text-bright/50">{">"}</span> {block.text}
+    <h2 className={`font-bold text-lg ${single ? "mb-4" : "mb-5"} flex items-center gap-2 paper:font-sans paper:text-xl paper:tracking-tight paper:!text-accent`} style={{ color: colorValue(block.color) }}>
+      <span className="text-bright/50 paper:hidden">{">"}</span> {block.text}
     </h2>
   );
 }
@@ -76,11 +121,11 @@ function Schema({ block, gap }) {
           </div>
           <div className="grid @min-[542px]:grid-cols-2 @min-[894px]:grid-cols-3 gap-3">
             {grp.tables.map((t) => (
-              <div key={t.name} className="rounded-lg border border-bright/10 bg-scrim/40 overflow-hidden transition-colors hover:border-accent/40">
-                <div className="px-3 py-1.5 bg-bright/[0.04] border-b border-bright/10 font-mono text-[12px] text-accent">{t.name}</div>
+              <div key={t.name} className="rounded-lg border border-bright/10 bg-scrim/40 overflow-hidden transition-colors hover:border-accent/40 paper-table">
+                <div className="px-3 py-1.5 bg-bright/[0.04] border-b border-bright/10 font-mono text-[12px] text-accent paper-table-head">{t.name}</div>
                 <div className="p-3 space-y-1">
                   {t.cols.map(([c, ty]) => (
-                    <div key={c} className="flex justify-between gap-3 font-mono text-[11px]">
+                    <div key={c} className="flex justify-between gap-3 font-mono text-[11px] paper-table-row">
                       <span className="text-bright/70">{c}</span>
                       <span className="text-bright/55">{ty}</span>
                     </div>
@@ -95,59 +140,68 @@ function Schema({ block, gap }) {
   );
 }
 
-function Screens({ block, gap }) {
+function Screens({ block, gap, n }) {
   return (
-    <div className={`grid grid-cols-2 @min-[542px]:grid-cols-3 @min-[894px]:grid-cols-4 gap-4 ${gap ? ` ${gap}` : ""}`}>
+    <div className={gap || undefined}>
+    <div className="grid grid-cols-2 @min-[542px]:grid-cols-3 @min-[894px]:grid-cols-4 gap-4">
       {block.items.map((w) => (
-        <div key={w.src} className="group rounded-lg overflow-hidden border border-bright/10 bg-scrim/40 transition-colors hover:border-accent/50">
+        <div key={w.src} className="group rounded-lg overflow-hidden border border-bright/10 bg-scrim/40 transition-colors hover:border-accent/50 paper-fig">
           <img src={w.src} alt={w.label} loading="lazy" className="w-full block" />
           <div className="px-2 py-1.5 font-mono text-[11px] text-bright/40 text-center border-t border-bright/5 transition-colors group-hover:text-accent">{w.label}</div>
         </div>
       ))}
     </div>
+    <FigCaption n={n} block={block} className="mt-3" />
+    </div>
   );
 }
 
-function Compare({ block, gap }) {
+function Compare({ block, gap, n }) {
   return (
-    <div className={`grid grid-cols-2 gap-3 ${gap ? ` ${gap}` : ""}`}>
+    <div className={gap || undefined}>
+    <div className="grid grid-cols-2 gap-3">
       {block.items.map((it) => (
-        <div key={it.src} className="rounded-lg overflow-hidden border border-bright/10 bg-scrim/40 transition-colors hover:border-accent/40">
+        <div key={it.src} className="rounded-lg overflow-hidden border border-bright/10 bg-scrim/40 transition-colors hover:border-accent/40 paper-fig">
           <img src={it.src} alt={it.label} loading="lazy" className="w-full block" />
           <div className="px-2 py-1.5 font-mono text-[11px] text-bright/40 text-center border-t border-bright/5">{it.label}</div>
         </div>
       ))}
     </div>
-  );
-}
-
-function Img({ block, gap }) {
-  if (block.size === "sm") {
-    return (
-      <div className={`rounded-lg overflow-hidden border border-bright/10 bg-scrim/40 ${gap ? ` ${gap}` : ""} max-w-md`}>
-        <img src={block.src} alt={block.alt} loading="lazy" className="w-full block" />
-      </div>
-    );
-  }
-  return (
-    <div className={`rounded-lg overflow-hidden border border-bright/10 ${gap ? ` ${gap}` : ""} transition-colors hover:border-accent/40`}>
-      <img src={block.src} alt={block.alt} loading="lazy" className="w-full block" />
+    <FigCaption n={n} block={block} className="mt-3" />
     </div>
   );
 }
 
-function Figure({ block }) {
+function Img({ block, gap, n }) {
+  if (block.size === "sm") {
+    return (
+      <div className={`rounded-lg overflow-hidden border border-bright/10 bg-scrim/40 ${gap ? ` ${gap}` : ""} max-w-md paper-fig`}>
+        <img src={block.src} alt={block.alt} loading="lazy" className="w-full block" />
+        <FigCaption n={n} block={block} className="px-1 pt-2" />
+      </div>
+    );
+  }
   return (
-    <div className="my-8 border border-bright/10 p-2 rounded bg-scrim/50">
-      <img src={block.src} alt={block.alt} loading="lazy" className="w-full rounded opacity-90 hover:opacity-100 transition-opacity" />
+    <div className={`rounded-lg overflow-hidden border border-bright/10 ${gap ? ` ${gap}` : ""} transition-colors hover:border-accent/40 paper-fig`}>
+      <img src={block.src} alt={block.alt} loading="lazy" className="w-full block" />
+      <FigCaption n={n} block={block} className="px-1 pt-2" />
+    </div>
+  );
+}
+
+function Figure({ block, n }) {
+  return (
+    <div className="my-8 border border-bright/10 p-2 rounded bg-scrim/50 paper-fig">
+      <img src={block.src} alt={block.alt} loading="lazy" className="w-full rounded opacity-90 hover:opacity-100 transition-opacity paper:opacity-100" />
+      <FigCaption n={n} block={block} className="px-1 pt-2" />
     </div>
   );
 }
 
 function FlowBox({ step }) {
   return (
-    <div className="rounded-lg border bg-scrim/40 px-3 py-2 text-center" style={{ borderColor: `color-mix(in srgb, ${colorValue(step.color)} 33.333%, transparent)` }}>
-      <div className="font-mono text-[11px]" style={{ color: colorValue(step.color) }}>{step.label}</div>
+    <div className="rounded-lg border bg-scrim/40 px-3 py-2 text-center paper:rounded-sm paper:bg-[#fffdf8]" style={{ borderColor: `color-mix(in srgb, ${colorValue(step.color)} 33.333%, transparent)` }}>
+      <div className="font-mono text-[11px] paper:!text-fg" style={{ color: colorValue(step.color) }}>{step.label}</div>
       {step.sub && <div className="font-mono text-[11px] text-bright/55 mt-0.5">{step.sub}</div>}
     </div>
   );
@@ -155,7 +209,7 @@ function FlowBox({ step }) {
 
 function Flow({ block, gap }) {
   return (
-    <div className={`rounded-lg border border-bright/10 bg-scrim/40 p-4 ${gap ? ` ${gap}` : ""} grid grid-cols-2 ${FLOW_COLS[block.steps.length] ?? ""} gap-2 items-center`}>
+    <div className={`rounded-lg border border-bright/10 bg-scrim/40 p-4 ${gap ? ` ${gap}` : ""} paper:rounded-sm paper:bg-transparent paper:border-dashed paper:border-line grid grid-cols-2 ${FLOW_COLS[block.steps.length] ?? ""} gap-2 items-center`}>
       {block.steps.map((s) => (
         <FlowBox key={s.label} step={s} />
       ))}
@@ -184,7 +238,7 @@ function Resources({ block }) {
   );
 }
 
-export function Block({ block, prev, next, single }) {
+export function Block({ block, prev, next, single, n }) {
   const gap = after(block, next);
   switch (block.type) {
     case "heading":
@@ -202,17 +256,27 @@ export function Block({ block, prev, next, single }) {
     case "points":
       return <Points block={block} gap={gap} single={single} />;
     case "schema":
-      return <Schema block={block} gap={gap} />;
+      return (
+        <>
+          <Schema block={block} gap={gap} />
+          <FigCaption n={n} block={block} className="mt-3" />
+        </>
+      );
     case "video":
-      return <VideoBlock src={block.src} caption={block.caption} />;
+      return (
+        <>
+          <VideoBlock src={block.src} caption={block.caption} />
+          <FigCaption n={n} block={block} className="mt-3 text-center" />
+        </>
+      );
     case "screens":
-      return <Screens block={block} gap={gap} />;
+      return <Screens block={block} gap={gap} n={n} />;
     case "compare":
-      return <Compare block={block} gap={gap} />;
+      return <Compare block={block} gap={gap} n={n} />;
     case "image":
-      return <Img block={block} gap={gap} />;
+      return <Img block={block} gap={gap} n={n} />;
     case "figure":
-      return <Figure block={block} />;
+      return <Figure block={block} n={n} />;
     case "flow":
       return <Flow block={block} gap={gap} />;
     case "note":
@@ -232,6 +296,7 @@ export function Block({ block, prev, next, single }) {
   }
 }
 
-export default function Blocks({ blocks, single = false }) {
-  return blocks.map((block, i) => <Block key={i} block={block} prev={blocks[i - 1]} next={blocks[i + 1]} single={single} />);
+export default function Blocks({ blocks, single = false, figStart = 1 }) {
+  let n = figStart;
+  return blocks.map((block, i) => <Block key={i} block={block} prev={blocks[i - 1]} next={blocks[i + 1]} single={single} n={FIG_TYPES.has(block.type) ? n++ : 0} />);
 }

@@ -1,10 +1,14 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { profile } from "@/content/profile";
 import { THEMES, PACKS } from "@/lib/themes";
 import { BOOT_DONE_EVENT } from "@/lib/events";
+import { usePrefs } from "@/lib/prefs";
+import NotebookCover from "../paper/NotebookCover";
 
 export const BOOT_MS = 2200;
+const OPEN_MS = 1000;
 
 const CMD = "boot --session";
 const COMMIT = process.env.NEXT_PUBLIC_COMMIT || "local";
@@ -66,6 +70,7 @@ export default function Boot({ auto = false, duration = BOOT_MS, contained = fal
   const ref = useRef(null);
   const done = useRef(onDone);
   const [gone, setGone] = useState(false);
+  const { pack } = usePrefs();
 
   useEffect(() => {
     done.current = onDone;
@@ -85,12 +90,40 @@ export default function Boot({ auto = false, duration = BOOT_MS, contained = fal
       setGone(true);
       done.current?.();
     };
-    const id = setTimeout(() => {
+    const paper = !contained && root.dataset.pack === "paper";
+    const openBook = () => {
       const el = ref.current;
       if (!el) return finish();
-      const goal = contained ? target?.current : findTarget();
-      collapse(el, goal, duration * 0.3).then(finish, finish);
-    }, Math.max(0, start + duration * 0.7 - performance.now()));
+      if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, easing: "ease-in", fill: "forwards" }).finished.then(finish, finish);
+        return;
+      }
+      root.setAttribute("data-boot-open", "");
+      const t = document.startViewTransition(() => {
+        unlock();
+        if (auto) root.removeAttribute("data-boot");
+        if (alive) flushSync(() => setGone(true));
+      });
+      t.ready.catch(() => {});
+      t.updateCallbackDone.catch(() => {});
+      t.finished
+        .catch(() => {})
+        .finally(() => {
+          root.removeAttribute("data-boot-open");
+          window.dispatchEvent(new Event(BOOT_DONE_EVENT));
+          if (alive) done.current?.();
+        });
+    };
+    const id = setTimeout(
+      () => {
+        if (paper) return openBook();
+        const el = ref.current;
+        if (!el) return finish();
+        const goal = contained ? target?.current : findTarget();
+        collapse(el, goal, duration * 0.3).then(finish, finish);
+      },
+      Math.max(0, start + (paper ? duration - OPEN_MS : duration * 0.7) - performance.now()),
+    );
     return () => {
       alive = false;
       clearTimeout(id);
@@ -104,12 +137,19 @@ export default function Boot({ auto = false, duration = BOOT_MS, contained = fal
     <div
       ref={ref}
       data-auto={auto ? "" : undefined}
+      data-contained={contained ? "" : undefined}
       aria-hidden
       className={`boot bg-ink font-mono text-fg ${contained ? "!absolute" : ""}`}
       style={{ "--boot": `${duration}ms`, "--n": CMD.length }}
     >
       <style>{LABELS}</style>
-      <div data-boot-body="" className={`w-full ${contained ? "px-6 text-[11px] leading-[1.7]" : "px-6 text-[13px] leading-[1.8] md:pl-[max(8rem,12vw)] md:text-sm"}`}>
+      {!contained && (
+        <div className="boot-nb">
+          <div className="book-base" />
+          <NotebookCover photo={pack === "paper"} className="boot-nb-cover" />
+        </div>
+      )}
+      <div data-boot-body="" className={`boot-term w-full ${contained ? "px-6 text-[11px] leading-[1.7]" : "px-6 text-[13px] leading-[1.8] md:pl-[max(8rem,12vw)] md:text-sm"}`}>
         <p className="whitespace-nowrap">
           <span className="text-accent">omj@magbadelojr</span>
           <span className="text-muted"> ~ % </span>

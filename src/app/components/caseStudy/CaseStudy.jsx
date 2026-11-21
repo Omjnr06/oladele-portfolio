@@ -1,8 +1,10 @@
 import Link from "next/link";
-import Blocks, { colorValue } from "./Blocks";
+import Blocks, { colorValue, figureStarts, SheetHead } from "./Blocks";
 import CaseStudyTabs from "./CaseStudyTabs";
 import Showcase from "./Showcase";
 import SiteNav from "../SiteNav";
+import ReportHeader from "../paper/ReportHeader";
+import MarginNote from "../paper/MarginNote";
 
 const TOKEN_BADGE = {
   accent: "text-accent bg-accent/10 border-accent/20",
@@ -20,7 +22,7 @@ const ACTION_STYLE = {
 };
 
 function Badge({ badge }) {
-  const base = "font-mono text-[11px] tracking-[0.3em] uppercase px-3 py-1 rounded border";
+  const base = "font-mono text-[11px] tracking-[0.3em] uppercase px-3 py-1 rounded border paper-stamp";
   if (TOKEN_BADGE[badge.color]) return <span className={`${base} ${TOKEN_BADGE[badge.color]}`}>{badge.label}</span>;
   const c = colorValue(badge.color);
   return (
@@ -32,10 +34,13 @@ function Badge({ badge }) {
 
 function Prompt({ text, className }) {
   return (
-    <div className={className}>
-      <span>{text}</span>
-      <span className="animate-pulse bg-bright/60 w-2 h-4 inline-block" />
-    </div>
+    <>
+      <div className={`${className} paper:hidden`}>
+        <span>{text}</span>
+        <span className="animate-pulse bg-bright/60 w-2 h-4 inline-block" />
+      </div>
+      <p className="hidden paper:block mt-8 font-hand text-2xl text-accent-2">end of notes, O.M.</p>
+    </>
   );
 }
 
@@ -46,9 +51,9 @@ export default function CaseStudy({ study }) {
   return (
     <main className="min-h-screen w-full flex flex-row bg-ink text-bright font-sans selection:bg-accent selection:text-on-accent relative">
       <SiteNav page="case" />
-      <div className="flex-1 min-w-0 relative overflow-x-clip">
-      <div className="absolute inset-0 z-0 pointer-events-none bg-journal-dots opacity-80" />
-      <div className={`absolute top-[10%] right-[-10%] w-[500px] h-[500px] ${modern.glow === "accent" ? "bg-accent" : "bg-accent-2"} opacity-[0.03] rounded-full blur-[120px] pointer-events-none`} />
+      <div className="flex-1 min-w-0 relative overflow-x-clip paper-page">
+      <div className="absolute inset-0 z-0 pointer-events-none bg-journal-dots opacity-80 paper:hidden" />
+      <div className={`absolute top-[10%] right-[-10%] w-[500px] h-[500px] ${modern.glow === "accent" ? "bg-accent" : "bg-accent-2"} opacity-[0.03] rounded-full blur-[120px] pointer-events-none paper:hidden`} />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-16 md:py-24">
         <Link href="/#projects" className="inline-flex items-center gap-2 text-muted hover:text-accent transition-colors mb-12 font-mono text-[11px] uppercase tracking-widest">
@@ -56,7 +61,12 @@ export default function CaseStudy({ study }) {
           Back to Projects
         </Link>
 
-        <div className={`rise-in ${single ? "mb-12" : "mb-10"}`}>
+        <ReportHeader path={`/projects/${study.slug}`} />
+
+        <div className={`rise-in relative ${single ? "mb-12" : "mb-10"}`}>
+          <div className="absolute right-0 top-0 hidden lg:block">
+            <MarginNote note={study.marginNote} className="max-w-56 rotate-[4deg] text-right" />
+          </div>
           <div className={`flex items-center gap-3 mb-4 ${single ? "" : " flex-wrap"}`}>
             <Badge badge={study.badge} />
             <span className="font-mono text-[11px] text-accent tracking-[0.3em] uppercase">{`// ${study.kicker}`}</span>
@@ -72,7 +82,7 @@ export default function CaseStudy({ study }) {
           )}
 
           {study.showcase && (
-            <div className="mt-8">
+            <div className="mt-8 paper:w-fit paper-taped paper-tilt-l">
               <Showcase id={study.showcase} />
             </div>
           )}
@@ -83,7 +93,7 @@ export default function CaseStudy({ study }) {
             {study.actions.map((a) => {
               const s = ACTION_STYLE[a.color] ?? ACTION_STYLE.accent;
               return (
-                <a key={a.href} href={a.href} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-3 px-6 py-3 border rounded transition group ${s.box}`}>
+                <a key={a.href} href={a.href} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-3 px-6 py-3 border rounded transition group ${s.box} paper:shadow-none paper:rounded-sm`}>
                   <svg className={`w-5 h-5 ${s.icon} group-hover:scale-110 transition-transform`} fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">{ACTION_ICONS[a.icon]}</svg>
                   <span className="font-mono text-xs uppercase tracking-widest text-bright">{a.label}</span>
                 </a>
@@ -93,17 +103,18 @@ export default function CaseStudy({ study }) {
         )}
 
         {single ? (
-          <div className="rise-in rise-in-2 w-full bg-panel border border-bright/10 rounded-xl shadow-2xl overflow-hidden">
-            <div className="h-10 bg-panel-2 border-b border-bright/5 flex items-center px-4 gap-2">
+          <div className="rise-in rise-in-2 w-full bg-panel border border-bright/10 rounded-xl shadow-2xl overflow-hidden paper-sheet">
+            <div className="h-10 bg-panel-2 border-b border-bright/5 flex items-center px-4 gap-2 paper:hidden">
               <div className="w-3 h-3 rounded-full bg-red-500/80" />
               <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
               <div className="w-3 h-3 rounded-full bg-green-500/80" />
               <span className="ml-4 font-mono text-[11px] text-bright/50 tracking-widest">{modern.file}</span>
             </div>
-            <div className="@container p-6 md:p-10 font-mono text-sm leading-relaxed text-bright/80 space-y-12">
-              {study.sections.map((s) => (
+            <div className="@container p-6 md:p-10 font-mono text-sm leading-relaxed text-bright/80 space-y-12 paper:font-sans paper:text-[15px] paper:leading-[1.7]">
+              <SheetHead title={study.title} label="Report" />
+              {study.sections.map((s, i) => (
                 <section key={s.id}>
-                  <Blocks blocks={s.blocks} single />
+                  <Blocks blocks={s.blocks} single figStart={figureStarts(study.sections)[i]} />
                 </section>
               ))}
               <section>
@@ -113,7 +124,7 @@ export default function CaseStudy({ study }) {
           </div>
         ) : (
           <>
-            <CaseStudyTabs sections={study.sections} file={modern.file} />
+            <CaseStudyTabs sections={study.sections} file={modern.file} title={study.title} />
             <Prompt text={modern.prompt} className="mt-8 pt-8 border-t border-bright/5 flex items-center gap-2 text-bright/40 font-mono text-sm" />
           </>
         )}
