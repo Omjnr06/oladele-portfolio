@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { prepare, search, parseCommand } from "@/lib/search";
 import { lockScroll, scrollToId, scrollToTop } from "@/lib/scroll";
 import { THEMES, packOpen } from "@/lib/themes";
-import { themeTransition } from "@/lib/themeTransition";
+import { switchTheme } from "@/lib/packSwitch";
 import { setPrefs } from "@/lib/prefs";
 import { track } from "@/lib/track";
 
@@ -94,14 +94,14 @@ function Row({ id, result, active, onPick, onHover }) {
   );
 }
 
-export default function Palette({ onClose }) {
+export default function Palette({ onClose, initialQuery = "" }) {
   const router = useRouter();
   const pathname = usePathname();
   const listId = useId();
   const inputRef = useRef(null);
   const listRef = useRef(null);
   const releaseRef = useRef(null);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery);
   const [active, setActive] = useState(0);
   const [index, setIndex] = useState(null);
   const [failed, setFailed] = useState(false);
@@ -207,7 +207,7 @@ export default function Palette({ onClose }) {
     if (item.act === "top") scrollToTop();
     else if (item.act === "theme") {
       track("variant_selected", item.value.variant);
-      themeTransition(null, () => setPrefs(item.value));
+      switchTheme(null, item.value);
     } else if (item.act === "nav") setPrefs({ navMode: item.value });
     else if (item.external) window.open(item.href, "_blank", "noopener,noreferrer");
     else if (item.href) go(item.href);

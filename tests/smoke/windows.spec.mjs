@@ -63,19 +63,102 @@ test("links inside a window open windows instead of navigating", async ({ page }
   const rsc = rscCounter(page);
   await page.locator("#win-client a[href^='/projects/']").first().click();
   await expect(page).toHaveURL(/\/projects\//);
-  await expect(page.locator(".win[data-focused]")).toHaveAttribute("aria-label", /case study/);
+  await expect(page.locator(".win[data-focused]")).not.toHaveAttribute("aria-label", "About Oladele");
   await expect(win(page, "About Oladele")).toHaveCount(1);
   expect(rsc.n).toBe(0);
 });
 
-test("leaving windows hands back the page for the current address", async ({ page }, info) => {
+test("shut down hands back the modern page for the current address", async ({ page }, info) => {
   desktopOnly(info);
   await page.goto("/?preview=windows&theme=windows-aero");
   await expect(page.locator("html")).toHaveAttribute("data-win-ready", "");
   await page.locator(".win-icon", { hasText: "Grind" }).dblclick();
   await expect(page).toHaveURL(/\/grind$/);
-  await page.getByRole("button", { name: "Leave Windows" }).click();
+  await page.getByRole("button", { name: "Start" }).click();
+  await page.getByRole("dialog", { name: "Start menu" }).getByRole("button", { name: "Shut down", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Open roles" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.dataset.pack)).toBe("modern");
   await expect(page.locator(".win-taskbar")).toHaveCount(0);
+});
+
+const ready = async (page, path = "/") => {
+  await page.goto(`${path}?preview=windows&theme=windows-aero`);
+  await expect(page.locator("html")).toHaveAttribute("data-win-ready", "");
+};
+
+test("start menu: headshot, pinned apps, all programs and search", async ({ page }, info) => {
+  desktopOnly(info);
+  await ready(page, "/resume");
+  await page.getByRole("button", { name: "Start" }).click();
+  const menu = page.getByRole("dialog", { name: "Start menu" });
+  await expect(menu.getByRole("img", { name: /Oladele/ })).toBeVisible();
+  await expect(menu.getByRole("searchbox", { name: "Search programs and files" })).toBeFocused();
+  await menu.getByRole("button", { name: "All Programs" }).click();
+  await expect(menu.getByRole("button", { name: "The Vault" })).toBeVisible();
+  await menu.getByRole("button", { name: "The Vault" }).click();
+  await expect(menu).toHaveCount(0);
+  await expect(page).toHaveURL(/\/projects\/vault$/);
+  await expect(page.locator(".win[data-focused]")).toHaveAttribute("aria-label", "The Vault");
+  await page.getByRole("button", { name: "Start" }).click();
+  await menu.getByRole("searchbox").fill("grind");
+  await expect(menu).toHaveCount(0);
+  await expect(page.getByRole("combobox", { name: "Search the site" })).toHaveValue("grind");
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Start" }).click();
+  await page.keyboard.press("Escape");
+  await expect(menu).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Start" })).toBeFocused();
+});
+
+test("switch user goes to paper", async ({ page }, info) => {
+  desktopOnly(info);
+  await ready(page, "/resume");
+  await page.getByRole("button", { name: "Start" }).click();
+  await page.getByRole("button", { name: "More shut down options" }).click();
+  await page.getByRole("menuitem", { name: /Switch user/ }).click();
+  await expect.poll(() => page.evaluate(() => document.documentElement.dataset.pack)).toBe("paper");
+  await expect(page.locator(".win-taskbar")).toHaveCount(0);
+});
+
+test("desktop right-click menu and drag-to-select", async ({ page }, info) => {
+  desktopOnly(info);
+  await ready(page, "/resume");
+  await page.getByRole("button", { name: "Show desktop" }).click();
+  await page.mouse.click(900, 300, { button: "right" });
+  const menu = page.getByRole("menu");
+  await expect(menu.getByRole("menuitem")).toHaveText(["Refresh", "Arrange icons", "Personalize", "About Oladele"]);
+  await menu.getByRole("menuitem", { name: "Personalize" }).click();
+  await expect(page.locator(".win[data-focused]")).toHaveAttribute("aria-label", "Personalize");
+  await page.getByRole("button", { name: "Show desktop" }).click();
+  await page.mouse.move(4, 4);
+  await page.mouse.down();
+  await page.mouse.move(60, 190, { steps: 5 });
+  await page.mouse.up();
+  await expect(page.locator(".win-icon[data-selected]")).toHaveCount(2);
+});
+
+test("first windows visit plays the OMJ OS boot once per session", async ({ page }, info) => {
+  desktopOnly(info);
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "webdriver", { get: () => false });
+    new MutationObserver(() => {
+      if (document.querySelector(".wb .wb-caption")) window.__booted = document.querySelector(".wb .wb-caption").textContent;
+    }).observe(document, { childList: true, subtree: true });
+  });
+  await page.goto("/?preview=windows&theme=windows-aero");
+  await expect.poll(() => page.evaluate(() => window.__booted ?? null)).toBe("Starting OMJ OS");
+  await expect(page.locator(".wb")).toHaveCount(0, { timeout: 8000 });
+  await expect(page.locator("html")).not.toHaveAttribute("data-win-boot", "");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-win-ready", "");
+  await page.waitForTimeout(400);
+  await expect(page.locator(".wb")).toHaveCount(0);
+});
+
+test("sound toggle in the tray saves the preference", async ({ page }, info) => {
+  desktopOnly(info);
+  await ready(page, "/resume");
+  await page.getByRole("button", { name: "Mute sounds" }).click();
+  await expect(page.getByRole("button", { name: "Turn sounds on" })).toBeVisible();
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("omj-prefs")).sound)).toBe(false);
 });

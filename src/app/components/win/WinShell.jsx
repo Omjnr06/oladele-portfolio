@@ -2,9 +2,13 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { setScrollRoot } from "@/lib/scroll";
-import { setPrefs } from "@/lib/prefs";
+import { setPrefs, usePrefs } from "@/lib/prefs";
 import { APPS, DESKTOP, appFor } from "./apps";
 import WinIcon, { IconDefs, Orb } from "./icons";
+import StartMenu from "./StartMenu";
+import ContextMenu from "./ContextMenu";
+import WinBoot from "./WinBoot";
+import { play, setSoundOn, wakeAudio } from "./sound";
 import "./win.css";
 
 const BAR = 40;
@@ -24,7 +28,32 @@ function animate() {
   animTimer = setTimeout(() => document.documentElement.removeAttribute("data-win-anim"), 260);
 }
 
+const BOOTED_KEY = "omj-win-booted";
+
 const here = () => location.pathname + location.search;
+
+function wantsBoot() {
+  const root = document.documentElement;
+  if (root.hasAttribute("data-win-boot")) return true;
+  if (navigator.webdriver || matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+  try {
+    return !sessionStorage.getItem(BOOTED_KEY);
+  } catch {
+    return false;
+  }
+}
+
+function reloadClean() {
+  const url = new URL(location.href);
+  url.searchParams.delete("theme");
+  url.searchParams.delete("preview");
+  location.replace(url.pathname + url.search + url.hash);
+}
+
+function leaveTo(pack, variant) {
+  setPrefs({ pack, variant });
+  reloadClean();
+}
 const desk = () => ({ w: innerWidth, h: innerHeight - BAR });
 
 function geometry(app, count) {
@@ -231,14 +260,28 @@ function AppWindow({ win, focused, actions }) {
   );
 }
 
+function iconBox(p) {
+  return { left: 8 + p.c * CELL_W, top: 12 + p.r * CELL_H, right: 8 + p.c * CELL_W + 84, bottom: 12 + p.r * CELL_H + 92 };
+}
+
 function Desktop({ onOpen }) {
   const [pos, setPos] = useState(() => layoutIcons(readIcons()));
-  const [sel, setSel] = useState(null);
+  const [sel, setSel] = useState([]);
   const [dragging, setDragging] = useState(null);
+  const [band, setBand] = useState(null);
+  const [menu, setMenu] = useState(null);
+  const [gen, setGen] = useState(0);
+
+  const savePos = (next) => {
+    setPos(next);
+    try {
+      localStorage.setItem(ICONS_KEY, JSON.stringify(next));
+    } catch {}
+  };
 
   const startDrag = (id) => (e) => {
     if (e.button !== 0) return;
-    setSel(id);
+    setSel((cur) => (e.ctrlKey ? (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id]) : cur.includes(id) ? cur : [id]));
     const el = e.currentTarget;
     const start = { px: e.clientX, py: e.clientY };
     let moved = false;
@@ -264,40 +307,85 @@ function Desktop({ onOpen }) {
       const other = Object.keys(next).find((k) => k !== id && next[k].c === c && next[k].r === r);
       if (other) next[other] = from;
       next[id] = { c, r };
-      setPos(next);
-      try {
-        localStorage.setItem(ICONS_KEY, JSON.stringify(next));
-      } catch {}
+      savePos(next);
     };
     el.addEventListener("pointermove", move);
     el.addEventListener("pointerup", up);
     el.addEventListener("pointercancel", up);
   };
 
+  const startBand = (e) => {
+    if (e.target !== e.currentTarget || e.button !== 0) return;
+    setSel([]);
+    const el = e.currentTarget;
+    el.setPointerCapture(e.pointerId);
+    const x0 = e.clientX;
+    const y0 = e.clientY;
+    const move = (m) => {
+      const b = { left: Math.min(x0, m.clientX), top: Math.min(y0, m.clientY), right: Math.max(x0, m.clientX), bottom: Math.max(y0, m.clientY) };
+      setBand(b);
+      setSel(
+        DESKTOP.filter((id) => {
+          const r = iconBox(pos[id]);
+          return r.left < b.right && r.right > b.left && r.top < b.bottom && r.bottom > b.top;
+        }),
+      );
+    };
+    const up = () => {
+      el.removeEventListener("pointermove", move);
+      el.removeEventListener("pointerup", up);
+      el.removeEventListener("pointercancel", up);
+      setBand(null);
+    };
+    el.addEventListener("pointermove", move);
+    el.addEventListener("pointerup", up);
+    el.addEventListener("pointercancel", up);
+  };
+
+  const arrange = { label: "Arrange icons", onSelect: () => savePos(layoutIcons({})) };
+
+  const openMenu = (e, id) => {
+    e.preventDefault();
+    if (id) setSel((cur) => (cur.includes(id) ? cur : [id]));
+    const items = id
+      ? [{ label: "Open", strong: true, onSelect: () => onOpen(APPS[id].path) }, "sep", arrange]
+      : [
+          { label: "Refresh", onSelect: () => setGen((g) => g + 1) },
+          arrange,
+          "sep",
+          { label: "Personalize", onSelect: () => onOpen(APPS.personalize.path) },
+          { label: "About Oladele", onSelect: () => onOpen(APPS.home.path) },
+        ];
+    setMenu({ x: e.clientX, y: e.clientY, items });
+  };
+
   return (
-    <div className="win-desktop" onPointerDown={(e) => e.target === e.currentTarget && setSel(null)}>
-      {DESKTOP.map((id) => {
+    <div className="win-desktop" onPointerDown={startBand} onContextMenu={(e) => e.target === e.currentTarget && openMenu(e, null)}>
+      {DESKTOP.map((id, i) => {
         const app = APPS[id];
         const p = pos[id];
         const d = dragging?.id === id ? dragging : null;
         return (
           <button
-            key={id}
+            key={`${id}-${gen}`}
             type="button"
             className="win-icon"
-            data-selected={sel === id ? "" : undefined}
+            data-selected={sel.includes(id) ? "" : undefined}
             data-dragging={d ? "" : undefined}
-            style={{ transform: `translate(${p.c * CELL_W + (d?.dx ?? 0)}px, ${p.r * CELL_H + (d?.dy ?? 0)}px)` }}
+            style={{ "--i": i, transform: `translate(${p.c * CELL_W + (d?.dx ?? 0)}px, ${p.r * CELL_H + (d?.dy ?? 0)}px)` }}
             onPointerDown={startDrag(id)}
-            onFocus={() => setSel(id)}
+            onFocus={() => setSel((cur) => (cur.includes(id) ? cur : [id]))}
             onDoubleClick={() => onOpen(app.path)}
             onKeyDown={(e) => e.key === "Enter" && onOpen(app.path)}
+            onContextMenu={(e) => openMenu(e, id)}
           >
             <WinIcon name={app.icon} className="win-icon-img" />
             <span className="win-icon-label">{app.title}</span>
           </button>
         );
       })}
+      {band && <div aria-hidden className="win-band" style={{ left: band.left, top: band.top, width: band.right - band.left, height: band.bottom - band.top }} />}
+      {menu && <ContextMenu {...menu} onClose={() => setMenu(null)} />}
     </div>
   );
 }
@@ -316,11 +404,12 @@ function Clock() {
   );
 }
 
-function Taskbar({ wins, focused, actions }) {
+function Taskbar({ wins, focused, actions, startOpen, onStart }) {
+  const { sound } = usePrefs();
   const open = wins.filter((w) => !w.closed);
   return (
     <nav className="win-taskbar" aria-label="Taskbar">
-      <button type="button" className="win-orb" aria-label="Show desktop" title="Show desktop" onClick={actions.showDesktop}>
+      <button type="button" className="win-orb" aria-label="Start" aria-expanded={startOpen} title="Start" onClick={onStart}>
         <Orb className="win-orb-img" />
       </button>
       <div className="win-tasks">
@@ -342,16 +431,14 @@ function Taskbar({ wins, focused, actions }) {
         <button
           type="button"
           className="win-tray-btn"
-          title="Leave Windows"
-          aria-label="Leave Windows"
-          onClick={() => {
-            setPrefs({ pack: "modern", variant: "cyan" });
-            location.reload();
-          }}
+          aria-label={sound ? "Mute sounds" : "Turn sounds on"}
+          title={sound ? "Sounds on" : "Sounds off"}
+          onClick={() => setPrefs({ sound: !sound })}
         >
-          <WinIcon name="power" className="win-tray-ico" />
+          <WinIcon name={sound ? "speaker" : "mute"} className="win-tray-ico" />
         </button>
         <Clock />
+        <button type="button" className="win-peek" aria-label="Show desktop" title="Show desktop" onClick={actions.showDesktop} />
       </div>
     </nav>
   );
@@ -362,7 +449,14 @@ export default function WinShell() {
   const [pageUrl] = useState(here);
   const [wins, setWins] = useState(() => [makeWin(appFor(here()), "page", 0)]);
   const [focused, setFocused] = useState(() => appFor(here()).id);
+  const [booting, setBooting] = useState(wantsBoot);
+  const [startOpen, setStartOpen] = useState(false);
+  const { sound } = usePrefs();
   const winsRef = useRef(wins);
+
+  useEffect(() => {
+    setSoundOn(sound);
+  }, [sound]);
 
   useLayoutEffect(() => {
     winsRef.current = wins;
@@ -396,6 +490,7 @@ export default function WinShell() {
         const win = makeWin(app, "soon", winsRef.current.filter((w) => !w.closed).length);
         winsRef.current = [...winsRef.current, win];
         setWins((ws) => [...ws, win]);
+        play("open");
       }
       setFocused(app.id);
       if (push && app.url !== here()) history.pushState(null, "", app.url);
@@ -410,6 +505,7 @@ export default function WinShell() {
       patch: (id, next) => setWins((ws) => ws.map((w) => (w.id === id ? { ...w, ...next } : w))),
       minimize: (id) => {
         animate();
+        play("minimize");
         setWins((ws) => ws.map((w) => (w.id === id ? { ...w, min: true } : w)));
         setFocused((f) => (f === id ? null : f));
       },
@@ -418,6 +514,7 @@ export default function WinShell() {
         setWins((ws) => ws.map((w) => (w.id === id ? { ...w, max: !w.max } : w)));
       },
       close: (id) => {
+        play("close");
         const rest = winsRef.current.filter((w) => w.id !== id && !w.closed && !w.min).sort((a, b) => b.z - a.z);
         setWins((ws) => ws.flatMap((w) => (w.id !== id ? [w] : w.kind === "page" ? [{ ...w, closed: true, max: false, min: false }] : [])));
         const next = rest[0];
@@ -465,9 +562,38 @@ export default function WinShell() {
       delete window.__omjWin;
       window.removeEventListener("popstate", onPop);
       window.removeEventListener("click", onClick, true);
-      if (document.documentElement.dataset.pack !== "windows" && here() !== pageUrl) location.reload();
+      if (document.documentElement.dataset.pack !== "windows" && here() !== pageUrl) reloadClean();
     };
   }, [open, pageUrl]);
+
+  useEffect(() => {
+    const wake = () => wakeAudio();
+    const onKey = (e) => {
+      if (e.key === "Escape" && e.ctrlKey) {
+        e.preventDefault();
+        setStartOpen((o) => !o);
+      }
+    };
+    window.addEventListener("pointerdown", wake, { once: true, capture: true });
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("pointerdown", wake, { capture: true });
+      window.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
+  const endBoot = useCallback(() => {
+    document.documentElement.removeAttribute("data-win-boot");
+    try {
+      sessionStorage.setItem(BOOTED_KEY, "1");
+    } catch {}
+    setBooting(false);
+  }, []);
+
+  const closeStart = useCallback(({ restoreFocus } = {}) => {
+    setStartOpen(false);
+    if (restoreFocus) document.querySelector(".win-orb")?.focus();
+  }, []);
 
   useEffect(() => {
     const onResize = () => setWins((ws) => [...ws]);
@@ -487,7 +613,20 @@ export default function WinShell() {
           <AppWindow key={w.id} win={w} focused={focused === w.id} actions={stable} />
         ),
       )}
-      <Taskbar wins={wins} focused={focused} actions={stable} />
+      <Taskbar wins={wins} focused={focused} actions={stable} startOpen={startOpen} onStart={() => setStartOpen((o) => !o)} />
+      {startOpen && (
+        <StartMenu
+          onOpen={open}
+          onClose={closeStart}
+          onShutDown={() => leaveTo("modern", "cyan")}
+          onSwitchUser={() => leaveTo("paper", "cream")}
+          onRestart={() => {
+            setStartOpen(false);
+            setBooting(true);
+          }}
+        />
+      )}
+      {booting && <WinBoot onDone={endBoot} />}
     </>
   );
 }
