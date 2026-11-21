@@ -153,3 +153,27 @@ test("music becomes a sketchbook in paper and stays dark in modern", async ({ pa
   await expect(page.locator(".mv-clip-node, .mvm-card").first()).toBeVisible();
   expect((await look()).bg).not.toBe("rgb(246, 241, 231)");
 });
+
+test("switching to a pack plays its boot once per session", async ({ page }, info) => {
+  test.skip(info.project.name !== "smoke-desktop", "desktop theme menu");
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "webdriver", { get: () => false });
+    window.__boots = 0;
+    new MutationObserver((ms) => {
+      for (const m of ms) for (const n of m.addedNodes) if (n.nodeType === 1 && n.matches?.(".boot")) window.__boots++;
+    }).observe(document, { childList: true, subtree: true });
+  });
+  await page.goto("/resume");
+  await page.waitForLoadState("networkidle");
+  const menu = async () => page.getByRole("navigation", { name: "Site" }).getByRole("button", { name: "Theme" }).click();
+  await menu();
+  await page.getByRole("button", { name: /^Paper/ }).click();
+  await expect.poll(() => page.evaluate(() => window.__boots)).toBe(1);
+  await expect(page.locator(".boot")).toHaveCount(0, { timeout: 8000 });
+  expect(await page.evaluate(() => document.documentElement.dataset.pack)).toBe("paper");
+  await menu();
+  await page.getByRole("button", { name: /^Default/ }).click();
+  await expect.poll(() => page.evaluate(() => document.documentElement.dataset.pack)).toBe("modern");
+  await page.waitForTimeout(600);
+  expect(await page.evaluate(() => window.__boots)).toBe(1);
+});

@@ -97,6 +97,26 @@ const ICONS = {
       <path d="M11 39c2-8 7-11 13-11s11 3 13 11" fill="#fff" />
     </>
   ),
+  brush: (
+    <>
+      <rect x="5" y="5" width="38" height="38" rx="8" fill="url(#wi-blue)" stroke="#164d9e" />
+      {shine}
+      <path d="M33 11l4 4-13 13-4-4z" fill="#fff" />
+      <path d="M19 26l4 4c-1 5-5 7-10 6 2-2 2-4 2-6s2-4 4-4z" fill="#ffe27a" stroke="#fff" />
+    </>
+  ),
+  speaker: (
+    <>
+      <path d="M8 19h7l9-8v26l-9-8H8z" fill="currentColor" />
+      <path d="M30 18a8 8 0 0 1 0 12M34 13a15 15 0 0 1 0 22" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+    </>
+  ),
+  mute: (
+    <>
+      <path d="M8 19h7l9-8v26l-9-8H8z" fill="currentColor" />
+      <path d="M30 18l10 12M40 18L30 30" stroke="#ff6b5b" strokeWidth="3.5" strokeLinecap="round" />
+    </>
+  ),
   power: (
     <>
       <path d="M17 12a15 15 0 1 0 14 0" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />

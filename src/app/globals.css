@@ -325,6 +325,22 @@ html[data-pack="windows"]:not([data-win-ready]) body::after {
   animation: win-cover-fail 0s 6s forwards;
 }
 
+html[data-pack-boot] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: var(--color-ink);
+}
+
+html[data-pack-boot="paper"] body::after {
+  background: radial-gradient(ellipse at 50% 45%, #24201c 0%, #0c0b0a 72%);
+}
+
+html[data-win-boot]:not([data-win-ready]) body::after {
+  background: #000;
+}
+
 @keyframes win-cover-fail {
   to {
     visibility: hidden;

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { PACKS, THEMES, packOpen } from "@/lib/themes";
 import { setPrefs, usePrefs } from "@/lib/prefs";
-import { themeTransition } from "@/lib/themeTransition";
+import { switchTheme } from "@/lib/packSwitch";
 import { isHandheld } from "@/lib/device";
 import { track } from "@/lib/track";
 
@@ -79,7 +79,9 @@ export default function ThemeMenu({ anchor, triggerRef, onClose }) {
     };
   }, [onClose, triggerRef]);
 
-  const choose = (e, patch) => themeTransition(e, () => setPrefs(patch));
+  const choose = (e, patch) => {
+    if (switchTheme(e, patch)) onClose();
+  };
 
   const onVariantKeys = (e, index) => {
     const step = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;

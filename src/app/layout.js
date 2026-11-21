@@ -9,6 +9,7 @@ import PaletteHost from "./components/palette/PaletteHost";
 import BookFlip from "./components/paper/BookFlip";
 import RuleSnap from "./components/paper/RuleSnap";
 import WinFrame from "./components/win/WinFrame";
+import PackBoot from "./components/boot/PackBoot";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,6 +51,7 @@ export default function RootLayout({ children }) {
         <PaletteHost />
         <BookFlip />
         <RuleSnap />
+        <PackBoot />
         <Analytics />
         <SpeedInsights/>
       </body>
