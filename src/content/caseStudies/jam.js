@@ -6,6 +6,7 @@ export const jam = {
   badge: { label: "Personal Project", color: "accent-2" },
   kicker: "Mobile · React Native · GraphQL",
   summary: "A location-based discovery app that connects university and local musicians. Find bandmates and jam partners who share your instruments, taste, and goals.",
+  marginNote: "musicians, meet each other",
   stage: "Frontend complete · Mock data · Backend in progress",
   modern: { file: "jam", prompt: "omj@server:~$", glow: "accent-2" },
   sections: [

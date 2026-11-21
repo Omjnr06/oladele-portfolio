@@ -310,6 +310,130 @@ html[data-boot] .boot[data-auto] {
   animation: boot-bar calc(var(--boot) * 0.66) cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
 }
 
+.boot-nb {
+  display: none;
+}
+
+html[data-boot][data-pack="paper"] .page-enter {
+  animation: none;
+}
+
+[data-pack="paper"] .boot:not([data-contained]) {
+  background: radial-gradient(ellipse at 50% 45%, #24201c 0%, #0c0b0a 72%);
+}
+
+[data-pack="paper"] .boot:not([data-contained]) .boot-term {
+  display: none;
+}
+
+[data-pack="paper"] .boot-nb {
+  position: absolute;
+  inset: 0;
+  display: block;
+  animation: nb-in 0.6s cubic-bezier(0.2, 0.8, 0.3, 1) 0.1s both;
+}
+
+.boot-nb-cover {
+  position: absolute;
+}
+
+@keyframes nb-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+html[data-boot-open] .boot {
+  view-transition-name: nb-desk;
+}
+
+html[data-boot-open] .boot-nb .book-base {
+  view-transition-name: nb-page;
+}
+
+html[data-boot-open] .boot-nb-cover {
+  view-transition-name: nb-cover;
+}
+
+html[data-boot-open]::view-transition-group(root),
+html[data-boot-open]::view-transition-group(nb-desk),
+html[data-boot-open]::view-transition-group(nb-page),
+html[data-boot-open]::view-transition-group(nb-cover) {
+  animation: none;
+}
+
+html[data-boot-open]::view-transition-group(nb-desk) {
+  z-index: 0;
+}
+
+html[data-boot-open]::view-transition-group(nb-page) {
+  z-index: 1;
+}
+
+html[data-boot-open]::view-transition-group(root) {
+  z-index: 2;
+}
+
+html[data-boot-open]::view-transition-group(nb-cover) {
+  z-index: 3;
+}
+
+html[data-boot-open]::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
+html[data-boot-open]::view-transition-old(nb-desk),
+html[data-boot-open]::view-transition-old(nb-page) {
+  animation: none;
+}
+
+html[data-boot-open]::view-transition-old(root) {
+  animation: none;
+  opacity: 0;
+}
+
+html[data-boot-open]::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: nb-zoom 1s linear both;
+}
+
+html[data-boot-open]::view-transition-old(nb-cover) {
+  transform-origin: left center;
+  animation: nb-open 1s linear both;
+}
+
+@keyframes nb-open {
+  0% {
+    opacity: 1;
+    filter: brightness(1);
+    transform: perspective(2200px) rotateY(0deg);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.7, 0.6);
+  }
+  55% {
+    opacity: 1;
+    filter: brightness(0.45);
+    transform: perspective(2200px) rotateY(-90deg);
+  }
+  55.1%,
+  100% {
+    opacity: 0;
+    filter: brightness(0.45);
+    transform: perspective(2200px) rotateY(-90deg);
+  }
+}
+
+@keyframes nb-zoom {
+  0%,
+  42% {
+    transform: scale(0.62);
+    animation-timing-function: cubic-bezier(0.6, 0, 0.2, 1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 [data-pack="paper"] .paper-page {
   --margin-x: 63px;
   background-color: var(--color-ink);
@@ -446,17 +570,20 @@ html[data-book-flip] .book-base {
 html[data-book-flip] .book-front {
   position: fixed;
   z-index: 1;
+  display: block;
+  view-transition-name: book-cover;
+}
+
+.nb-cover {
   top: calc(19vh - 12px);
   bottom: calc(19vh - 12px);
   left: calc(19vw - 12px);
   right: calc(19vw - 12px);
-  display: block;
   overflow: hidden;
   border-radius: 6px 14px 14px 6px;
   background-color: #262a33;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.05), inset -10px 0 24px -12px rgb(0 0 0 / 0.6), 0 40px 80px -20px rgb(0 0 0 / 0.85);
-  view-transition-name: book-cover;
 }
 
 .book-spine {
@@ -753,6 +880,70 @@ html[data-book-flip]::view-transition-new(book-cover) {
 [data-pack="paper"] [data-theme="kraft"] .paper-card,
 [data-pack="paper"][data-theme="kraft"] .paper-card {
   background-color: #efe2c6;
+}
+
+[data-pack="paper"] .paper-sheet {
+  border-color: var(--color-line);
+  border-radius: 3px;
+  background-color: #fffdf8;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--paper-rule) 30%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--paper-rule) 30%, transparent) 1px, transparent 1px),
+    linear-gradient(to right, color-mix(in srgb, var(--paper-rule) 14%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--paper-rule) 14%, transparent) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  background-position: -1px -1px;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 24px 48px -28px rgb(0 0 0 / 0.45);
+}
+
+[data-pack="paper"] [data-theme="graph"] .paper-sheet,
+[data-pack="paper"][data-theme="graph"] .paper-sheet {
+  --paper-rule: var(--paper-grid);
+}
+
+[data-pack="paper"] [data-theme="kraft"] .paper-sheet,
+[data-pack="paper"][data-theme="kraft"] .paper-sheet {
+  --paper-rule: #b59c72;
+  background-color: #efe2c6;
+}
+
+[data-pack="paper"] .paper-fig {
+  padding: 8px;
+  border-color: var(--color-line);
+  border-radius: 2px;
+  background: #fbf9f3;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.1), 0 12px 28px -18px rgb(0 0 0 / 0.4);
+}
+
+[data-pack="paper"] .paper-fig > div {
+  border-top: 0;
+}
+
+[data-pack="paper"] .paper-table {
+  border-color: var(--color-line-strong);
+  border-radius: 0;
+  background: transparent;
+}
+
+[data-pack="paper"] .paper-table-head {
+  border-bottom: 2px solid var(--color-line-strong);
+  background: transparent;
+  color: var(--color-fg);
+  font-weight: 600;
+}
+
+[data-pack="paper"] .paper-table-row {
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+[data-pack="paper"] .paper-stamp {
+  border-width: 2px !important;
+  border-color: color-mix(in srgb, var(--color-accent-2) 70%, transparent) !important;
+  border-radius: 3px;
+  background: transparent !important;
+  color: var(--color-accent-2) !important;
+  transform: rotate(-2deg);
 }
 
 .paper-tape {

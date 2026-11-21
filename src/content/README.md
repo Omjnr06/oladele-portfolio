@@ -86,6 +86,7 @@ export const grandTheatre = {
   badge: { label: "Project Manager", color: "accent-2" },
   kicker: "Next.js · FastAPI · Neon",
   summary: "One or two sentences under the title.",
+  marginNote: "the one number that matters",  // optional, Paper theme handwritten note by the title
   stage: "In progress · …",         // optional yellow status pill
   actions: [{ label: "Read the report (PDF)", href: "/assets/….pdf", icon: "document", color: "accent" }],  // optional buttons
   modern: { file: "grand", prompt: "omj@server:~$", glow: "accent-2" },  // Modern pack flavour

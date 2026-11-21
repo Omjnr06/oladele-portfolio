@@ -6,6 +6,7 @@ export const pimplenet = {
   badge: { label: "Internship", color: "accent-2" },
   kicker: "Machine Learning",
   summary: "A deep learning acne severity classifier built to enhance microbiome-based skincare personalization at PurelyBiome.",
+  marginNote: "95.6% accuracy :)",
   actions: [
     { label: "Open Full Research Paper (PDF)", href: "/assets/NextAI__Oladele_.pdf", icon: "document", color: "accent" },
     { label: "See It Live · Sample Report", href: "https://report.purelybiome.com/sample-report", icon: "external", color: "accent-2" },

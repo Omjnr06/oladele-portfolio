@@ -12,11 +12,11 @@ export const profile = {
   resumePdf: { href: "/assets/Oladele_Magbadelo_Resume.pdf", size: "99_KB" },
   course: "Computer Science @ Western '28",
   marginNotes: {
-    home: "← that's me! code + music",
-    gallery: "some of my favourite days",
+    home: "← code + music",
+    gallery: "a snapshot of my life",
     spotlight: "start here ↓",
-    projects: "hackathons = best weekends",
-    contact: "say hi :)",
+    projects: "what im building",
+    contact: "say wassup!",
     resume: "the short version ↓",
   },
 };

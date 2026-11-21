@@ -4,6 +4,7 @@ export const gallery = [
   { id: "wfn-team-2027", src: "/assets/images/wfn-full-team-2027.JPG", caption: "Western Founders Network team" },
   { id: "wfn-projects", src: "/assets/images/junior-WFNProjects.jpg", caption: "Presenting WFN projects" },
   { id: "statue", src: "/assets/images/junior-statue.jpeg", caption: "By a statue" },
+  {id: "junior-tsi", src: "/assets/images/junior-tsi.JPG", caption: "First client meeting with Grand Theatre"},
   { id: "wfn-kathy-jr", src: "/assets/images/wfn-kathy-jr-team.JPG", caption: "WFN team" },
   { id: "ozen-food", src: "/assets/images/junior-food.jpeg", caption: "Food" },
   { id: "basketball", src: "/assets/images/junior-basketball.jpg", caption: "Basketball" },

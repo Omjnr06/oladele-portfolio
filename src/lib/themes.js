@@ -16,7 +16,6 @@ export const THEMES = {
   },
   paper: {
     label: "Paper",
-    preview: true,
     variants: [
       { id: "cream", label: "Cream ruled", light: true, swatch: ["#F6F1E7", "#1E40AF", "#B42318"] },
       { id: "graph", label: "Graph", light: true, swatch: ["#FAFAF6", "#1D4ED8", "#B45309"] },

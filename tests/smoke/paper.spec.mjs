@@ -3,11 +3,9 @@ import { test, expect } from "@playwright/test";
 const nav = (page) => page.getByRole("navigation", { name: "Site" });
 const attrs = (page) => page.evaluate(() => ({ ...document.documentElement.dataset }));
 
-test("paper stays private without the preview flag", async ({ page }) => {
+test("paper is public: a theme link applies it with no preview flag", async ({ page }) => {
   await page.goto("/?theme=paper-cream");
-  const a = await attrs(page);
-  expect(a.pack).toBe("modern");
-  expect(a.nav).not.toBe("tabs");
+  expect(await attrs(page)).toMatchObject({ pack: "paper", theme: "cream", nav: "tabs" });
 });
 
 test("preview flag turns on paper before paint, with tabs and the report header", async ({ page }) => {
@@ -74,18 +72,50 @@ test("paper back-to-top is the handwritten note", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Back to top" }).getByText("↑ top")).toBeVisible();
 });
 
-test("theme menu: paper is in progress without the flag, selectable with it, and switching back restores the nav", async ({ page }, info) => {
+test("theme menu: paper is selectable and switching back restores the nav", async ({ page }, info) => {
   test.skip(info.project.name !== "smoke-desktop", "desktop layout");
   await page.goto("/resume");
   await nav(page).getByRole("button", { name: "Theme" }).click();
-  await expect(page.getByRole("button", { name: /Paper/ })).toBeDisabled();
-  await page.keyboard.press("Escape");
-
-  await page.goto("/resume?preview=paper");
-  await nav(page).getByRole("button", { name: "Theme" }).click();
+  await expect(page.getByRole("button", { name: /Paper/ })).toBeEnabled();
   await page.getByRole("button", { name: /Paper/ }).click();
   await expect.poll(() => attrs(page)).toMatchObject({ pack: "paper", theme: "cream", nav: "tabs" });
   await expect(page.getByRole("radiogroup", { name: "Navigation style" })).toBeHidden();
   await page.getByRole("button", { name: /Default/ }).click();
   await expect.poll(() => attrs(page)).toMatchObject({ pack: "modern", nav: "rail" });
+});
+
+test("case studies become lab notebook pages in paper only", async ({ page }) => {
+  await page.goto("/projects/pimplenet?theme=paper-cream");
+  await expect(page.getByText("PimpleNet lab notebook")).toBeVisible();
+  await expect(page.getByText(/^Fig\. 1/)).toBeVisible();
+  await expect(page.getByText("end of notes, O.M.")).toBeVisible();
+  await expect(page.getByText("Page", { exact: false }).filter({ hasText: "of 6" }).first()).toBeVisible();
+  await page.goto("/projects/pimplenet?theme=modern-cyan");
+  await expect(page.getByText("PimpleNet lab notebook")).toBeHidden();
+  await expect(page.getByText(/^Fig\. 1/)).toBeHidden();
+  await expect(page.getByText("omj@server:~$")).toBeVisible();
+});
+
+test("paper first visit opens the notebook cover, then hands back the page", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "webdriver", { get: () => false });
+    try {
+      localStorage.setItem("omj-prefs", JSON.stringify({ pack: "paper", variant: "cream" }));
+    } catch {}
+    new MutationObserver(() => {
+      if (document.documentElement.hasAttribute("data-boot-open")) window.__opened = true;
+      const t = document.querySelector(".boot .book-title");
+      if (t && !window.__title) window.__title = t.textContent;
+    }).observe(document, { attributes: true, childList: true, subtree: true });
+  });
+  await page.goto("/");
+  await expect.poll(() => page.evaluate(() => window.__title)).toBe("Oladele's Portfolio");
+  await expect.poll(() => page.evaluate(() => window.__opened === true), { timeout: 10000 }).toBe(true);
+  await expect.poll(() => page.evaluate(() => document.documentElement.hasAttribute("data-boot") || document.documentElement.hasAttribute("data-boot-open")), { timeout: 10000 }).toBe(false);
+  await expect(page.locator(".boot")).toHaveCount(0);
+});
+
+test("grind gets the report header in paper", async ({ page }) => {
+  await page.goto("/grind?theme=paper-cream");
+  await expect(page.getByText("Page", { exact: false }).filter({ hasText: "of 6" }).first()).toBeVisible();
 });

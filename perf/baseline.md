@@ -168,3 +168,11 @@ and projects reveal are small client islands. Boot replay is lazy-loaded from th
 Modern visitor, JS/CSS to `load` vs pass 2b: JS +0.6 to +0.8 KB per route, CSS +2.7 KB (Paper rules and
 3 Paper tones in the shared stylesheet). Caveat is `preload: false` and only fetched when Paper text uses it
 (home still downloads 2 fonts).
+
+## Pass 3b (Nov 20 2026)
+
+Source size added vs main (gzip): globals.css +0.5 KB, Boot +0.4 KB, case study components +1.2 KB,
+NotebookCover 0.4 KB (shared by the boot and the page flip). No new dependencies, no new fonts, no
+new images: the boot reuses the headshot already used by the page flip, and only renders it in Paper.
+The Paper boot and page flip are CSS + View Transitions (compositor only). Modern visuals are
+pixel-identical (strict visual pass).

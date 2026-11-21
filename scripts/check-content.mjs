@@ -207,6 +207,7 @@ caseStudies.forEach((c, i) => {
   if (!existsSync(join("src/app/projects", c.slug, "page.js"))) fail(`${at}.slug`, `needs a page at src/app/projects/${c.slug}/page.js (copy an existing one and change the slug)`);
   if (c.project !== undefined && !projectIds.has(c.project)) fail(`${at}.project`, `"${c.project}" is not a project id`);
   for (const k of ["title", "kicker", "summary"]) str(c[k], `${at}.${k}`);
+  if (c.marginNote !== undefined) str(c.marginNote, `${at}.marginNote`);
   str(c.badge?.label, `${at}.badge.label`);
   color(c.badge?.color, `${at}.badge.color`);
   if (c.showcase !== undefined && !SHOWCASES.includes(c.showcase)) fail(`${at}.showcase`, `must be one of ${SHOWCASES.join(", ")}`);

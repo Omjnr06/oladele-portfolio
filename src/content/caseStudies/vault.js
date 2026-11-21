@@ -10,6 +10,7 @@ export const vault = {
   badge: { label: "Team Project · Led by me", color: CYAN },
   kicker: "Next.js · FastAPI · Plaid",
   summary: "A personal finance dashboard that connects to real bank accounts and answers one question the others don't: how much is actually safe to spend today, after bills, savings goals, and a buffer are already accounted for.",
+  marginNote: "the one number that matters",
   stage: "In active development · Plaid integration built · production bank connections rolling out",
   showcase: "vault-safe-to-spend",
   brand: { primary: CYAN, success: GREEN, danger: RED },
