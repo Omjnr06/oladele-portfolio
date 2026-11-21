@@ -310,6 +310,27 @@ html[data-boot] .boot[data-auto] {
   animation: boot-bar calc(var(--boot) * 0.66) cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
 }
 
+.win-host,
+.win-page,
+.win-client {
+  display: contents;
+}
+
+html[data-pack="windows"]:not([data-win-ready]) body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  background: linear-gradient(165deg, #061f48 0%, #0b4a8e 50%, #0a2f63 100%);
+  animation: win-cover-fail 0s 6s forwards;
+}
+
+@keyframes win-cover-fail {
+  to {
+    visibility: hidden;
+  }
+}
+
 .boot-nb {
   display: none;
 }

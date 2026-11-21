@@ -182,6 +182,8 @@ export default function Palette({ onClose }) {
       location.assign(href);
     } else if (here && !url.search) {
       scrollToTop();
+    } else if (window.__omjWin) {
+      window.__omjWin.open(url.pathname + url.search);
     } else {
       router.push(href);
     }

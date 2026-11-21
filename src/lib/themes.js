@@ -22,6 +22,12 @@ export const THEMES = {
       { id: "kraft", label: "Kraft", light: true, swatch: ["#D9C49F", "#1E3A8A", "#8B1D1D"] },
     ],
   },
+  windows: {
+    label: "Windows",
+    preview: true,
+    desktopOnly: true,
+    variants: [{ id: "aero", label: "Aero", light: true, swatch: ["#0D4F8F", "#1F5FBF", "#D9480F"] }],
+  },
 };
 
 export const PACKS = [
@@ -46,10 +52,20 @@ export function packOpen(pack) {
   }
 }
 
+export const DESKTOP_MIN = 900;
+
+export function packFits(pack) {
+  if (!THEMES[pack]?.desktopOnly) return true;
+  if (typeof window === "undefined") return true;
+  const ua = navigator.userAgent;
+  const handheld = navigator.userAgentData?.mobile === true || /Android|iPhone|iPad|iPod|Mobile/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  return !handheld && window.innerWidth >= DESKTOP_MIN;
+}
+
 const variantIds = (pack) => THEMES[pack].variants.map((v) => v.id);
 
 export function resolveTheme(input) {
-  const pack = input && packOpen(input.pack) ? input.pack : DEFAULT_THEME.pack;
+  const pack = input && packOpen(input.pack) && packFits(input.pack) ? input.pack : DEFAULT_THEME.pack;
   const ids = variantIds(pack);
   const variant = input && ids.includes(input.variant) ? input.variant : ids[0];
   return { pack, variant };
