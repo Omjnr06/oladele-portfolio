@@ -75,7 +75,7 @@ export default function CaseStudy({ study }) {
           <p className="text-xl text-bright/60 font-light leading-relaxed max-w-2xl">{study.summary}</p>
 
           {study.stage && (
-            <div className="mt-6 inline-flex items-center gap-2 font-mono text-[11px] tracking-wide px-4 py-2 rounded-full border border-warn/30 bg-warn/5 text-warn-soft">
+            <div className="mt-6 inline-flex items-center gap-2 font-mono text-[11px] tracking-wide px-4 py-2 rounded-full border border-warn/30 bg-warn/5 text-warn-soft paper:bg-panel">
               <span className="w-2 h-2 rounded-full bg-warn animate-pulse" />
               CURRENT STAGE: {study.stage}
             </div>

@@ -28,8 +28,21 @@ function SongCard({ item, onOpen }) {
   );
 }
 
+function deepLink() {
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get("track") || params.get("clip");
+  if (!raw) return null;
+  const key = raw.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  for (const cat of instrumentItems) {
+    const match = clipItemsForCategory(cat.categoryId).find((c) => c.trackId.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-") === key || c.id === `clip-${key}`);
+    if (match) return { tab: cat.categoryId, clip: match };
+  }
+  return null;
+}
+
 export default function MobileWheel() {
-  const [tab, setTab] = useState(TABS[0].key);
+  const [deep] = useState(deepLink);
+  const [tab, setTab] = useState(deep?.tab ?? TABS[0].key);
   const [drawer, setDrawer] = useState(false);
   const [clip, setClip] = useState(null);
   const [song, setSong] = useState(null);
@@ -39,16 +52,10 @@ export default function MobileWheel() {
   const active = TABS.find((t) => t.key === tab);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const raw = params.get("track") || params.get("clip");
-    if (!raw) return;
-    const key = raw.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-    for (const cat of instrumentItems) {
-      const clips = clipItemsForCategory(cat.categoryId);
-      const match = clips.find((c) => c.trackId.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-") === key || c.id === `clip-${key}`);
-      if (match) { setTab(cat.categoryId); setTimeout(() => setClip(match), 400); break; }
-    }
-  }, []);
+    if (!deep) return;
+    const t = setTimeout(() => setClip(deep.clip), 400);
+    return () => clearTimeout(t);
+  }, [deep]);
 
   useEffect(() => {
     const el = tabRefs.current[tab];

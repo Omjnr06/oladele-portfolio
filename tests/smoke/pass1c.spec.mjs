@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { gallery } from "../../src/content/gallery.js";
 
 const desktop = (info) => test.skip(info.project.name !== "smoke-desktop", "keyboard palette is desktop only");
 const palette = (page) => page.getByRole("dialog", { name: "Search the site" });
@@ -56,7 +57,7 @@ test("photo results jump to that photo in the gallery", async ({ page }, info) =
   await input(page).fill("guitar");
   await palette(page).getByRole("group", { name: "Photos" }).getByRole("option").first().click();
   await expect(palette(page)).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "Show photo 9" })).toHaveClass(/w-8/);
+  await expect(page.getByRole("button", { name: `Show photo ${gallery.findIndex((g) => g.id === "guitar") + 1}` })).toHaveClass(/w-8/);
 });
 
 test("Escape closes only the palette on /grind, and / still focuses grind search", async ({ page }, info) => {

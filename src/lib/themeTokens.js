@@ -132,10 +132,10 @@ export function themeCss() {
   out.push(block(both(Object.keys(PAPER_TOKENS)), PAPER_RAMP));
   if (lights.length) {
     out.push(`${block(both(lights), LIGHT).slice(0, -1)};color-scheme:light;--texture:none;--grid-line:color-mix(in srgb,var(--color-bright) 6%,transparent);--grid-dot:color-mix(in srgb,var(--color-accent) 35%,transparent)}`);
-    const stageSel = lights.flatMap((id) => [`:root[data-theme="${id}"] [data-surface="stage"]`, `:root[data-theme="${id}"] [data-surface="media"]`]).join(",");
+    const stageSel = lights.flatMap((id) => [...(PAPER_TOKENS[id] ? [] : [`:root[data-theme="${id}"] [data-surface="stage"]`]), `:root[data-theme="${id}"] [data-surface="media"]`]).join(",");
     out.push(`${block(stageSel, { ...stage, "on-accent": "#000000" }).slice(0, -1)};color-scheme:dark;--texture:url("/assets/textures/carbon-fibre.png")}`);
     for (const id of lights) {
-      const sel = [`:root[data-theme="${id}"] [data-surface="stage"]`, `:root[data-theme="${id}"] [data-surface="media"]`].join(",");
+      const sel = [...(PAPER_TOKENS[id] ? [] : [`:root[data-theme="${id}"] [data-surface="stage"]`]), `:root[data-theme="${id}"] [data-surface="media"]`].join(",");
       out.push(block(sel, { accent: `color-mix(in oklab,${all[id].accent} 55%,white)`, "accent-2": `color-mix(in oklab,${all[id].accent2} 70%,white)` }));
     }
   }

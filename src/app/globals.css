@@ -463,6 +463,14 @@ html[data-boot-open]::view-transition-old(nb-cover) {
   }
 }
 
+[data-pack="paper"] :is(.paper-page, .paper-card) :is(p, li, h1, h2, h3, h4, dt, dd, blockquote):not(:is(.paper-sheet, .paper-print, .paper-fig, [data-no-rule]) *) {
+  line-height: round(up, 1.3em, 32px);
+}
+
+[data-pack="paper"] :is(.paper-page, .paper-card) :is(h1, h2, h3):not(:is(.paper-sheet, .paper-print, .paper-fig, [data-no-rule]) *) {
+  line-height: round(up, 1.05em, 32px);
+}
+
 [data-pack="paper"] .animate-scan {
   animation: none;
 }
@@ -867,13 +875,14 @@ html[data-book-flip]::view-transition-new(book-cover) {
 }
 
 [data-pack="paper"] .paper-card {
+  --rule-top: 57px;
   border-color: var(--color-line);
   border-radius: 4px;
   background-color: #fffdf8;
   background-image:
     linear-gradient(to bottom, transparent 55px, #e07070 55px, #e07070 57px, transparent 57px),
     repeating-linear-gradient(to bottom, transparent 0, transparent 31px, #c6d6ee 31px, #c6d6ee 32px);
-  background-position: 0 0, 0 57px;
+  background-position: 0 0, 0 var(--rule-top);
   box-shadow: 0 1px 2px rgb(0 0 0 / 0.1), 0 14px 30px -18px rgb(0 0 0 / 0.4);
 }
 
@@ -941,7 +950,7 @@ html[data-book-flip]::view-transition-new(book-cover) {
   border-width: 2px !important;
   border-color: color-mix(in srgb, var(--color-accent-2) 70%, transparent) !important;
   border-radius: 3px;
-  background: transparent !important;
+  background: var(--color-ink) !important;
   color: var(--color-accent-2) !important;
   transform: rotate(-2deg);
 }

@@ -26,9 +26,12 @@ export default function CanvasBoard() {
   const apiRef = useRef(null);
   const gridRef = useRef(null);
   const pctRef = useRef(null);
-  const [view, setView] = useState({ scale: INITIAL_SCALE, x: 0, y: 0 });
-  const [viewport, setViewport] = useState({ w: 0, h: 0 });
-  const [start, setStart] = useState(null);
+  const [start] = useState(() => ({
+    sx: (window.innerWidth - CANVAS_SIZE * INITIAL_SCALE) / 2,
+    sy: (window.innerHeight - CANVAS_SIZE * INITIAL_SCALE) / 2,
+  }));
+  const [view, setView] = useState(() => ({ scale: INITIAL_SCALE, x: start.sx, y: start.sy }));
+  const [viewport, setViewport] = useState(() => ({ w: window.innerWidth, h: window.innerHeight }));
   const [hoveredClip, setHoveredClip] = useState(null);
   const [selectedClip, setSelectedClip] = useState(null);
   const [selectedSong, setSelectedSong] = useState(null);
@@ -37,12 +40,6 @@ export default function CanvasBoard() {
   const raf = useRef(0);
 
   useEffect(() => {
-    const vw = window.innerWidth, vh = window.innerHeight;
-    const sx = (vw - CANVAS_SIZE * INITIAL_SCALE) / 2;
-    const sy = (vh - CANVAS_SIZE * INITIAL_SCALE) / 2;
-    setStart({ sx, sy });
-    setView({ scale: INITIAL_SCALE, x: sx, y: sy });
-    setViewport({ w: vw, h: vh });
     const onResize = () => setViewport({ w: window.innerWidth, h: window.innerHeight });
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);

@@ -13,6 +13,8 @@ music/
 ├─ layout.js                   Full-viewport (100vh) positioning shell (works around the
 │                              global template.js transform that breaks position:fixed).
 ├─ musicCanvas.css             All styling for the canvas, nodes, modals, and mobile.
+│                              The Paper pack skin (sketchbook: taped polaroids, handwritten
+│                              labels, pencil circles) is the [data-pack="paper"] block at the end.
 ├─ README.md                   This file.
 │
 ├─ data/
