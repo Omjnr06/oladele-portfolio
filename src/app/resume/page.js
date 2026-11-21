@@ -21,7 +21,7 @@ function Node({ hover = "accent" }) {
 
 function Points({ points }) {
   return (
-    <ul className="space-y-3">
+    <ul className="space-y-3 paper:space-y-0">
       {points.map((point, i) => (
         <li key={i} className="text-bright/75 leading-relaxed flex items-start text-sm">
           <span className="text-accent-2 mr-3 font-mono mt-0.5">{`>`}</span>
@@ -44,7 +44,7 @@ export default function ResumePage() {
               <ReportHeader path="/resume" className="mb-8" />
               <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-bright mb-2">{profile.firstName} {profile.lastName}</h1>
               <p className="font-mono text-xs tracking-widest text-accent mb-4">{profile.title}</p>
-              <div className="inline-block px-3 py-1 bg-bright/5 border border-bright/10 rounded-sm font-mono text-[11px] text-muted">{profile.status}</div>
+              <div className="inline-block px-3 py-1 bg-bright/5 border border-bright/10 rounded-sm font-mono text-[11px] text-muted paper:bg-panel paper:border-line">{profile.status}</div>
             </div>
 
             <a href={profile.resumePdf.href} target="_blank" rel="noopener noreferrer" className="group relative overflow-hidden bg-panel border border-bright/10 text-bright font-mono text-sm px-6 py-4 w-full block transition hover:border-accent hover:shadow-[0_0_15px_color-mix(in_srgb,var(--color-accent)_20%,transparent)] rounded-md">
@@ -66,7 +66,7 @@ export default function ResumePage() {
                     <h3 className="font-mono text-[11px] tracking-widest text-accent-2 mb-3 uppercase">[{group.category}]</h3>
                     <div className="flex flex-wrap gap-2">
                       {group.items.map((item) => (
-                        <span key={item} className="px-3 py-1 bg-bright/5 border border-bright/5 text-bright text-xs rounded-full hover:bg-bright/10 transition-colors cursor-default">{item}</span>
+                        <span key={item} className="px-3 py-1 bg-bright/5 border border-bright/5 text-bright text-xs rounded-full hover:bg-bright/10 transition-colors cursor-default paper:bg-panel paper:border-line">{item}</span>
                       ))}
                     </div>
                   </div>
@@ -81,7 +81,7 @@ export default function ResumePage() {
               <Heading>EXPERIENCE</Heading>
               <div className="space-y-12 relative border-l border-bright/10 ml-1">
                 {experience.map((exp) => (
-                  <div key={exp.id} id={exp.id} className="relative pl-8 scroll-mt-24">
+                  <div key={exp.id} id={exp.id} data-rule-lead className="relative pl-8 scroll-mt-24">
                     <Node />
                     <div className="mb-2 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                       <h3 className="text-xl font-bold text-bright tracking-tight">{exp.role}</h3>
@@ -98,7 +98,7 @@ export default function ResumePage() {
               <Heading>PROJECTS</Heading>
               <div className="space-y-12 relative border-l border-bright/10 ml-1">
                 {resumeProjects.map((prj) => (
-                  <div key={prj.id} id={prj.id} className="relative pl-8 scroll-mt-24">
+                  <div key={prj.id} id={prj.id} data-rule-lead className="relative pl-8 scroll-mt-24">
                     <Node />
                     <div className="mb-2 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                       <h3 className="text-xl font-bold text-bright tracking-tight">{prj.title}</h3>
@@ -115,7 +115,7 @@ export default function ResumePage() {
               <Heading dot="accent-2">EDUCATION</Heading>
               <div className="space-y-10 relative border-l border-bright/10 ml-1">
                 {education.map((edu) => (
-                  <div key={edu.id} id={edu.id} className="relative pl-8 scroll-mt-24">
+                  <div key={edu.id} id={edu.id} data-rule-lead className="relative pl-8 scroll-mt-24">
                     <Node hover="accent-2" />
                     <div className="mb-2 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                       <h3 className="text-lg font-bold text-bright tracking-tight">{edu.degree}</h3>

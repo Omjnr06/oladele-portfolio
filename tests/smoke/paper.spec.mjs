@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { profile } from "../../src/content/profile.js";
 
 const nav = (page) => page.getByRole("navigation", { name: "Site" });
 const attrs = (page) => page.evaluate(() => ({ ...document.documentElement.dataset }));
@@ -13,7 +14,7 @@ test("preview flag turns on paper before paint, with tabs and the report header"
   const a = await attrs(page);
   expect(a).toMatchObject({ pack: "paper", theme: "kraft", nav: "tabs" });
   await expect(page.getByText("Page", { exact: false }).filter({ hasText: "of 6" }).first()).toBeVisible();
-  await expect(page.getByText(/that's me!/)).toBeVisible();
+  await expect(page.getByText(profile.marginNotes.home, { exact: true })).toBeVisible();
 });
 
 test("modern hides paper extras and never downloads the handwriting font", async ({ page }) => {
@@ -21,7 +22,7 @@ test("modern hides paper extras and never downloads the handwriting font", async
   page.on("request", (r) => r.resourceType() === "font" && fonts.push(r.url()));
   await page.goto("/");
   await page.waitForLoadState("networkidle");
-  await expect(page.getByText(/that's me!/)).toBeHidden();
+  await expect(page.getByText(profile.marginNotes.home, { exact: true })).toBeHidden();
   await expect(page.getByText("of 6")).toBeHidden();
   expect(fonts.length).toBeLessThanOrEqual(2);
 });
@@ -118,4 +119,37 @@ test("paper first visit opens the notebook cover, then hands back the page", asy
 test("grind gets the report header in paper", async ({ page }) => {
   await page.goto("/grind?theme=paper-cream");
   await expect(page.getByText("Page", { exact: false }).filter({ hasText: "of 6" }).first()).toBeVisible();
+});
+
+test("paper text sits on the ruled lines, modern is untouched", async ({ page }) => {
+  await page.goto("/resume?theme=paper-cream");
+  await page.waitForLoadState("networkidle");
+  const offsets = await page.evaluate(() => {
+    const pg = document.querySelector(".paper-page").getBoundingClientRect().top;
+    return [...document.querySelectorAll(".paper-page li")].filter((li) => li.getClientRects().length).slice(0, 8).map((li) => {
+      const cs = getComputedStyle(li);
+      return { lh: cs.lineHeight, mod: Math.round(((li.lastElementChild.getBoundingClientRect().top - pg) % 32) + 32) % 32 };
+    });
+  });
+  expect(offsets.length).toBeGreaterThan(3);
+  expect(new Set(offsets.map((o) => o.lh))).toEqual(new Set(["32px"]));
+  expect(new Set(offsets.map((o) => o.mod)).size).toBe(1);
+  await page.goto("/resume?theme=modern-cyan");
+  await page.waitForLoadState("networkidle");
+  expect(await page.locator("[data-snapped]").count()).toBe(0);
+});
+
+test("music becomes a sketchbook in paper and stays dark in modern", async ({ page }) => {
+  const look = () =>
+    page.evaluate(() => {
+      const bg = document.querySelector(".mv-grid-bg, .mvm-dots");
+      const card = document.querySelector(".mv-clip-node, .mvm-card");
+      return { bg: getComputedStyle(bg).backgroundColor, frame: getComputedStyle(card).borderTopColor };
+    });
+  await page.goto("/music?theme=paper-cream");
+  await expect(page.locator(".mv-clip-node, .mvm-card").first()).toBeVisible();
+  expect(await look()).toEqual({ bg: "rgb(246, 241, 231)", frame: "rgb(251, 249, 243)" });
+  await page.goto("/music?theme=modern-cyan");
+  await expect(page.locator(".mv-clip-node, .mvm-card").first()).toBeVisible();
+  expect((await look()).bg).not.toBe("rgb(246, 241, 231)");
 });

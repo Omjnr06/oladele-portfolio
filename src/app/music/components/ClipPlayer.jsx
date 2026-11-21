@@ -29,72 +29,6 @@ export default function ClipPlayer({ clip, onClose }) {
 
   const go = useCallback((d) => setIdx((i) => (i + d + list.length) % list.length), [list.length]);
 
-  const togglePlay = useCallback(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    if (v.paused) { setupAudio(); v.play().catch(() => {}); } else v.pause();
-  }, []);
-
-  const toggleFullscreen = useCallback(() => {
-    if (!document.fullscreenElement) {
-      if (containerRef.current?.requestFullscreen) containerRef.current.requestFullscreen().catch(() => {});
-      else if (videoRef.current?.webkitEnterFullscreen) videoRef.current.webkitEnterFullscreen();
-    } else {
-      document.exitFullscreen();
-    }
-  }, []);
-
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === "Escape" && !document.fullscreenElement) onClose();
-      if (e.key === "ArrowRight") go(1);
-      if (e.key === "ArrowLeft") go(-1);
-      if (e.key === " ") { e.preventDefault(); togglePlay(); }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose, go, togglePlay]);
-
-  useEffect(() => {
-    const sync = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener("fullscreenchange", sync);
-    document.addEventListener("webkitfullscreenchange", sync);
-    const v = videoRef.current;
-    const onBegin = () => setIsFullscreen(true);
-    const onEnd = () => setIsFullscreen(false);
-    if (v) {
-      v.addEventListener("webkitbeginfullscreen", onBegin);
-      v.addEventListener("webkitendfullscreen", onEnd);
-    }
-    return () => {
-      document.removeEventListener("fullscreenchange", sync);
-      document.removeEventListener("webkitfullscreenchange", sync);
-      if (v) {
-        v.removeEventListener("webkitbeginfullscreen", onBegin);
-        v.removeEventListener("webkitendfullscreen", onEnd);
-      }
-    };
-  }, [idx]);
-
-  const setupAudio = useCallback(() => {
-    if (current.audioOnly || !videoRef.current) return;
-    try {
-      if (!audioCtxRef.current) {
-        const Ctx = window.AudioContext || window.webkitAudioContext;
-        audioCtxRef.current = new Ctx();
-        analyserRef.current = audioCtxRef.current.createAnalyser();
-        analyserRef.current.fftSize = 128;
-      }
-      if (!sourceRef.current) {
-        sourceRef.current = audioCtxRef.current.createMediaElementSource(videoRef.current);
-        sourceRef.current.connect(analyserRef.current);
-        analyserRef.current.connect(audioCtxRef.current.destination);
-      }
-      if (audioCtxRef.current.state === "suspended") audioCtxRef.current.resume();
-    } catch (e) {}
-    startVisualizer();
-  }, [current.audioOnly]);
-
   const startVisualizer = useCallback(() => {
     if (rafRef.current || !analyserRef.current) return;
     const bufferLength = analyserRef.current.frequencyBinCount;
@@ -146,6 +80,73 @@ export default function ClipPlayer({ clip, onClose }) {
     };
     draw();
   }, []);
+
+  const setupAudio = useCallback(() => {
+    if (current.audioOnly || !videoRef.current) return;
+    try {
+      if (!audioCtxRef.current) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        audioCtxRef.current = new Ctx();
+        analyserRef.current = audioCtxRef.current.createAnalyser();
+        analyserRef.current.fftSize = 128;
+      }
+      if (!sourceRef.current) {
+        sourceRef.current = audioCtxRef.current.createMediaElementSource(videoRef.current);
+        sourceRef.current.connect(analyserRef.current);
+        analyserRef.current.connect(audioCtxRef.current.destination);
+      }
+      if (audioCtxRef.current.state === "suspended") audioCtxRef.current.resume();
+    } catch (e) {}
+    startVisualizer();
+  }, [current.audioOnly, startVisualizer]);
+
+  const togglePlay = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) { setupAudio(); v.play().catch(() => {}); } else v.pause();
+  }, [setupAudio]);
+
+  const toggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      if (containerRef.current?.requestFullscreen) containerRef.current.requestFullscreen().catch(() => {});
+      else if (videoRef.current?.webkitEnterFullscreen) videoRef.current.webkitEnterFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape" && !document.fullscreenElement) onClose();
+      if (e.key === "ArrowRight") go(1);
+      if (e.key === "ArrowLeft") go(-1);
+      if (e.key === " ") { e.preventDefault(); togglePlay(); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose, go, togglePlay]);
+
+  useEffect(() => {
+    const sync = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", sync);
+    document.addEventListener("webkitfullscreenchange", sync);
+    const v = videoRef.current;
+    const onBegin = () => setIsFullscreen(true);
+    const onEnd = () => setIsFullscreen(false);
+    if (v) {
+      v.addEventListener("webkitbeginfullscreen", onBegin);
+      v.addEventListener("webkitendfullscreen", onEnd);
+    }
+    return () => {
+      document.removeEventListener("fullscreenchange", sync);
+      document.removeEventListener("webkitfullscreenchange", sync);
+      if (v) {
+        v.removeEventListener("webkitbeginfullscreen", onBegin);
+        v.removeEventListener("webkitendfullscreen", onEnd);
+      }
+    };
+  }, [idx]);
+
 
   useEffect(() => () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); themeOffRef.current?.(); }, []);
 

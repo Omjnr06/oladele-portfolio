@@ -176,3 +176,10 @@ NotebookCover 0.4 KB (shared by the boot and the page flip). No new dependencies
 new images: the boot reuses the headshot already used by the page flip, and only renders it in Paper.
 The Paper boot and page flip are CSS + View Transitions (compositor only). Modern visuals are
 pixel-identical (strict visual pass).
+
+## Pass 4 (Nov 21 2026)
+
+RuleSnap (Paper text on the ruled lines) is a ~1 KB client island that returns early outside Paper.
+In Paper it runs after load, on page change and when a page resizes (images, tabs), and settles within
+~1.5s. The /music sketchbook skin is CSS only, in MusicCanvas.css, which only loads on /music. Modern
+visuals pixel-identical (strict pass).
