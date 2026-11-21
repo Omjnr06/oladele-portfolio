@@ -43,6 +43,10 @@ export const PAPER_TOKENS = {
   kraft: { light: true, ink: "#D9C49F", panel: "#E4D3B3", line: "#B39B72", fg: "#22180C", muted: "#4A3A22", accent: "#1E3A8A", accent2: "#8B1D1D", ok: "#2E5A28", warn: "#5E4108", err: "#8B1D1D", rule: "transparent", margin: "#9B2C2C", grid: "transparent" },
 };
 
+export const WINDOWS_TOKENS = {
+  aero: { light: true, ink: "#F4F7FB", panel: "#FFFFFF", line: "#D3DCE7", fg: "#16202C", muted: "#4F5B69", accent: "#1F5FBF", accent2: "#C2410C", ok: "#15803D", warn: "#A16207", err: "#B91C1C" },
+};
+
 const hex = (h) => {
   const s = h.replace("#", "");
   return [0, 2, 4].map((i) => parseInt(s.slice(i, i + 2), 16) / 255);
@@ -101,7 +105,7 @@ const DERIVED_OTHER = "--grid-dot:color-mix(in srgb,var(--color-accent) 25%,tran
 const both = (ids) => ids.flatMap((id) => [`:root[data-theme="${id}"]`, `[data-theme="${id}"]`]).join(",");
 
 export function themeCss() {
-  const all = { ...VARIANT_TOKENS, ...PAPER_TOKENS };
+  const all = { ...VARIANT_TOKENS, ...PAPER_TOKENS, ...WINDOWS_TOKENS };
   const ids = Object.keys(all);
   const lights = ids.filter((id) => all[id].light);
   const stage = Object.fromEntries(Object.entries(CYAN).filter(([k]) => !["accent", "accent-2", "on-accent"].includes(k)));

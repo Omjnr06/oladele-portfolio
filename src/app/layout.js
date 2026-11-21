@@ -8,6 +8,7 @@ import { NO_FLASH_SCRIPT } from "@/lib/themeScript";
 import PaletteHost from "./components/palette/PaletteHost";
 import BookFlip from "./components/paper/BookFlip";
 import RuleSnap from "./components/paper/RuleSnap";
+import WinFrame from "./components/win/WinFrame";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,7 +46,7 @@ export default function RootLayout({ children }) {
         <script dangerouslySetInnerHTML={{ __html: NO_FLASH_SCRIPT }} />
       </head>
       <body className="min-h-full flex flex-col">
-        {children}
+        <WinFrame>{children}</WinFrame>
         <PaletteHost />
         <BookFlip />
         <RuleSnap />

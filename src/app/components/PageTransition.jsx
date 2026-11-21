@@ -66,7 +66,9 @@ export default function PageTransition({ children }) {
     if (!navigated) return null;
     if (window.__omjBookFlip) return "book";
     if (!cdOn()) return null;
-    return document.documentElement.dataset.pack === "paper" ? "flip" : "cd";
+    const pack = document.documentElement.dataset.pack;
+    if (pack === "windows") return null;
+    return pack === "paper" ? "flip" : "cd";
   });
   const [veil, setVeil] = useState(!!cd);
 
