@@ -43,7 +43,7 @@ test("no boot with reduced motion", async ({ browser }) => {
   await ctx.close();
 });
 
-test("OMJ card replays the boot", async ({ page }, info) => {
+test("OMJ card opens without a replay boot button", async ({ page }, info) => {
   test.skip(info.project.name !== "smoke-desktop", "the mark lives in the desktop rail");
   await page.goto("/resume");
   const mark = page.getByRole("navigation", { name: "Site" }).getByRole("button", { name: "About Oladele" });
@@ -52,8 +52,6 @@ test("OMJ card replays the boot", async ({ page }, info) => {
     if (!(await card.count())) await mark.click();
     await expect(card).toBeVisible({ timeout: 1000 });
   }).toPass();
-  await card.getByRole("button", { name: "Replay boot" }).click();
-  await expect(page.locator(".boot")).toBeVisible();
-  await expect(page.locator(".boot")).toHaveCount(0, { timeout: 5000 });
-  await expect(mark).toBeFocused();
+  await expect(card.getByRole("button", { name: "Replay boot" })).toHaveCount(0);
+  await expect(card.getByRole("link", { name: "Open resume" })).toBeVisible();
 });

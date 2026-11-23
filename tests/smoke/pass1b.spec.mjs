@@ -60,18 +60,6 @@ test("spotlight videos pause when scrolled away", async ({ page }, info) => {
   expect(await video.evaluate((v) => v.paused)).toBe(true);
 });
 
-test("project image preview opens and closes with Escape", async ({ page }, info) => {
-  test.skip(info.project.name !== "smoke-desktop", "desktop interaction");
-  await page.goto("/projects");
-  await page.getByRole("button", { name: "DATA SCIENCE", exact: true }).click();
-  await page.locator('#projects [style*="flowlytics-ui"]').click();
-  await expect(page.getByAltText("Project preview")).toBeVisible();
-  expect(await page.evaluate(() => document.body.style.position)).toBe("fixed");
-  await page.keyboard.press("Escape");
-  await expect(page.getByAltText("Project preview")).toHaveCount(0);
-  expect(await page.evaluate(() => document.body.style.position)).toBe("");
-});
-
 test("case study tabs work with the keyboard", async ({ page }) => {
   await page.goto("/projects/vault");
   const overview = page.getByRole("tab", { name: "Overview" });

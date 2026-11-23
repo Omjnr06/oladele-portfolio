@@ -52,6 +52,8 @@ Paper theme only: `course` fills the report header, and `marginNotes` are the ha
   summary: "One paragraph.",
   internship: true,                 // optional, shows the INTERNSHIP badge
   caseStudy: "pimplenet",           // optional, slug of a file in caseStudies/
+  hackathon: true,                  // optional, files it under hackathons/ on /projects
+  tag: "live users",                // optional, "shipped" (in production) or "live users" (people use it)
   links: { live: "https://…", github: "https://…" },   // both optional, use {} for none
   media: { image: "/assets/…", video: "/assets/….mp4", fit: "cover" | "contain", orientation: "portrait" },
                                     // big videos on Supabase: add loop (12s, 720p, no audio) for the Spotlight

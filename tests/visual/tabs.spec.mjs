@@ -44,16 +44,19 @@ for (const size of SIZES) {
       await expect(page.locator("#spotlight")).toHaveScreenshot(`spotlight-music-${size.name}.png`, opts({ fullPage: undefined, mask: media(page) }));
     });
 
-    test("projects page browser", async ({ page }) => {
+    test("projects page explorer", async ({ page }) => {
       await page.goto("/projects", { waitUntil: "load" });
       await page.waitForTimeout(1200);
       const projects = page.locator("#projects");
       await projects.scrollIntoViewIfNeeded();
       await page.waitForTimeout(600);
       await expect(projects).toHaveScreenshot(`projects-${size.name}.png`, opts({ fullPage: undefined, mask: media(page) }));
-      await page.getByRole("button", { name: "MACHINE LEARNING", exact: true }).click();
-      await page.waitForTimeout(900);
-      await expect(projects).toHaveScreenshot(`projects-ml-${size.name}.png`, opts({ fullPage: undefined, mask: media(page) }));
+      const graph = page.getByRole("radio", { name: "--graph" });
+      if (await graph.isVisible()) {
+        await graph.click();
+        await page.waitForTimeout(600);
+        await expect(projects).toHaveScreenshot(`projects-graph-${size.name}.png`, opts({ fullPage: undefined, mask: media(page) }));
+      }
     });
   });
 }

@@ -7,7 +7,7 @@ export const profile = {
   now: "Learning Human Nature by Michael Jackson on fingerstyle guitar.",
   intro: [
     { id: "study", text: "Pursuing *Computer Science* at Western University." },
-    { id: "tagline", text: "Building *cool things.* Jamming *along the way.*" },
+    { id: "tagline", text: "Building *cool* things. *Jamming* along the way." },
   ],
   resumePdf: { href: "/assets/Oladele_Magbadelo_Resume.pdf", size: "99_KB" },
   course: "Computer Science @ Western '28",

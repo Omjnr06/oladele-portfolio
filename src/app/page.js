@@ -9,6 +9,7 @@ import { clipSlug } from "./music/data/boardItems";
 import SiteNav from "./components/SiteNav";
 import Boot from "./components/boot/Boot";
 import Rich from "./components/Rich";
+import Tagline from "./components/home/Tagline";
 import BackToTop from "./components/BackToTop";
 import Gallery from "./components/home/Gallery";
 import MusicSpotlight from "./components/home/MusicSpotlight";
@@ -31,7 +32,9 @@ function Letters({ word, offset }) {
     <div className="flex">
       {word.split("").map((letter, index) => (
         <span key={index} className="hover-letter animate-scan" style={{ animationDelay: `${(index + offset) * 0.06}s` }}>
-          {letter}
+          <span className="ink-letter" style={{ "--i": index + offset }}>
+            {letter}
+          </span>
         </span>
       ))}
     </div>
@@ -52,7 +55,7 @@ export default function Home() {
         <div className="absolute left-10 h-full w-[1px] bg-accent opacity-20 pointer-events-none hidden md:block paper:hidden z-0" />
         <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-accent-2 opacity-[0.03] rounded-full blur-[120px] pointer-events-none paper:hidden" />
 
-        <div className="home-fit relative z-10 mx-auto flex w-full max-w-[1440px] flex-col gap-[clamp(20px,3.6vh,40px)] px-6 py-8 pb-28 md:px-12 md:pb-8 lg:h-[100svh] lg:min-h-[640px] lg:px-16 lg:py-[clamp(24px,4.5vh,48px)] lg:paper:py-[clamp(16px,2.5vh,32px)] pill:pt-24">
+        <div className="home-fit relative z-10 mx-auto flex w-full max-w-[1440px] flex-col gap-[clamp(20px,3.6vh,40px)] px-6 py-8 pb-28 md:px-12 md:pb-8 lg:h-[100svh] lg:min-h-[800px] lg:px-16 lg:py-[clamp(24px,4.5vh,48px)] lg:paper:py-[clamp(16px,2.5vh,32px)] pill:pt-24">
           <header id="home" data-no-rule className="relative flex shrink-0 flex-wrap items-end justify-between gap-x-8 gap-y-4 scroll-mt-24 lg:flex-nowrap">
             <div className="relative min-w-0">
               <div className="relative w-fit">
@@ -64,13 +67,18 @@ export default function Home() {
                 <MarginNote id="home" className="mt-1 rotate-[-3deg] lg:absolute lg:left-full lg:top-1/2 lg:mt-0 lg:ml-6 lg:-translate-y-1/2 lg:whitespace-nowrap" />
               </div>
               <p className="mt-2 max-w-3xl text-base font-light leading-relaxed text-muted lg:text-lg">
-                <Rich text={study.text} em="text-bright" /> <Rich text={tagline.text} em="text-accent" />
+                <span className="inline-block">
+                  <Rich text={study.text} em="text-bright" />
+                </span>{" "}
+                <span className="tagline-line inline-block">
+                  <Tagline text={tagline.text} em="text-accent" />
+                </span>
               </p>
             </div>
             <ContactBar />
           </header>
 
-          <div data-no-rule className="grid min-h-0 flex-1 gap-[clamp(20px,3.2vh,32px)] paper:gap-x-[clamp(24px,4.2vh,44px)] paper:gap-y-[clamp(20px,2.8vh,36px)] lg:grid-cols-12 lg:grid-rows-[minmax(0,1.15fr)_minmax(0,1fr)] [@media(max-height:800px)]:lg:grid-rows-[minmax(0,1.5fr)_minmax(0,1fr)]">
+          <div data-no-rule className="grid min-h-0 flex-1 gap-[clamp(20px,3.2vh,32px)] paper:gap-x-[clamp(24px,4.2vh,44px)] paper:gap-y-[clamp(20px,2.8vh,36px)] lg:grid-cols-12 lg:grid-rows-[minmax(0,1.25fr)_minmax(0,1fr)]">
             <div className="min-h-0 lg:col-span-4">
               <ExperienceList roles={highlightedExperience} />
             </div>

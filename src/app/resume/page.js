@@ -45,11 +45,11 @@ export default function ResumePage() {
 
       <div className="paper-page flex-1 min-w-0 bg-ink relative overflow-x-clip">
         <div className="px-6 md:px-12 lg:px-16 py-10 md:py-14 pill:pt-24 max-w-7xl mx-auto w-full z-10 flex flex-col lg:flex-row gap-10 lg:gap-12">
-          <div className="w-full lg:w-[30%] space-y-8 lg:sticky lg:top-10 h-fit lg:max-h-[calc(100svh-5rem)] lg:overflow-y-auto lg:pr-3 lg:-mr-3 lg:pb-6 lg:paper:static lg:paper:max-h-none lg:paper:overflow-visible">
+          <div className="w-full lg:w-[30%] lg:min-w-[300px] lg:shrink-0 space-y-8 lg:sticky lg:top-10 h-fit lg:max-h-[calc(100svh-5rem)] lg:overflow-y-auto lg:pr-3 lg:-mr-3 lg:pb-6 lg:paper:static lg:paper:max-h-none lg:paper:overflow-visible">
             <div>
               <h1 className="text-[clamp(1.75rem,2.4vw,2.25rem)] font-extrabold leading-tight tracking-tight text-bright mb-2 paper:font-normal">
                 <span className="sr-only">{profile.firstName} {profile.lastName}</span>
-                <TypedText text={`${profile.firstName} ${profile.lastName}`} label={false} className="paper:hidden" />
+                <TypedText text={`${profile.firstName} ${profile.lastName}`} label={false} className="whitespace-nowrap paper:hidden" />
                 <WrittenName as="span" look="hidden paper:inline-block text-[44px] tracking-normal" />
               </h1>
               <p className="font-mono text-xs tracking-widest text-accent mb-4">{profile.title}</p>
@@ -58,17 +58,17 @@ export default function ResumePage() {
 
             <div className="space-y-3">
               <div className="flex gap-2">
-                <a href={profile.resumePdf.href} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-lg bg-accent px-5 text-sm font-semibold text-on-accent transition-[transform,filter] duration-150 hover:brightness-110 active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
-                  View resume PDF
+                <a href={profile.resumePdf.href} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-accent px-4 text-sm font-semibold text-on-accent transition-[transform,filter] duration-150 hover:brightness-110 active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+                  View resume
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M7 17 17 7M8 7h9v9" /></svg>
                 </a>
                 <a href={profile.resumePdf.href} download className="inline-flex h-11 items-center rounded-lg border border-bright/10 bg-panel px-4 text-sm text-bright transition-[border-color,transform] duration-150 hover:border-accent/50 active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
                   Download
                 </a>
               </div>
-              <div id="contact" className="flex flex-wrap gap-2 scroll-mt-24">
+              <div id="contact" className="grid grid-flow-col auto-cols-fr gap-2 scroll-mt-24">
                 {contact.map((c) => (
-                  <a key={c.id} href={c.href} target={c.id === "email" ? undefined : "_blank"} rel="noopener noreferrer" aria-label={c.label} title={c.label} className="grid h-10 w-10 place-items-center rounded-lg border border-bright/10 bg-panel text-muted transition-[color,border-color,transform] duration-150 hover:border-accent/50 hover:text-accent active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+                  <a key={c.id} href={c.href} target={c.id === "email" ? undefined : "_blank"} rel="noopener noreferrer" aria-label={c.label} title={c.label} className="grid h-10 place-items-center rounded-lg border border-bright/10 bg-panel text-muted transition-[color,border-color,transform] duration-150 hover:border-accent/50 hover:text-accent active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
                     <svg className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" aria-hidden>{ICONS[c.icon]}</svg>
                   </a>
                 ))}

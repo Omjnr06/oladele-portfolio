@@ -18,8 +18,10 @@ function useOffscreenPause(ref, reduce) {
   }, [ref, reduce]);
 }
 
+const nav = "grid size-10 place-items-center rounded-full text-bright transition-[opacity,background-color,transform] duration-150 hover:bg-scrim/60 active:scale-95 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+
 const Arrow = ({ d }) => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
     <path d={d} />
   </svg>
 );
@@ -92,24 +94,25 @@ export default function MusicSpotlight({ tracks, role }) {
       </AnimatePresence>
 
       {n > 1 && (
-        <>
-          <button aria-label="Previous clip" onClick={() => setIndex((p) => (p - 1 + n) % n)} className={`absolute left-3 top-1/2 z-30 -translate-y-1/2 rounded-full border border-bright/10 bg-scrim/40 p-2 text-bright backdrop-blur-md transition duration-300 hover:scale-110 hover:bg-scrim/70 ${hovered ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0 pointer-events-none"}`}>
+        <div className="absolute right-3 top-3 z-20 flex items-center gap-1">
+          <button type="button" aria-label="Previous clip" onClick={() => setIndex((p) => (p - 1 + n) % n)} className={`${nav} ${hovered ? "opacity-100" : "opacity-0 max-lg:opacity-100"}`}>
             <Arrow d="M15 18l-6-6 6-6" />
           </button>
-          <button aria-label="Next clip" onClick={() => setIndex((p) => (p + 1) % n)} className={`absolute right-3 top-1/2 z-30 -translate-y-1/2 rounded-full border border-bright/10 bg-scrim/40 p-2 text-bright backdrop-blur-md transition duration-300 hover:scale-110 hover:bg-scrim/70 ${hovered ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0 pointer-events-none"}`}>
-            <Arrow d="M9 18l6-6-6-6" />
-          </button>
-          <div className="absolute right-4 top-4 z-20 flex gap-2">
+          <div className="flex items-center gap-2 px-1">
             {tracks.map((item, i) => (
               <button
                 key={item.id}
+                type="button"
                 onClick={() => setIndex(i)}
                 aria-label={`Show clip ${i + 1}`}
                 className={`h-1.5 rounded-full transition-[width,background-color] duration-300 ${index === i ? "w-8 bg-accent-2" : "w-2 bg-bright/30 hover:bg-bright/60"}`}
               />
             ))}
           </div>
-        </>
+          <button type="button" aria-label="Next clip" onClick={() => setIndex((p) => (p + 1) % n)} className={`${nav} ${hovered ? "opacity-100" : "opacity-0 max-lg:opacity-100"}`}>
+            <Arrow d="M9 18l6-6-6-6" />
+          </button>
+        </div>
       )}
     </div>
   );

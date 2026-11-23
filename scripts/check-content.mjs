@@ -82,6 +82,8 @@ projects.forEach((p, i) => {
   str(p.title, `${at}.title`);
   strings(p.categories, `${at}.categories`);
   strings(p.stack, `${at}.stack`);
+  if (p.hackathon !== undefined && typeof p.hackathon !== "boolean") fail(`${at}.hackathon`, "must be true or false");
+  if (p.tag !== undefined && !["shipped", "live users"].includes(p.tag)) fail(`${at}.tag`, 'must be "shipped" or "live users"');
   str(p.summary, `${at}.summary`);
   if (p.caseStudy !== undefined && !caseSlugs.has(p.caseStudy)) fail(`${at}.caseStudy`, `"${p.caseStudy}" has no matching case study in src/content/caseStudies`);
   if (typeof p.links !== "object" || p.links === null) fail(`${at}.links`, "must be an object (use {} if there are none)");

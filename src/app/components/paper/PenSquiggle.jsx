@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { BOOT_DONE_EVENT } from "@/lib/events";
 
 const WAVES = [5, 7, 4, 6, 8, 5, 6, 4, 7, 5, 6, 5, 7, 4, 6, 5, 8, 5, 6, 4];
 const STEP = 600 / WAVES.length;
@@ -10,21 +9,19 @@ export default function PenSquiggle() {
   const path = useRef(null);
 
   useEffect(() => {
-    const el = path.current;
-    const host = el?.closest("h1");
+    const host = path.current?.closest("h1");
     if (!host || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let run = null;
-    const redraw = () => {
-      if (document.documentElement.dataset.pack !== "paper" || (run && run.playState === "running")) return;
-      el.style.animation = "none";
-      run = el.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 650, easing: "cubic-bezier(0.6, 0, 0.3, 1)", fill: "forwards" });
+    const replay = () => {
+      if (document.documentElement.dataset.pack !== "paper") return;
+      const runs = [...host.querySelectorAll(".ink-letter, .pen-draw")].flatMap((el) => el.getAnimations());
+      if (!runs.length || runs.some((a) => a.playState === "running")) return;
+      runs.forEach((a) => {
+        a.currentTime = 0;
+        a.play();
+      });
     };
-    host.addEventListener("pointerenter", redraw);
-    window.addEventListener(BOOT_DONE_EVENT, redraw);
-    return () => {
-      host.removeEventListener("pointerenter", redraw);
-      window.removeEventListener(BOOT_DONE_EVENT, redraw);
-    };
+    host.addEventListener("pointerenter", replay);
+    return () => host.removeEventListener("pointerenter", replay);
   }, []);
 
   return (

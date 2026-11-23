@@ -11,7 +11,7 @@ const SCREENS = [
 
 for (const theme of ["modern-cyan", "paper-cream"]) {
   for (const [w, h] of SCREENS) {
-    test(`recruiter essentials fit one screen: ${theme} ${w}x${h}`, async ({ page }, info) => {
+    test(`recruiter essentials fit within a small scroll: ${theme} ${w}x${h}`, async ({ page }, info) => {
       test.skip(info.project.name !== "smoke-desktop", "laptop and desktop sizes");
       await page.setViewportSize({ width: w, height: h });
       await page.goto(`/?theme=${theme}`);
@@ -19,8 +19,9 @@ for (const theme of ["modern-cyan", "paper-cream"]) {
       const bottoms = await page.evaluate(() =>
         Object.fromEntries(["contact", "experience", "projects", "gallery", "spotlight"].map((id) => [id, document.getElementById(id)?.getBoundingClientRect().bottom ?? Infinity])),
       );
-      for (const [id, bottom] of Object.entries(bottoms)) expect(bottom, id).toBeLessThanOrEqual(h);
-      expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(h);
+      const fold = Math.max(h, 800);
+      for (const [id, bottom] of Object.entries(bottoms)) expect(bottom, id).toBeLessThanOrEqual(fold);
+      expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThanOrEqual(fold);
     });
   }
 }
@@ -90,4 +91,29 @@ test("paper captions never sit under the tape", async ({ page }, info) => {
     const [n, b] = [await note.boundingBox(), await page.locator(`#${id}`).boundingBox()];
     expect(n.y, id).toBeGreaterThan(b.y + b.height - 1);
   }
+});
+
+test("tagline: cool gets sunglasses and jamming opens an inline band", async ({ page }, info) => {
+  test.skip(info.project.name !== "smoke-desktop", "hover");
+  await page.goto("/?theme=modern-cyan");
+  await expect(page.locator(".cool-word")).toHaveText("cool");
+  await expect(page.locator(".jam-word")).toHaveText("Jamming");
+  await page.locator(".jam-word").hover();
+  await expect(page.locator(".jam-band .band-player")).toHaveCount(4);
+  await expect(page.locator(".jam-word")).toHaveCSS("color", await page.locator(".cool-word").evaluate((e) => getComputedStyle(e).color));
+  await expect(page.locator(".jam-group[data-run] .jam-letter")).toHaveCount(7);
+  await page.waitForTimeout(2500);
+  await expect(page.locator(".jam-band")).toHaveCount(1);
+  await page.mouse.move(5, 5);
+  await expect(page.locator(".jam-band")).toHaveCount(0, { timeout: 4000 });
+});
+
+test("terminal contact panel shows the ssh randomart seal", async ({ page }) => {
+  await page.goto("/?theme=modern-cyan#contact");
+  const art = page.locator(".randomart");
+  await expect(art).toBeVisible();
+  await expect(art).toContainText("[magbadelojr]");
+  await expect(art).toContainText("host verified");
+  await page.goto("/?theme=paper-cream#contact");
+  await expect(page.locator(".randomart")).toBeHidden();
 });

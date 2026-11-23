@@ -82,9 +82,7 @@ function snapPage(page) {
 function run() {
   reset();
   if (document.documentElement.dataset.pack !== "paper") return;
-  [...document.querySelectorAll(PAGES)].reverse().forEach((page) => {
-    if (!page.classList.contains("flip-sheet")) snapPage(page);
-  });
+  [...document.querySelectorAll(PAGES)].reverse().forEach(snapPage);
 }
 
 export default function RuleSnap() {

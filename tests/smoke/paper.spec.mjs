@@ -52,7 +52,7 @@ test("paper navigation zooms out to the book and turns the page", async ({ page 
   await expect(page.locator(".cd-veil")).toHaveCount(0);
 });
 
-test("back button in paper falls back to the sheet turn", async ({ page }) => {
+test("back button in paper returns without the old sheet turn", async ({ page }) => {
   await page.goto("/resume?preview=paper&theme=paper-cream");
   await page.waitForLoadState("networkidle");
   await page.evaluate(() => {
@@ -63,7 +63,25 @@ test("back button in paper falls back to the sheet turn", async ({ page }) => {
   await expect.poll(() => page.evaluate(() => document.documentElement.hasAttribute("data-book-flip"))).toBe(false);
   await page.goBack();
   await expect(page).toHaveURL(/\/resume/);
-  await expect(page.locator(".flip-sheet")).toBeAttached();
+  await expect(page.locator(".flip-sheet")).toHaveCount(0);
+  await expect(page.locator("h1").first()).toBeVisible();
+});
+
+test("palette cd in paper uses the notebook cover flip", async ({ page }, info) => {
+  test.skip(info.project.name !== "smoke-desktop", "palette shortcut");
+  await page.goto("/resume?preview=paper&theme=paper-cream");
+  await page.waitForLoadState("networkidle");
+  await page.evaluate(() => {
+    window.__sawBook = false;
+    new MutationObserver(() => {
+      if (document.documentElement.hasAttribute("data-book-flip")) window.__sawBook = true;
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-book-flip"] });
+  });
+  const ok = await page.evaluate(() => window.__omjBookGo?.("/projects"));
+  expect(ok).toBe(true);
+  await expect(page).toHaveURL(/\/projects$/);
+  await expect.poll(() => page.evaluate(() => window.__sawBook)).toBe(true);
+  await expect(page.locator(".flip-sheet")).toHaveCount(0);
 });
 
 test("paper back-to-top is the handwritten note", async ({ page }) => {
