@@ -11,7 +11,9 @@ export function SectionLabel({ children, note, action, caption = false, taped = 
   return (
     <div className={`mb-3 flex items-baseline justify-between gap-4 ${caption ? "paper:order-last paper:mb-0 paper:mt-3 paper:justify-center" : taped ? "paper:mb-5" : ""}`}>
       <h2 className={`font-mono text-[11px] uppercase tracking-[0.12em] text-muted ${text ? "paper:hidden" : ""}`}>{children}</h2>
-      {text && <p className="hidden paper:block font-hand text-xl leading-none text-accent-2">{text}</p>}
+      {text && <p className="hidden paper:block font-hand text-xl leading-none text-accent-2">
+          <span className="note-hop">{text}</span>
+        </p>}
       {action}
     </div>
   );
@@ -26,7 +28,7 @@ export function ExperienceList({ roles }) {
       <SectionLabel action={<Link href="/resume" className={linkCls}>Full resume</Link>}>
         <span id="home-experience">Experience</span>
       </SectionLabel>
-      <ol className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden paper:gap-2 [@media(max-height:800px)]:gap-2">
+      <ol className="flex min-h-0 flex-1 flex-col justify-between gap-2 overflow-hidden paper:justify-start rounded-xl border border-bright/10 bg-panel px-4 py-3 paper:gap-2 paper:rounded-none paper:border-0 paper:bg-transparent paper:p-0 [@media(max-height:800px)]:gap-2">
         {roles.map((r) => (
           <li key={r.id} className="group border-l border-bright/10 pl-4 transition-colors duration-150 hover:border-accent paper:border-accent-2/40">
             <div className="flex items-baseline justify-between gap-3">
@@ -56,7 +58,7 @@ function target(p) {
 export function FeaturedProjects({ items }) {
   return (
     <section id="projects" aria-labelledby="home-projects" className="flex h-full min-h-0 flex-col scroll-mt-24">
-      <SectionLabel note="projects" taped action={<Link href="/projects" className={linkCls}>All projects</Link>}>
+      <SectionLabel note="projects" taped action={<Link href="/projects" className={`${linkCls} mr-3`}>All projects</Link>}>
         <span id="home-projects">Featured projects</span>
       </SectionLabel>
       <ul className="grid min-h-0 flex-1 gap-4 sm:grid-cols-3 paper:gap-6">

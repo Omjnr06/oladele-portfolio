@@ -8,7 +8,6 @@ let navigated = false;
 
 const cdOn = () => !matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-
 function CdVeil({ path, onDone }) {
   const done = useRef(onDone);
   const label = path === "/" ? "~" : path;
@@ -41,25 +40,6 @@ function CdVeil({ path, onDone }) {
   );
 }
 
-function FlipSheet({ onDone }) {
-  const done = useRef(onDone);
-  useEffect(() => {
-    const root = document.documentElement;
-    root.setAttribute("data-cd", "");
-    const t = setTimeout(() => done.current(), 820);
-    return () => {
-      clearTimeout(t);
-      root.removeAttribute("data-cd");
-    };
-  }, []);
-  return (
-    <div aria-hidden className="pointer-events-none fixed inset-y-0 left-0 right-0 z-[70] md:left-16">
-      <div className="flip-shade absolute inset-0" />
-      <div className="flip-sheet paper-page absolute inset-0" />
-    </div>
-  );
-}
-
 export default function PageTransition({ children }) {
   const path = usePathname();
   const [cd] = useState(() => {
@@ -67,8 +47,7 @@ export default function PageTransition({ children }) {
     if (window.__omjBookFlip) return "book";
     if (!cdOn()) return null;
     const pack = document.documentElement.dataset.pack;
-    if (pack === "windows") return null;
-    return pack === "paper" ? "flip" : "cd";
+    return pack === "windows" || pack === "paper" ? null : "cd";
   });
   const [veil, setVeil] = useState(!!cd);
 
@@ -80,7 +59,6 @@ export default function PageTransition({ children }) {
   return (
     <div data-transition={cd ?? undefined} className={`${cd ? "" : "page-enter "}h-full w-full`}>
       {veil && cd === "cd" && <CdVeil path={path} onDone={() => setVeil(false)} />}
-      {veil && cd === "flip" && <FlipSheet onDone={() => setVeil(false)} />}
       {children}
     </div>
   );

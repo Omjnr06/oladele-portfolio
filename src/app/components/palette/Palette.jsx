@@ -187,7 +187,7 @@ export default function Palette({ onClose, initialQuery = "" }) {
       scrollToTop();
     } else if (window.__omjWin) {
       window.__omjWin.open(url.pathname + url.search);
-    } else {
+    } else if (!window.__omjBookGo?.(href)) {
       router.push(href);
     }
   };

@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { profile } from "@/content/profile";
 import { contact } from "@/content/contact";
 import { ICONS } from "../ContactLinks";
+import Randomart from "./Randomart";
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
@@ -94,6 +95,9 @@ export default function ContactPanel({ open, onClose }) {
                 </h2>
               </div>
               <div className="flex items-start gap-3">
+                <div className="paper:hidden">
+                  <Randomart />
+                </div>
                 <motion.div
                   aria-hidden
                   initial={reduce ? false : { scale: 1.8, rotate: -14, opacity: 0 }}

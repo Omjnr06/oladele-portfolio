@@ -26,24 +26,9 @@ export default function BookFlip() {
   const [dest, setDest] = useState("");
 
   useEffect(() => {
-    const onClick = (e) => {
-      const root = document.documentElement;
-      if (root.dataset.pack !== "paper" || !document.startViewTransition) return;
-      if (window.__omjBookFlip) {
-        if (e.target.closest?.("a[href]")) {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-        }
-        return;
-      }
-      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      const a = e.target.closest?.("a[href]");
-      if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
-      const url = new URL(a.href, location.href);
-      if (url.origin !== location.origin || url.pathname === location.pathname) return;
-      e.preventDefault();
-      e.stopImmediatePropagation();
+    const root = document.documentElement;
+    const can = () => root.dataset.pack === "paper" && !!document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const flip = (url) => {
       const href = url.pathname + url.search + url.hash;
       window.__omjBookFlip = true;
       flushSync(() => setDest(place(url.pathname)));
@@ -61,8 +46,35 @@ export default function BookFlip() {
           root.removeAttribute("data-book-flip");
         });
     };
+    const onClick = (e) => {
+      if (root.dataset.pack !== "paper" || !document.startViewTransition) return;
+      if (window.__omjBookFlip) {
+        if (e.target.closest?.("a[href]")) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+        return;
+      }
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || !can()) return;
+      const a = e.target.closest?.("a[href]");
+      if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
+      const url = new URL(a.href, location.href);
+      if (url.origin !== location.origin || url.pathname === location.pathname) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      flip(url);
+    };
+    window.__omjBookGo = (href) => {
+      const url = new URL(href, location.href);
+      if (!can() || window.__omjBookFlip || url.origin !== location.origin || url.pathname === location.pathname) return false;
+      flip(url);
+      return true;
+    };
     window.addEventListener("click", onClick, true);
-    return () => window.removeEventListener("click", onClick, true);
+    return () => {
+      window.removeEventListener("click", onClick, true);
+      delete window.__omjBookGo;
+    };
   }, [router]);
 
   return (
