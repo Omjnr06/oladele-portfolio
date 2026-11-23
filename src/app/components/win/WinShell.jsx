@@ -9,6 +9,8 @@ import StartMenu from "./StartMenu";
 import ContextMenu from "./ContextMenu";
 import WinBoot from "./WinBoot";
 import { play, setSoundOn, wakeAudio } from "./sound";
+import { leaveTo, reloadClean } from "./leave";
+import { AppView, hasNative } from "./registry";
 import "./win.css";
 
 const BAR = 40;
@@ -43,17 +45,7 @@ function wantsBoot() {
   }
 }
 
-function reloadClean() {
-  const url = new URL(location.href);
-  url.searchParams.delete("theme");
-  url.searchParams.delete("preview");
-  location.replace(url.pathname + url.search + url.hash);
-}
 
-function leaveTo(pack, variant) {
-  setPrefs({ pack, variant });
-  reloadClean();
-}
 const desk = () => ({ w: innerWidth, h: innerHeight - BAR });
 
 function geometry(app, count) {
@@ -61,10 +53,12 @@ function geometry(app, count) {
   const max = app.kind === "page" && app.id === "music";
   const rows = Math.max(1, Math.floor((vh - 16) / CELL_H));
   const left = 8 + Math.ceil(DESKTOP.length / rows) * CELL_W + 12;
-  const w = Math.min(app.kind === "page" ? 1180 : 760, vw - left - 32);
-  const h = Math.min(app.kind === "page" ? vh - 56 : 520, vh - 56);
+  const [sw, sh] = app.size ?? (app.kind === "page" ? [1180, vh - 56] : [760, 520]);
+  const w = Math.min(sw, vw - left - 32);
   const step = (count % 8) * 28;
-  return { x: Math.max(left, Math.round((vw - w) / 2)) + step, y: 20 + step, w, h, max };
+  const y = 20 + step;
+  const h = Math.max(MIN_H, Math.min(sh, vh - y - 16));
+  return { x: Math.min(Math.max(left, Math.round((vw - w) / 2)) + step, Math.max(left, vw - w - 16)), y: Math.min(y, vh - h - 8), w, h, max };
 }
 
 function makeWin(app, kind, count) {
@@ -254,7 +248,7 @@ function AppWindow({ win, focused, actions }) {
     >
       <Chrome win={win} actions={actions} />
       <div className="win-client">
-        <Soon win={win} />
+        <AppView win={win} open={actions.open} fallback={<Soon win={win} />} />
       </div>
     </section>
   );
@@ -447,7 +441,10 @@ function Taskbar({ wins, focused, actions, startOpen, onStart }) {
 export default function WinShell() {
   const [pageEl] = useState(() => document.getElementById("win-page"));
   const [pageUrl] = useState(here);
-  const [wins, setWins] = useState(() => [makeWin(appFor(here()), "page", 0)]);
+  const [wins, setWins] = useState(() => {
+    const app = appFor(here());
+    return [makeWin(app, hasNative(app.id) ? "app" : "page", 0)];
+  });
   const [focused, setFocused] = useState(() => appFor(here()).id);
   const [booting, setBooting] = useState(wantsBoot);
   const [startOpen, setStartOpen] = useState(false);
@@ -487,7 +484,7 @@ export default function WinShell() {
         if (exists.min) animate();
         setWins((ws) => ws.map((w) => (w.id === app.id ? { ...w, z: ++zTop, min: false, closed: false } : w)));
       } else {
-        const win = makeWin(app, "soon", winsRef.current.filter((w) => !w.closed).length);
+        const win = makeWin(app, "app", winsRef.current.filter((w) => !w.closed).length);
         winsRef.current = [...winsRef.current, win];
         setWins((ws) => [...ws, win]);
         play("open");
@@ -502,6 +499,7 @@ export default function WinShell() {
   const stable = useMemo(
     () => ({
       focus,
+      open,
       patch: (id, next) => setWins((ws) => ws.map((w) => (w.id === id ? { ...w, ...next } : w))),
       minimize: (id) => {
         animate();
@@ -527,7 +525,7 @@ export default function WinShell() {
         setFocused(null);
       },
     }),
-    [focus],
+    [focus, open],
   );
 
   useLayoutEffect(() => {

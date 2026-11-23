@@ -1,21 +1,21 @@
 import { caseStudies } from "@/content/caseStudies";
 
 export const APPS = {
-  resume: { title: "Resume", icon: "doc", path: "/resume" },
-  projects: { title: "Projects", icon: "folder", path: "/?app=projects" },
+  resume: { title: "Resume", icon: "doc", path: "/resume", size: [940, 760] },
+  projects: { title: "Projects", icon: "folder", path: "/?app=projects", size: [960, 640] },
   music: { title: "Music", icon: "music", path: "/music" },
-  gallery: { title: "Gallery", icon: "photo", path: "/?app=gallery" },
-  contact: { title: "Contact", icon: "mail", path: "/?app=contact" },
+  gallery: { title: "Gallery", icon: "photo", path: "/?app=gallery", size: [980, 700] },
+  contact: { title: "Contact", icon: "mail", path: "/?app=contact", size: [880, 580] },
   grind: { title: "Grind", icon: "chart", path: "/grind" },
-  home: { title: "About Oladele", icon: "user", path: "/" },
-  personalize: { title: "Personalize", icon: "brush", path: "/?app=personalize" },
+  home: { title: "About Oladele", icon: "user", path: "/", size: [820, 620] },
+  personalize: { title: "Personalize", icon: "brush", path: "/?app=personalize", size: [820, 640] },
 };
 
 export const DESKTOP = ["resume", "projects", "music", "gallery", "contact", "grind", "home"];
 export const PINNED = ["resume", "projects", "music", "gallery", "contact", "grind"];
 export const PLACES = ["home", "resume", "projects", "gallery", "music", "personalize"];
 
-export const STUDIES = caseStudies.map((c) => ({ id: `case-${c.slug}`, title: c.title, icon: "doc", path: `/projects/${c.slug}` }));
+export const STUDIES = caseStudies.map((c) => ({ id: `case-${c.slug}`, title: c.title, icon: "doc", path: `/projects/${c.slug}`, size: [1040, 760] }));
 
 const titleCase = (slug) => slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
