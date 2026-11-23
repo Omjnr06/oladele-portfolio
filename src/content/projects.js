@@ -41,6 +41,8 @@ export const projects = [
   },
   {
     id: "pimplenet",
+    highlight: 2,
+    tagline: "Acne severity classifier at 95.5% validation accuracy, now live in PurelyBiome's customer report.",
     code: "PROJECT 04",
     title: "PimpleNet",
     categories: ["MACHINE LEARNING"],
@@ -65,6 +67,8 @@ export const projects = [
   },
   {
     id: "internship-alert-pipeline",
+    highlight: 3,
+    tagline: "Scans about 720 postings across 5 sources every 15 minutes and alerts me to new roles.",
     code: "PROJECT 06",
     title: "Internship Alert Pipeline",
     categories: ["SYSTEM INFRASTRUCTURE"],
@@ -75,6 +79,8 @@ export const projects = [
   },
   {
     id: "the-vault",
+    highlight: 1,
+    tagline: "Real bank sync and a safe to spend budget engine across Next.js and FastAPI.",
     code: "PROJECT 07",
     title: "The Vault - AI Financial Dashboard",
     categories: ["FULL STACK", "DATA SCIENCE"],
@@ -88,6 +94,8 @@ export const projects = [
 ];
 
 export const featuredProjects = projects.filter((p) => p.featured).sort((a, b) => a.featured - b.featured);
+
+export const highlightedProjects = projects.filter((p) => p.highlight).sort((a, b) => a.highlight - b.highlight);
 
 export const projectCategories = ["ALL", ...new Set(projects.flatMap((p) => p.categories))];
 

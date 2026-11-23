@@ -13,7 +13,6 @@ test("preview flag turns on paper before paint, with tabs and the report header"
   await page.goto("/?preview=paper&theme=paper-kraft");
   const a = await attrs(page);
   expect(a).toMatchObject({ pack: "paper", theme: "kraft", nav: "tabs" });
-  await expect(page.getByText("Page", { exact: false }).filter({ hasText: "of 6" }).first()).toBeVisible();
   await expect(page.getByText(profile.marginNotes.home, { exact: true })).toBeVisible();
 });
 
@@ -23,7 +22,7 @@ test("modern hides paper extras and never downloads the handwriting font", async
   await page.goto("/");
   await page.waitForLoadState("networkidle");
   await expect(page.getByText(profile.marginNotes.home, { exact: true })).toBeHidden();
-  await expect(page.getByText("of 6")).toBeHidden();
+  await expect(page.locator(".written-name").first()).toBeHidden();
   expect(fonts.length).toBeLessThanOrEqual(2);
 });
 
@@ -32,7 +31,7 @@ test("notebook tabs sit on the left edge on desktop", async ({ page }, info) => 
   await page.goto("/resume?preview=paper&theme=paper-cream");
   const box = await nav(page).boundingBox();
   expect(box.x).toBeLessThan(1);
-  expect(box.width).toBeLessThan(80);
+  expect(box.width).toBeLessThanOrEqual(88);
 });
 
 test("paper navigation zooms out to the book and turns the page", async ({ page }) => {
@@ -90,7 +89,7 @@ test("case studies become lab notebook pages in paper only", async ({ page }) =>
   await expect(page.getByText("PimpleNet lab notebook")).toBeVisible();
   await expect(page.getByText(/^Fig\. 1/)).toBeVisible();
   await expect(page.getByText("end of notes, O.M.")).toBeVisible();
-  await expect(page.getByText("Page", { exact: false }).filter({ hasText: "of 6" }).first()).toBeVisible();
+  await expect(page.locator(".written-name")).toBeVisible();
   await page.goto("/projects/pimplenet?theme=modern-cyan");
   await expect(page.getByText("PimpleNet lab notebook")).toBeHidden();
   await expect(page.getByText(/^Fig\. 1/)).toBeHidden();
@@ -116,9 +115,9 @@ test("paper first visit opens the notebook cover, then hands back the page", asy
   await expect(page.locator(".boot")).toHaveCount(0);
 });
 
-test("grind gets the report header in paper", async ({ page }) => {
+test("grind gets the written name in paper", async ({ page }) => {
   await page.goto("/grind?theme=paper-cream");
-  await expect(page.getByText("Page", { exact: false }).filter({ hasText: "of 6" }).first()).toBeVisible();
+  await expect(page.locator(".written-name")).toBeVisible();
 });
 
 test("paper text sits on the ruled lines, modern is untouched", async ({ page }) => {

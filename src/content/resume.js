@@ -9,6 +9,9 @@ export const skills = [
 export const experience = [
   {
     id: "grand-theatre-pm",
+    logo: "/assets/logos/grand-theatre-color.png",
+    highlight: 1,
+    summary: "Leading 6 developers building a carbon tracking platform that replaces a 24 column Excel workflow across 9 departments.",
     role: "Project Manager",
     company: "Grand Theatre",
     date: "Sep. 2026 - Present",
@@ -20,10 +23,26 @@ export const experience = [
     ],
   },
   {
+    id: "western-music-assistant",
+    logo: "/assets/logos/western-color.png",
+    role: "Music Production & Recording Assistant",
+    company: "Don Wright Faculty of Music, Western University",
+    date: "Oct. 2026 - Present",
+    location: "London, ON",
+    points: [
+      "Set up and patch the audio and video systems for live performances across von Kuster Hall, Paul Davenport Theatre, and Moscovich Recital Hall, from stage microphones and cameras to the control room.",
+      "Mix live sound on a Yamaha 02R96 digital console for jazz combos, concertos, chamber recitals, and full opera productions.",
+      "Direct multi camera concert recordings and livestreams, cutting between angles live on a RODECaster Video switcher, positioning PTZ cameras from a network camera controller, and capturing the program feed in OBS Studio.",
+    ],
+  },
+  {
     id: "purelybiome-intern",
+    logo: "/assets/logos/purelybiome-color.png",
+    highlight: 2,
+    summary: "Built and deployed a computer vision model that grades acne severity at 95.5% validation accuracy.",
     role: "AI & Software Developer Intern",
     company: "PurelyBiome",
-    date: "May 2026 - August 2026",
+    date: "May 2026 - Aug. 2026",
     location: "Remote",
     project: "pimplenet",
     points: [
@@ -33,9 +52,10 @@ export const experience = [
   },
   {
     id: "3d-western-dev",
+    logo: "/assets/logos/3d-western-color.png",
     role: "Software Developer",
     company: "3D Western",
-    date: "Jun. 2026 - September 2026",
+    date: "Jun. 2026 - Sep. 2026",
     location: "London, ON",
     points: [
       "Built the frontend data and API layer for a 3D-printing lab management dashboard (Next.js, TypeScript, React) launching to production in August 2026, delivering typed contracts and API client wrappers across booking and job-tracking features.",
@@ -45,6 +65,9 @@ export const experience = [
   },
   {
     id: "wfn-vp-projects",
+    logo: "/assets/logos/wfn-color.png",
+    highlight: 3,
+    summary: "Run a technical curriculum that takes student builders from setup to a working full stack prototype.",
     role: "VP of Projects",
     company: "Western Founders Network",
     date: "Sep. 2025 - Present",
@@ -56,6 +79,7 @@ export const experience = [
   },
   {
     id: "autopilot-marketing",
+    logo: "/assets/logos/autopilot.png",
     role: "Marketing Director",
     company: "Western Engineering AutoPilot",
     date: "Sep. 2025 - Present",
@@ -67,6 +91,7 @@ export const experience = [
   },
   {
     id: "rccg-hop-intern",
+    logo: "/assets/logos/rccg-hop-color.png",
     role: "Facilities Asset Management Intern",
     company: "RCCG HOP",
     date: "Jun. 2022 - Aug. 2022",
@@ -164,3 +189,5 @@ export const education = [
     details: "High Honours, Male Athlete of the Year (Basketball MVP).",
   },
 ];
+
+export const highlightedExperience = experience.filter((e) => e.highlight).sort((a, b) => a.highlight - b.highlight);

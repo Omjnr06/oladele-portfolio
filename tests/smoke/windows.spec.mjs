@@ -62,7 +62,7 @@ test("links inside the page window open windows instead of navigating", async ({
   await page.waitForLoadState("networkidle");
   const rsc = rscCounter(page);
   await page.locator("#win-client").getByRole("link", { name: "Back to projects" }).click();
-  await expect(page.locator(".win[data-focused]")).toHaveAttribute("aria-label", "About Oladele");
+  await expect(page.locator(".win[data-focused]")).toHaveAttribute("aria-label", "Projects");
   await expect(win(page, "Grind")).toHaveCount(1);
   expect(rsc.n).toBe(0);
 });

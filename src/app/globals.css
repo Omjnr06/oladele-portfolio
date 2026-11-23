@@ -887,13 +887,148 @@ html[data-book-flip]::view-transition-new(book-cover) {
 }
 
 [data-pack="paper"] .paper-taped::before {
-  left: -18px;
-  transform: rotate(-30deg);
+  left: 14px;
+  transform: rotate(-6deg);
 }
 
 [data-pack="paper"] .paper-taped::after {
-  right: -18px;
-  transform: rotate(26deg);
+  right: 14px;
+  transform: rotate(5deg);
+}
+
+.written-name svg {
+  clip-path: inset(-40% 100% -40% 0);
+  animation: write-name 1.5s cubic-bezier(0.45, 0, 0.35, 1) 0.15s forwards;
+}
+
+.written-name text {
+  fill: currentColor;
+  fill-opacity: 0;
+  stroke: currentColor;
+  stroke-width: 0.6px;
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  animation: ink-stroke 1.6s ease-out 0.15s forwards, ink-fill 0.5s ease-out 1.3s forwards;
+}
+
+.written-line {
+  position: absolute;
+  left: 0;
+  right: 0.15em;
+  bottom: -6px;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: line-draw 0.45s cubic-bezier(0.6, 0, 0.3, 1) 1.55s forwards;
+}
+
+@keyframes write-name {
+  to {
+    clip-path: inset(-40% -4% -40% 0);
+  }
+}
+
+@keyframes ink-stroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes ink-fill {
+  to {
+    fill-opacity: 1;
+    stroke-width: 0;
+  }
+}
+
+@keyframes line-draw {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.typed > span:not(.sr-only, .typed-caret) {
+  animation: type-in 1ms steps(1) both;
+}
+
+.typed-caret {
+  display: inline-block;
+  width: 0.08em;
+  height: 0.85em;
+  margin-left: 0.08em;
+  vertical-align: -0.05em;
+  background: var(--color-accent);
+  opacity: 0;
+  animation: caret-blink 0.8s steps(1) 5 forwards;
+}
+
+@keyframes type-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes caret-blink {
+  0% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.company-logo {
+  transition: color 150ms ease-out;
+}
+
+.group:hover .company-logo {
+  animation: logo-hop 0.45s cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+
+@keyframes logo-hop {
+  40% {
+    transform: translateY(-4px) rotate(-8deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .written-name svg,
+  .written-name text,
+  .written-line,
+  .typed > span,
+  .group:hover .company-logo {
+    animation: none;
+  }
+  .written-name svg {
+    clip-path: none;
+  }
+  .written-name text {
+    fill-opacity: 1;
+    stroke-width: 0;
+  }
+  .written-line {
+    transform: none;
+  }
+}
+
+[data-pack="paper"] .paper-tape-top::before {
+  content: "";
+  position: absolute;
+  z-index: 30;
+  top: -13px;
+  left: 50%;
+  width: 84px;
+  height: 24px;
+  translate: -50% 0;
+  rotate: -3deg;
+  background: color-mix(in srgb, #f3e6c4 75%, transparent);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+  pointer-events: none;
 }
 
 [data-pack="paper"] .paper-tilt-l {
@@ -990,6 +1125,27 @@ html[data-book-flip]::view-transition-new(book-cover) {
   background: var(--color-ink) !important;
   color: var(--color-accent-2) !important;
   transform: rotate(-2deg);
+}
+
+[data-pack="paper"] .paper-note {
+  padding: 12px 16px;
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  background: #fffdf8;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 14px 30px -20px rgb(0 0 0 / 0.4);
+  rotate: -0.4deg;
+}
+
+[data-pack="paper"] .paper-note-card {
+  border-color: var(--color-line);
+  border-radius: 3px;
+  background: #fffdf8;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.1), 0 14px 30px -18px rgb(0 0 0 / 0.4);
+}
+
+[data-pack="paper"] [data-theme="kraft"] :is(.paper-note, .paper-note-card),
+[data-pack="paper"][data-theme="kraft"] :is(.paper-note, .paper-note-card) {
+  background: #efe2c6;
 }
 
 .paper-tape {

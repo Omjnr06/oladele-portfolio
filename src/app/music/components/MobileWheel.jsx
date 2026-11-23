@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { CONTACT_EVENT } from "@/lib/events";
 import { instrumentItems, clipItemsForCategory, photoItems, songItems } from "../data/boardItems";
 import { INSTRUMENT_ICONS } from "./icons/Instruments";
 import ClipPlayer from "./ClipPlayer";
@@ -149,10 +150,10 @@ export default function MobileWheel() {
               drag="x" dragConstraints={{ left: 0, right: 0 }} dragElastic={0.2} onDragEnd={(e, { offset }) => { if (offset.x > 60) setDrawer(false); }}>
               <span className="mvm-drawer-kicker">Navigation</span>
               <Link href="/#home" className="mvm-drawer-link">Home</Link>
-              <Link href="/#projects" className="mvm-drawer-link">Projects</Link>
+              <Link href="/projects" className="mvm-drawer-link">Projects</Link>
               <Link href="/resume" className="mvm-drawer-link">Resume</Link>
               <Link href="/music" className="mvm-drawer-link mvm-drawer-link--on">Music</Link>
-              <Link href="/#contact" className="mvm-drawer-link">Contact</Link>
+              <button type="button" onClick={() => { setDrawer(false); window.dispatchEvent(new Event(CONTACT_EVENT)); }} className="mvm-drawer-link">Contact</button>
             </motion.div>
           </>
         )}

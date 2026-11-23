@@ -17,7 +17,8 @@ Inline formatting in text fields: `*words*` = emphasis, `[label](https://link)` 
 | Adding | File | What to do |
 | --- | --- | --- |
 | A project or hackathon | `projects.js` | Copy an entry, give it a new `id` and the next `code` |
-| A project to the home Spotlight | `projects.js` | Add `featured: 3` (1 shows first) |
+| A project on the home page (3 slots) | `projects.js` | Add `highlight: 1`, `2` or `3` plus a one line `tagline` |
+| A role on the home page (3 slots) | `resume.js` | Add `highlight: 1`, `2` or `3` plus a one line `summary` |
 | A job, role or club position | `resume.js` → `experience` | Copy an entry |
 | A resume project bullet list | `resume.js` → `resumeProjects` | Copy an entry; `project` links it to `projects.js` |
 | A skill | `resume.js` → `skills` | Add to the right `items` list |
@@ -32,6 +33,11 @@ Inline formatting in text fields: `*words*` = emphasis, `[label](https://link)` 
 ### `profile.js`
 Name, title line, status, the two intro lines on home, and the resume PDF.
 `now` is the NOW line in the OMJ card (delete it to hide the row).
+`musicRole` is the id of a role in `resume.js` shown as "Currently:" in the home music spotlight (delete it to hide the line).
+
+`openTo` and `locations` in `profile.js` fill the Contact panel.
+
+A role's `logo` in `resume.js` is a file in `public/assets/logos/`; it pops up when someone hovers the role. Delete the field to show no logo.
 Paper theme only: `course` fills the report header, and `marginNotes` are the handwritten notes
 (`home`, `gallery`, `spotlight`, `projects`, `contact`, `resume`). Change the text freely; remove a key to hide that note.
 
@@ -50,7 +56,8 @@ Paper theme only: `course` fills the report header, and `marginNotes` are the ha
   media: { image: "/assets/…", video: "/assets/….mp4", fit: "cover" | "contain", orientation: "portrait" },
                                     // big videos on Supabase: add loop (12s, 720p, no audio) for the Spotlight
                                     // and poster (jpg) so the full video only downloads when someone presses play
-  featured: 1,                      // optional, shows in the home Spotlight in this order
+  highlight: 1,                     // optional, one of the 3 home page project cards (1 shows first)
+  tagline: "One line for the home card.", // required when highlight is set
 }
 ```
 

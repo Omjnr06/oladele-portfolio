@@ -76,6 +76,7 @@ const projectIds = new Set(projects.map((p) => p.id));
 
 list(projects, "projects") && uniqueIds(projects, "projects");
 projects.forEach((p, i) => {
+  if (p.highlight !== undefined) str(p.tagline, `projects[${i}].tagline`);
   const at = `projects[${i}]`;
   str(p.code, `${at}.code`);
   str(p.title, `${at}.title`);
@@ -111,6 +112,8 @@ for (const [name, items] of [["experience", experience], ["resumeProjects", resu
 }
 experience.forEach((e, i) => {
   for (const k of ["role", "company", "date", "location"]) str(e[k], `experience[${i}].${k}`);
+  if (e.highlight !== undefined) str(e.summary, `experience[${i}].summary`);
+  if (e.logo !== undefined) asset(e.logo, `experience[${i}].logo`);
   strings(e.points, `experience[${i}].points`);
   if (e.project !== undefined && !projectIds.has(e.project)) fail(`experience[${i}].project`, `"${e.project}" is not a project id`);
 });
@@ -223,6 +226,21 @@ caseStudies.forEach((c, i) => {
     list(s.blocks, `${at}.sections[${j}].blocks`) && s.blocks.forEach((b, k) => block(b, `${at}.sections[${j}].blocks[${k}]`));
   });
 });
+
+for (const [name, items] of [["projects", projects], ["experience", experience]]) {
+  const marks = items.filter((x) => x.highlight !== undefined);
+  marks.forEach((x) => {
+    if (!Number.isInteger(x.highlight) || x.highlight < 1 || x.highlight > 3) fail(`${name}.${x.id}.highlight`, "must be 1, 2 or 3 (its position on the home page)");
+  });
+  const seen = new Set();
+  marks.forEach((x) => {
+    if (seen.has(x.highlight)) fail(`${name}.${x.id}.highlight`, `${x.highlight} is used twice; each position can only hold one`);
+    seen.add(x.highlight);
+  });
+}
+str(profile.openTo, "profile.openTo");
+strings(profile.locations, "profile.locations");
+if (profile.musicRole !== undefined && !experience.some((e) => e.id === profile.musicRole)) fail("profile.musicRole", `"${profile.musicRole}" is not an id in resume.js experience`);
 
 uniqueIds(searchAliases, "searchAliases");
 const aliasSeen = new Map();

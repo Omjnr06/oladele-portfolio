@@ -38,21 +38,21 @@ const PILL = {
 };
 
 const PAPER = {
-  nav: "paper:bg-transparent md:paper:w-16 md:paper:bg-[color-mix(in_srgb,var(--color-ink)_93%,var(--color-fg))] max-md:paper:inset-x-0 max-md:paper:bottom-0 max-md:paper:rounded-none max-md:paper:border-x-0 max-md:paper:border-b-0 max-md:paper:bg-[color-mix(in_srgb,var(--color-ink)_93%,var(--color-fg))] max-md:paper:px-2 max-md:paper:pb-[max(6px,env(safe-area-inset-bottom))] max-md:paper:pt-0 max-md:paper:shadow-none",
+  nav: "paper:bg-transparent md:paper:w-20 md:paper:bg-[color-mix(in_srgb,var(--color-ink)_93%,var(--color-fg))] max-md:paper:inset-x-0 max-md:paper:bottom-0 max-md:paper:rounded-none max-md:paper:border-x-0 max-md:paper:border-b-0 max-md:paper:bg-[color-mix(in_srgb,var(--color-ink)_93%,var(--color-fg))] max-md:paper:px-2 max-md:paper:pb-[max(6px,env(safe-area-inset-bottom))] max-md:paper:pt-0 max-md:paper:shadow-none",
   list: "md:paper:-mr-px md:paper:items-end md:paper:gap-1.5",
-  item: "paper:border paper:border-line md:paper:w-11 md:paper:rounded-none md:paper:rounded-l-lg md:paper:border-r-0 md:paper:py-3 max-md:paper:-mt-px max-md:paper:rounded-none max-md:paper:rounded-b-lg max-md:paper:border-t-0",
-  on: "paper:bg-ink md:paper:w-12",
+  item: "paper:border paper:border-line md:paper:w-14 md:paper:rounded-none md:paper:rounded-l-lg md:paper:border-r-0 md:paper:py-3 max-md:paper:-mt-px max-md:paper:rounded-none max-md:paper:rounded-b-lg max-md:paper:border-t-0",
+  on: "paper:bg-ink md:paper:w-16",
   off: "paper:bg-[color-mix(in_srgb,var(--color-ink)_97%,var(--color-fg))]",
   mark: "paper:hidden",
   icon: "md:paper:hidden",
-  labelOn: "md:paper:rotate-180 md:paper:text-xs md:paper:[writing-mode:vertical-rl]",
-  labelOff: "md:paper:rotate-180 md:paper:text-xs md:paper:[writing-mode:vertical-rl]",
+  labelOn: "paper:font-hand max-md:paper:text-lg md:paper:rotate-180 md:paper:text-[22px] md:paper:leading-none md:paper:[writing-mode:vertical-rl]",
+  labelOff: "paper:font-hand max-md:paper:text-lg md:paper:rotate-180 md:paper:text-[22px] md:paper:leading-none md:paper:[writing-mode:vertical-rl]",
   tools: "md:paper:border-t-0",
 };
 
 const SHAPES = {
   auto: { nav: `sticky top-0 h-[100svh] w-20 border-r py-4 ${PHONE.nav} ${PILL.nav} ${PAPER.nav}`, parts: [PHONE, PILL, PAPER] },
-  dock: { nav: `absolute inset-y-0 left-0 w-20 border-r py-4 ${PILL.dock}`, parts: [PILL] },
+  dock: { nav: `absolute inset-y-0 left-0 w-20 border-r py-4 ${PILL.dock} ${PAPER.nav}`, parts: [PILL, PAPER] },
 };
 
 const cx = (shape, key) => SHAPES[shape].parts.map((p) => p[key]).filter(Boolean).join(" ");
@@ -112,7 +112,7 @@ export default function Nav({ items, active, shape = "auto" }) {
               <>
                 {on && <span aria-hidden className={`absolute inset-0 rounded-xl border border-accent/30 bg-accent/10 ${cx(shape, "round")} ${cx(shape, "mark")}`} />}
                 <Icon className={`relative size-5 shrink-0 ${cx(shape, "icon")}`} />
-                <span className={`relative text-[11px] font-medium ${cx(shape, on ? "labelOn" : "labelOff")}`}>{it.label}</span>
+                <span className={`relative text-xs font-medium ${cx(shape, on ? "labelOn" : "labelOff")}`}>{it.label}</span>
               </>
             );
             return (

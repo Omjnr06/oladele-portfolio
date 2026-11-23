@@ -46,22 +46,23 @@ test("resume scrolls whichever side the mouse is over", async ({ page }, info) =
   await page.waitForTimeout(600);
   const max = await left.evaluate((el) => el.scrollHeight - el.clientHeight);
   expect(await left.evaluate((el) => el.scrollTop)).toBeGreaterThanOrEqual(max - 2);
-  await expect(left.getByText("Microsoft Office Suite", { exact: true })).toBeInViewport();
+  await expect(left.getByText(/Microsoft Office Suite/)).toBeInViewport();
 });
 
-test("spotlight videos pause when scrolled away", async ({ page }) => {
+test("spotlight videos pause when scrolled away", async ({ page }, info) => {
+  test.skip(info.project.name !== "smoke-phone", "home is one screen on desktop, so only phones scroll");
   await page.goto("/");
-  await page.getByRole("button", { name: "Music", exact: true }).click();
   const video = page.locator("#spotlight video").first();
   await expect(video).toBeAttached();
-  await page.locator("#contact").scrollIntoViewIfNeeded();
+  await page.locator("#spotlight").scrollIntoViewIfNeeded();
+  await page.locator("#home").scrollIntoViewIfNeeded();
   await page.waitForTimeout(800);
   expect(await video.evaluate((v) => v.paused)).toBe(true);
 });
 
 test("project image preview opens and closes with Escape", async ({ page }, info) => {
   test.skip(info.project.name !== "smoke-desktop", "desktop interaction");
-  await page.goto("/");
+  await page.goto("/projects");
   await page.getByRole("button", { name: "DATA SCIENCE", exact: true }).click();
   await page.locator('#projects [style*="flowlytics-ui"]').click();
   await expect(page.getByAltText("Project preview")).toBeVisible();
