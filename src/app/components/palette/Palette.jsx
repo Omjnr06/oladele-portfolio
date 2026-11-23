@@ -7,6 +7,7 @@ import { THEMES, packOpen } from "@/lib/themes";
 import { switchTheme } from "@/lib/packSwitch";
 import { setPrefs } from "@/lib/prefs";
 import { track } from "@/lib/track";
+import { CONTACT_EVENT } from "@/lib/events";
 
 const RECENT_KEY = "omj-palette-recent";
 const GROUPS = {
@@ -63,7 +64,7 @@ function clientActions() {
 
 const parentOf = (path) => {
   if (path === "/") return null;
-  if (path.startsWith("/projects/")) return "/#projects";
+  if (path.startsWith("/projects/")) return "/projects";
   return "/";
 };
 
@@ -173,7 +174,9 @@ export default function Palette({ onClose, initialQuery = "" }) {
     const url = new URL(href, location.origin);
     const here = url.pathname === location.pathname;
     const photo = url.searchParams.get("photo");
-    if (here && photo) {
+    if (url.hash === "#contact" && !url.search) {
+      window.dispatchEvent(new Event(CONTACT_EVENT));
+    } else if (here && photo) {
       window.dispatchEvent(new CustomEvent("omj:photo", { detail: photo }));
       scrollToId("gallery");
     } else if (here && url.hash) {

@@ -10,6 +10,8 @@ import BookFlip from "./components/paper/BookFlip";
 import RuleSnap from "./components/paper/RuleSnap";
 import WinFrame from "./components/win/WinFrame";
 import PackBoot from "./components/boot/PackBoot";
+import ContactHost from "./components/contact/ContactHost";
+import ReplayHost from "./components/ReplayHost";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,6 +51,8 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col">
         <WinFrame>{children}</WinFrame>
         <PaletteHost />
+        <ContactHost />
+        <ReplayHost />
         <BookFlip />
         <RuleSnap />
         <PackBoot />

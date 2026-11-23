@@ -1,6 +1,7 @@
 import { profile } from "@/content/profile";
 import { gallery } from "@/content/gallery";
-import { projects, featuredProjects, projectCategories, caseStudyHref } from "@/content/projects";
+import { highlightedProjects } from "@/content/projects";
+import { experience, highlightedExperience } from "@/content/resume";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { musicLibrary } from "./music/data/musicLibrary";
@@ -9,24 +10,19 @@ import SiteNav from "./components/SiteNav";
 import Boot from "./components/boot/Boot";
 import Rich from "./components/Rich";
 import BackToTop from "./components/BackToTop";
-import { ContactSection } from "./components/ContactLinks";
 import Gallery from "./components/home/Gallery";
-import Spotlight from "./components/home/Spotlight";
+import MusicSpotlight from "./components/home/MusicSpotlight";
 import DotGlow from "./components/home/DotGlow";
-import ReportHeader from "./components/paper/ReportHeader";
 import MarginNote from "./components/paper/MarginNote";
 import PenSquiggle from "./components/paper/PenSquiggle";
-import Reveal from "./components/home/Reveal";
-import ProjectBrowser from "./components/home/ProjectBrowser";
-
-const withHref = (p) => ({ ...p, caseStudyHref: p.caseStudy ? caseStudyHref(p.caseStudy) : null });
+import { ContactBar, ExperienceList, FeaturedProjects, SectionLabel } from "./components/home/HomeBlocks";
 
 function featuredTracks() {
   const all = musicLibrary.flatMap((c) => c.tracks);
   const featured = all.filter((t) => t.isFeatured);
-  return (featured.length ? featured : [all[0]]).map(({ id, title, originalArtist, notes, videoUrl }) => {
+  return (featured.length ? featured : [all[0]]).map(({ id, title, originalArtist, videoUrl }) => {
     const loop = `/assets/music/generated/${clipSlug(id)}-loop.mp4`;
-    return { id, title, originalArtist, notes, videoUrl, loop: existsSync(join(process.cwd(), "public", loop)) ? loop : null };
+    return { id, title, originalArtist, videoUrl, loop: existsSync(join(process.cwd(), "public", loop)) ? loop : null };
   });
 }
 
@@ -44,6 +40,7 @@ function Letters({ word, offset }) {
 
 export default function Home() {
   const [study, tagline] = profile.intro;
+  const musicRole = experience.find((e) => e.id === profile.musicRole);
 
   return (
     <main className="min-h-screen w-full flex flex-row bg-ink font-sans selection:bg-accent selection:text-on-accent relative">
@@ -54,51 +51,45 @@ export default function Home() {
         <DotGlow />
         <div className="absolute left-10 h-full w-[1px] bg-accent opacity-20 pointer-events-none hidden md:block paper:hidden z-0" />
         <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-accent-2 opacity-[0.03] rounded-full blur-[120px] pointer-events-none paper:hidden" />
-        <div className="absolute bottom-[10%] left-[-5%] w-[400px] h-[400px] bg-accent opacity-[0.03] rounded-full blur-[120px] pointer-events-none paper:hidden" />
 
-        <div className="relative px-6 md:px-16 lg:px-24 w-full z-10 py-16 md:py-24 max-w-7xl mx-auto flex flex-col">
-          <div id="home" className="relative mb-16 scroll-mt-24">
-            <ReportHeader path="/" />
-            <MarginNote id="home" className="mb-2 rotate-[-2deg] lg:absolute lg:right-0 lg:top-24 lg:mb-0" />
-            <h1 className="relative text-[2.8rem] leading-[1.1] sm:text-5xl md:text-6xl lg:text-[5.5rem] xl:text-[7rem] font-extrabold mb-8 md:mb-10 tracking-tight flex flex-wrap gap-x-3 md:gap-x-5 overflow-visible pl-1 md:pl-2">
-              <Letters word={profile.firstName} offset={0} />
-              <Letters word={profile.lastName} offset={8} />
-              <PenSquiggle />
-            </h1>
-
-            <div className="max-w-3xl space-y-6 text-muted">
-              <p className="text-xl md:text-2xl leading-relaxed font-light">
-                <Rich text={study.text} em="text-bright" />
-              </p>
-              <p className="text-lg md:text-xl leading-relaxed font-light border-l border-bright/10 pl-6">
-                <Rich text={tagline.text} em="text-accent" />
+        <div className="home-fit relative z-10 mx-auto flex w-full max-w-[1440px] flex-col gap-[clamp(20px,3.6vh,40px)] px-6 py-8 pb-28 md:px-12 md:pb-8 lg:h-[100svh] lg:min-h-[640px] lg:px-16 lg:py-[clamp(24px,4.5vh,48px)] lg:paper:py-[clamp(16px,2.5vh,32px)] pill:pt-24">
+          <header id="home" data-no-rule className="relative flex shrink-0 flex-wrap items-end justify-between gap-x-8 gap-y-4 scroll-mt-24 lg:flex-nowrap">
+            <div className="relative min-w-0">
+              <div className="relative w-fit">
+                <h1 className="relative flex w-fit flex-wrap gap-x-3 overflow-visible text-[clamp(2.25rem,7vh,4.75rem)] font-extrabold leading-[1.05] tracking-tight text-bright md:gap-x-4">
+                  <Letters word={profile.firstName} offset={0} />
+                  <Letters word={profile.lastName} offset={8} />
+                  <PenSquiggle />
+                </h1>
+                <MarginNote id="home" className="mt-1 rotate-[-3deg] lg:absolute lg:left-full lg:top-1/2 lg:mt-0 lg:ml-6 lg:-translate-y-1/2 lg:whitespace-nowrap" />
+              </div>
+              <p className="mt-2 max-w-3xl text-base font-light leading-relaxed text-muted lg:text-lg">
+                <Rich text={study.text} em="text-bright" /> <Rich text={tagline.text} em="text-accent" />
               </p>
             </div>
-          </div>
+            <ContactBar />
+          </header>
 
-          <MarginNote id="gallery" className="mb-4 ml-2 rotate-[-1.5deg]" />
-          <div className="paper-taped paper-tilt-l">
-            <Gallery images={gallery} />
-          </div>
-
-          <MarginNote id="spotlight" className="mb-3 ml-2 rotate-[-2deg]" />
-          <Spotlight projects={featuredProjects.map(withHref)} tracks={featuredTracks()} />
-
-          <Reveal>
-            <div className="flex items-center gap-4 mb-8 md:mb-12">
-              <div className="w-2 h-2 rounded-full bg-accent shadow-[0_0_10px_var(--color-accent)]" />
-              <h1 className="font-mono text-xl md:text-2xl tracking-[0.3em] text-bright uppercase">PROJECTS AND HACKATHONS</h1>
-              <div className="h-[1px] flex-1 bg-bright/5" />
-              <div className="hidden lg:block">
-                <MarginNote id="projects" className="rotate-[-3deg]" />
+          <div data-no-rule className="grid min-h-0 flex-1 gap-[clamp(20px,3.2vh,32px)] paper:gap-x-[clamp(24px,4.2vh,44px)] paper:gap-y-[clamp(20px,2.8vh,36px)] lg:grid-cols-12 lg:grid-rows-[minmax(0,1.15fr)_minmax(0,1fr)] [@media(max-height:800px)]:lg:grid-rows-[minmax(0,1.5fr)_minmax(0,1fr)]">
+            <div className="min-h-0 lg:col-span-4">
+              <ExperienceList roles={highlightedExperience} />
+            </div>
+            <div className="min-h-0 lg:col-span-8">
+              <FeaturedProjects items={highlightedProjects} />
+            </div>
+            <div className="flex min-h-0 flex-col lg:col-span-4">
+              <SectionLabel note="gallery" caption>Gallery</SectionLabel>
+              <div className="min-h-0 flex-1 paper-taped paper-tilt-l">
+                <Gallery images={gallery} />
               </div>
             </div>
-
-            <ProjectBrowser projects={projects.map(withHref)} categories={projectCategories} />
-          </Reveal>
-
-          <MarginNote id="contact" className="mx-auto mb-2 rotate-[-2deg]" />
-          <ContactSection compact />
+            <div className="flex min-h-0 flex-col lg:col-span-8">
+              <SectionLabel note="spotlight" caption>Music</SectionLabel>
+              <div className="min-h-0 flex-1 paper-taped paper-tilt-r">
+                <MusicSpotlight tracks={featuredTracks()} role={musicRole} />
+              </div>
+            </div>
+          </div>
         </div>
 
         <BackToTop label="Back to Home" targetId="home" />

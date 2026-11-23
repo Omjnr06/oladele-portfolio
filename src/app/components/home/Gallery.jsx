@@ -57,7 +57,7 @@ export default function Gallery({ images }) {
     <motion.div
       id="gallery"
       data-surface="media"
-      className="paper-print scroll-mt-24 mb-32 relative w-full h-[450px] md:h-[clamp(420px,calc(100svh-8rem),550px)] border border-bright/10 bg-ink rounded-xl overflow-hidden group shadow-2xl cursor-grab active:cursor-grabbing"
+      className="paper-print scroll-mt-24 relative w-full h-full min-h-[240px] lg:min-h-0 border border-bright/10 bg-ink rounded-xl overflow-hidden group shadow-2xl cursor-grab active:cursor-grabbing"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       drag="x"
@@ -80,28 +80,28 @@ export default function Gallery({ images }) {
               fill
               className="object-cover object-center"
               priority={index === 0}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 85vw, 1200px"
+              sizes="(max-width: 1024px) 100vw, 40vw"
             />
           )}
         </div>
       ))}
       <div className="absolute inset-0 bg-[linear-gradient(color-mix(in_srgb,var(--color-bright)_2%,transparent)_1px,transparent_1px)] bg-[size:100%_4px] z-20 pointer-events-none" />
 
-      <button aria-label="Previous photo" onClick={(e) => { e.stopPropagation(); show(current - 1); }} className={`absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-scrim/40 text-bright backdrop-blur-md border border-bright/10 transition duration-300 hover:bg-scrim/70 hover:scale-110 ${paused ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4 pointer-events-none"}`}>
+      <button aria-label="Previous photo" onClick={(e) => { e.stopPropagation(); show(current - 1); }} className={`absolute left-3 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-scrim/40 text-bright backdrop-blur-md border border-bright/10 transition duration-300 hover:bg-scrim/70 hover:scale-110 ${paused ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4 pointer-events-none"}`}>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
-      <button aria-label="Next photo" onClick={(e) => { e.stopPropagation(); show(current + 1); }} className={`absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-scrim/40 text-bright backdrop-blur-md border border-bright/10 transition duration-300 hover:bg-scrim/70 hover:scale-110 ${paused ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4 pointer-events-none"}`}>
+      <button aria-label="Next photo" onClick={(e) => { e.stopPropagation(); show(current + 1); }} className={`absolute right-3 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-scrim/40 text-bright backdrop-blur-md border border-bright/10 transition duration-300 hover:bg-scrim/70 hover:scale-110 ${paused ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4 pointer-events-none"}`}>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </button>
 
-      <div className="absolute bottom-0 inset-x-0 h-1/3 bg-gradient-to-t from-scrim/80 to-transparent z-20 flex items-end justify-center pb-6 pointer-events-none">
-        <div className="flex gap-2">
+      <div className="absolute bottom-0 inset-x-0 h-1/3 bg-gradient-to-t from-scrim/80 to-transparent z-20 flex items-end justify-center pb-3 pointer-events-none">
+        <div className="flex gap-1.5">
           {images.map((image, idx) => (
             <button
               key={image.id}
               aria-label={`Show photo ${idx + 1}`}
               onClick={(e) => { e.stopPropagation(); show(idx); }}
-              className={`h-1.5 rounded-full transition-[width,background-color,box-shadow,opacity] duration-500 pointer-events-auto ${current === idx ? "w-8 md:w-10 bg-bright shadow-[0_0_10px_color-mix(in_srgb,var(--color-bright)_50%,transparent)]" : "w-2 bg-bright/30 hover:bg-bright/60"}`}
+              className={`h-1.5 rounded-full transition-[width,background-color,box-shadow,opacity] duration-500 pointer-events-auto ${current === idx ? "w-8 bg-bright shadow-[0_0_10px_color-mix(in_srgb,var(--color-bright)_50%,transparent)]" : "w-2 bg-bright/30 hover:bg-bright/60"}`}
             />
           ))}
         </div>

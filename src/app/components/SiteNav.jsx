@@ -1,28 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import Nav from "./nav/Nav";
-import { onScroll, scrollToId } from "@/lib/scroll";
+import { scrollToId } from "@/lib/scroll";
+import { CONTACT_EVENT } from "@/lib/events";
 
 const jump = (id) => (e) => {
   e.preventDefault();
   scrollToId(id);
 };
-
-function useHomeSection() {
-  const [active, setActive] = useState("home");
-  useEffect(() => {
-    const update = () => {
-      const projects = document.getElementById("projects");
-      const contact = document.getElementById("contact");
-      if (contact && contact.getBoundingClientRect().top <= 300) setActive("contact");
-      else if (projects && projects.getBoundingClientRect().top <= 300) setActive("projects");
-      else setActive("home");
-    };
-    update();
-    return onScroll(update);
-  }, []);
-  return active;
-}
 
 function useHashOnLoad() {
   useEffect(() => {
@@ -35,18 +20,24 @@ function useHashOnLoad() {
 
 const item = (key, label, href, onClick) => ({ key, label, href, onClick });
 
+const openContact = (e) => {
+  e.preventDefault();
+  window.dispatchEvent(new Event(CONTACT_EVENT));
+};
+
+const CONTACT = item("contact", "Contact", "#contact", openContact);
+
 function HomeNav() {
-  const active = useHomeSection();
   useHashOnLoad();
   return (
     <Nav
-      active={active}
+      active="home"
       items={[
         item("home", "Home", "#home", jump("home")),
-        item("projects", "Projects", "#projects", jump("projects")),
+        item("projects", "Projects", "/projects"),
         item("resume", "Resume", "/resume"),
         item("music", "Music", "/music"),
-        item("contact", "Contact", "#contact", jump("contact")),
+        CONTACT,
       ]}
     />
   );
@@ -59,20 +50,20 @@ function ResumeNav() {
       active="resume"
       items={[
         item("home", "Home", "/#home"),
-        item("projects", "Projects", "/#projects"),
+        item("projects", "Projects", "/projects"),
         item("resume", "Resume", "/resume"),
         item("music", "Music", "/music"),
-        item("contact", "Contact", "#contact", jump("contact")),
+        CONTACT,
       ]}
     />
   );
 }
 
-const OTHER = [item("home", "Home", "/#home"), item("projects", "Projects", "/#projects"), item("resume", "Resume", "/resume"), item("music", "Music", "/music"), item("contact", "Contact", "/#contact")];
+const OTHER = [item("home", "Home", "/#home"), item("projects", "Projects", "/projects"), item("resume", "Resume", "/resume"), item("music", "Music", "/music"), CONTACT];
 
 export default function SiteNav({ page }) {
   if (page === "home") return <HomeNav />;
   if (page === "resume") return <ResumeNav />;
   if (page === "music") return <Nav active="music" items={OTHER} shape="dock" />;
-  return <Nav active={page === "case" ? "projects" : null} items={OTHER} />;
+  return <Nav active={page === "case" || page === "projects" ? "projects" : null} items={OTHER} />;
 }

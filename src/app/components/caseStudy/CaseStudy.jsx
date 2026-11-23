@@ -3,7 +3,7 @@ import Blocks, { colorValue, figureStarts, SheetHead } from "./Blocks";
 import CaseStudyTabs from "./CaseStudyTabs";
 import Showcase from "./Showcase";
 import SiteNav from "../SiteNav";
-import ReportHeader from "../paper/ReportHeader";
+import WrittenName from "../paper/WrittenName";
 import MarginNote from "../paper/MarginNote";
 
 const TOKEN_BADGE = {
@@ -56,12 +56,12 @@ export default function CaseStudy({ study }) {
       <div className={`absolute top-[10%] right-[-10%] w-[500px] h-[500px] ${modern.glow === "accent" ? "bg-accent" : "bg-accent-2"} opacity-[0.03] rounded-full blur-[120px] pointer-events-none paper:hidden`} />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-16 md:py-24">
-        <Link href="/#projects" className="inline-flex items-center gap-2 text-muted hover:text-accent transition-colors mb-12 font-mono text-[11px] uppercase tracking-widest">
+        <Link href="/projects" className="inline-flex items-center gap-2 text-muted hover:text-accent transition-colors mb-12 font-mono text-[11px] uppercase tracking-widest">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
           Back to Projects
         </Link>
 
-        <ReportHeader path={`/projects/${study.slug}`} />
+        <WrittenName className="mb-10" />
 
         <div className={`rise-in relative ${single ? "mb-12" : "mb-10"}`}>
           <div className="absolute right-0 top-0 hidden lg:block">

@@ -41,13 +41,11 @@ for (const size of SIZES) {
     test("home music spotlight", async ({ page }) => {
       await page.goto("/", { waitUntil: "load" });
       await page.waitForTimeout(1200);
-      await page.getByRole("button", { name: "Music", exact: true }).click();
-      await page.waitForTimeout(1200);
       await expect(page.locator("#spotlight")).toHaveScreenshot(`spotlight-music-${size.name}.png`, opts({ fullPage: undefined, mask: media(page) }));
     });
 
-    test("home project browser", async ({ page }) => {
-      await page.goto("/", { waitUntil: "load" });
+    test("projects page browser", async ({ page }) => {
+      await page.goto("/projects", { waitUntil: "load" });
       await page.waitForTimeout(1200);
       const projects = page.locator("#projects");
       await projects.scrollIntoViewIfNeeded();

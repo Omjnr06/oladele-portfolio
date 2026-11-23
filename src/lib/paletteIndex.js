@@ -13,8 +13,9 @@ const PAGES = [
   { id: "page-music", type: "page", title: "Music Vault", sub: "/music", href: "/music", keys: ["music", "covers", "clips", "piano", "guitar", "drums", "bass"] },
   { id: "page-grind", type: "page", title: "Grind", sub: "/grind", href: "/grind", keys: ["internships", "jobs", "applications", "roles", "new grad"] },
   { id: "section-gallery", type: "section", title: "Gallery", sub: "Home", href: "/#gallery", keys: ["photos", "pictures"] },
-  { id: "section-spotlight", type: "section", title: "Spotlight", sub: "Home", href: "/#spotlight", keys: ["featured"] },
-  { id: "section-projects", type: "section", title: "Projects", sub: "Home", href: "/#projects", keys: ["work", "portfolio"] },
+  { id: "section-spotlight", type: "section", title: "Music spotlight", sub: "Home", href: "/#spotlight", keys: ["music", "clip", "live session"] },
+  { id: "section-experience", type: "section", title: "Experience", sub: "Home", href: "/#experience", keys: ["jobs", "work history", "roles"] },
+  { id: "section-projects", type: "section", title: "Projects", sub: "All projects", href: "/projects", keys: ["work", "portfolio"] },
   { id: "section-contact", type: "section", title: "Contact", sub: "Home", href: "/#contact", keys: ["email", "reach out", "socials"] },
 ];
 
@@ -38,7 +39,7 @@ function projectItems() {
   return projects.map((p) => {
     const study = p.caseStudy && caseStudies.find((c) => c.slug === p.caseStudy);
     const resume = linked.get(p.id);
-    const href = study ? caseStudyHref(study.slug) : p.links.live || p.links.github || "/#projects";
+    const href = study ? caseStudyHref(study.slug) : p.links.live || p.links.github || "/projects";
     return {
       id: `project-${p.id}`,
       type: "project",

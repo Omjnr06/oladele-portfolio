@@ -24,6 +24,7 @@ export function appFor(href) {
   const path = url.pathname.replace(/\/+$/, "") || "/";
   const q = url.searchParams.get("app");
   if (path === "/" && q && APPS[q]) return { id: q, ...APPS[q], url: APPS[q].path };
+  if (path === "/projects") return { id: "projects", ...APPS.projects, url: APPS.projects.path };
   const study = STUDIES.find((s) => s.path === path);
   if (study) return { ...study, url: path };
   const hit = Object.entries(APPS).find(([, a]) => a.path === path);

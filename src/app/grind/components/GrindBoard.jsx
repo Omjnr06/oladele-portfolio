@@ -15,7 +15,7 @@ import { ACTIVE } from "../lib/status";
 import { Toast } from "./Toast";
 import { Terminal } from "./Terminal";
 import SiteNav from "../../components/SiteNav";
-import ReportHeader from "../../components/paper/ReportHeader";
+import WrittenName from "../../components/paper/WrittenName";
 
 const VISIT_LAST = "grind_visit_last";
 const VISIT_PREV = "grind_visit_prev";
@@ -313,12 +313,12 @@ export default function GrindBoard({ feed, owner, initial, unlockStatus }) {
         <div className="relative min-w-0 flex-1 overflow-x-clip">
         <div aria-hidden className="bg-journal-dots pointer-events-none absolute inset-0 opacity-60 paper:hidden" />
         <div ref={wrapRef} className="relative mx-auto max-w-6xl px-4 pb-24 pt-12 md:px-8 md:pt-16">
-          <Link href="/#projects" className="mb-12 inline-flex h-10 items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-muted transition-[color] duration-150 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent">
+          <Link href="/projects" className="mb-12 inline-flex h-10 items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-muted transition-[color] duration-150 hover:text-accent focus-visible:outline-2 focus-visible:outline-accent">
             <svg aria-hidden width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
             Back to projects
           </Link>
 
-          <ReportHeader path="/grind" />
+          <WrittenName className="mb-10" />
 
           <header className="mb-8 grid gap-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
             <div>
