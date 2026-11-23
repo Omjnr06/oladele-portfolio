@@ -1,0 +1,470 @@
+.wa {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: #fff;
+  color: #1e1e1e;
+  font-family: "Segoe UI", "Segoe UI Variable", system-ui, sans-serif;
+  font-size: 12px;
+  user-select: text;
+}
+
+.wa-row {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.wa-loading {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: #4f5b69;
+  font-size: 13px;
+}
+
+.wa-cmd {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2px;
+  height: 32px;
+  padding: 0 6px;
+  border-bottom: 1px solid #a0afc3;
+  background: linear-gradient(to bottom, #f5f9fd, #e8f0fa 50%, #dce7f5 51%, #e9f1fb);
+}
+
+.wa-cmd-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 9px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  color: #1e395b;
+  font-size: 12px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.wa-cmd-btn:hover,
+.wa-cmd-btn[aria-pressed="true"] {
+  border-color: #a7bcd6;
+  background: linear-gradient(to bottom, #fdfeff, #e6eef8);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.8);
+}
+
+.wa-cmd-btn:active {
+  background: linear-gradient(to bottom, #d9e5f3, #c3d4ea);
+}
+
+.wa-cmd-btn:focus-visible,
+.wa-btn:focus-visible,
+.wa-nav-item:focus-visible,
+.wa-tab:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -3px;
+}
+
+.wa-cmd-sep {
+  width: 1px;
+  height: 18px;
+  margin: 0 4px;
+  background: #b9c9dc;
+}
+
+.wa-addr {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 8px;
+  border-bottom: 1px solid #dfe6ef;
+  background: linear-gradient(to bottom, #fbfdff, #eef3f9);
+}
+
+.wa-crumbs {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 2px;
+  height: 24px;
+  min-width: 0;
+  padding: 0 6px;
+  overflow: hidden;
+  border: 1px solid #a9bdd3;
+  border-radius: 2px;
+  background: #fff;
+  color: #1e1e1e;
+  white-space: nowrap;
+}
+
+.wa-crumb {
+  padding: 2px 4px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: none;
+  color: inherit;
+  font-size: 12px;
+}
+
+.wa-crumb:hover {
+  border-color: #b9d1ec;
+  background: #e5f1fc;
+}
+
+.wa-crumb-sep {
+  color: #6b7a8c;
+}
+
+.wa-nav {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 1px;
+  width: 190px;
+  padding: 8px 6px;
+  overflow-y: auto;
+  border-right: 1px solid #dfe6ef;
+  background: linear-gradient(to right, #fff, #f6f9fc);
+}
+
+.wa-nav-head {
+  margin: 8px 6px 4px;
+  color: #1e395b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.wa-nav-head:first-child {
+  margin-top: 0;
+}
+
+.wa-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 24px;
+  padding: 2px 8px 2px 18px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  color: #1e1e1e;
+  font-size: 12px;
+  text-align: left;
+  text-decoration: none;
+}
+
+.wa-nav-item:hover {
+  border-color: #b9d1ec;
+  background: linear-gradient(to bottom, #f2f8fe, #e3effc);
+}
+
+.wa-nav-item[aria-current="true"],
+.wa-nav-item[aria-pressed="true"] {
+  border-color: #84acdd;
+  background: linear-gradient(to bottom, #dcebfc, #c1dbfc);
+}
+
+.wa-nav-ico {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.wa-main {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  background: #fff;
+}
+
+.wa-status {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 16px;
+  height: 24px;
+  padding: 0 10px;
+  border-top: 1px solid #dfe6ef;
+  background: linear-gradient(to bottom, #f4f7fb, #e7eef7);
+  color: #3c4a5c;
+}
+
+.wa-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 75px;
+  height: 24px;
+  padding: 0 12px;
+  border: 1px solid #707070;
+  border-radius: 3px;
+  background: linear-gradient(to bottom, #f6f6f6, #e3e3e3 50%, #d6d6d6 51%, #ececec);
+  color: #111;
+  font-size: 12px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.wa-btn:hover {
+  border-color: #3c7fb1;
+  background: linear-gradient(to bottom, #eaf6fd, #d9f0fc 50%, #bee6fd 51%, #a7d9f5);
+}
+
+.wa-btn:active {
+  border-color: #2c628b;
+  background: linear-gradient(to bottom, #e5f4fc, #c4e5f6 50%, #98d1ef 51%, #68b3db);
+}
+
+.wa-btn--default {
+  border-color: #3c7fb1;
+  box-shadow: inset 0 0 0 1px #9cd2f4;
+}
+
+.wa-link {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.wa-link:hover {
+  text-decoration: underline;
+}
+
+.wa-tabs {
+  display: flex;
+  flex-shrink: 0;
+  gap: 2px;
+  padding: 8px 10px 0;
+  border-bottom: 1px solid #898c95;
+  background: #f0f0f0;
+}
+
+.wa-tab {
+  position: relative;
+  top: 1px;
+  padding: 4px 12px;
+  border: 1px solid #898c95;
+  border-bottom-color: transparent;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(to bottom, #f2f2f2, #dcdcdc);
+  color: #1e1e1e;
+  font-size: 12px;
+}
+
+.wa-tab:hover {
+  background: linear-gradient(to bottom, #eaf6fd, #bee6fd);
+}
+
+.wa-tab[aria-selected="true"] {
+  z-index: 1;
+  padding-top: 5px;
+  margin-top: -1px;
+  border-bottom-color: #fff;
+  background: #fff;
+}
+
+.wa-doc-scroll {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+  overflow: auto;
+  background: #e9edf3;
+}
+
+.wa-doc {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 44px 52px;
+  background: #fff;
+  box-shadow: 0 0 0 1px #c6cfdb, 0 4px 14px rgb(0 0 0 / 0.12);
+  color: #1e1e1e;
+  font-family: Calibri, "Segoe UI", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.wa-doc h1 {
+  color: #17365d;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.wa-doc h2 {
+  margin: 26px 0 10px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #4f81bd;
+  color: #365f91;
+  font-size: 17px;
+  font-weight: 600;
+  scroll-margin-top: 12px;
+}
+
+.wa-doc h3 {
+  color: #1e1e1e;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.wa-doc-sub {
+  color: #4f6228;
+  font-size: 13px;
+}
+
+.wa-doc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px 12px;
+  margin-bottom: 4px;
+}
+
+.wa-doc-meta span {
+  color: #5a6472;
+  font-size: 13px;
+}
+
+.wa-doc ul {
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.wa-doc li {
+  margin: 3px 0;
+}
+
+.wa-doc-entry + .wa-doc-entry {
+  margin-top: 14px;
+}
+
+.wa-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.wa-chip {
+  padding: 1px 8px;
+  border: 1px solid #c6d4e5;
+  border-radius: 2px;
+  background: #f3f7fc;
+  color: #1e395b;
+  font-size: 12px;
+}
+
+.wa-files {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: 6px;
+  align-content: start;
+  padding: 12px;
+}
+
+.wa-file {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 6px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  color: #1e1e1e;
+  font-size: 12px;
+  text-align: center;
+}
+
+.wa-file:hover {
+  border-color: #b9d1ec;
+  background: linear-gradient(to bottom, #f2f8fe, #e3effc);
+}
+
+.wa-file[aria-selected="true"] {
+  border-color: #84acdd;
+  background: linear-gradient(to bottom, #dcebfc, #c1dbfc);
+}
+
+.wa-file:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -3px;
+}
+
+.wa-thumb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 80px;
+  overflow: hidden;
+  border: 1px solid #c8d0da;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.18);
+}
+
+.wa-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wa-thumb-ico {
+  width: 56px;
+  height: 56px;
+}
+
+
+.wa-details {
+  display: flex;
+  flex-shrink: 0;
+  gap: 14px;
+  min-height: 96px;
+  padding: 10px 14px;
+  border-top: 1px solid #c6d4e5;
+  background: linear-gradient(to bottom, #f9fbfe, #e9f0f8);
+}
+
+.wa-details h3 {
+  color: #1e1e1e;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.wa-details p {
+  max-width: 70ch;
+  margin-top: 3px;
+  color: #3c4a5c;
+  line-height: 1.45;
+}
+
+.wa-details-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.wa-dim {
+  color: #5a6472;
+}
+
+.wa-case {
+  font-family: "Segoe UI", "Segoe UI Variable", system-ui, sans-serif;
+  font-size: 14px;
+}
+
+.wa-case h2 {
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.wa-case h2 > span:first-child {
+  display: none;
+}

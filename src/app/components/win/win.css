@@ -126,6 +126,10 @@ html[data-pack="windows"] .win[data-closed] {
   display: none;
 }
 
+html[data-pack="windows"] .win-page:not(.win) {
+  display: none;
+}
+
 html[data-win-anim] .win {
   transition:
     transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),

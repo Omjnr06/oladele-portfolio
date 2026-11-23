@@ -1,0 +1,108 @@
+.wm-count {
+  margin-left: auto;
+  padding: 0 6px;
+  border-radius: 8px;
+  background: #1f5fbf;
+  color: #fff;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.wm-msg {
+  max-width: 720px;
+}
+
+.wm-head {
+  padding: 16px 22px 12px;
+  border-bottom: 1px solid #dfe6ef;
+  background: linear-gradient(to bottom, #fbfdff, #eef3f9);
+}
+
+.wm-head h2 {
+  margin-bottom: 6px;
+  color: #17365d;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.wm-body {
+  padding: 18px 22px 24px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.wm-body p + p {
+  margin-top: 10px;
+}
+
+.wm-links {
+  margin: 8px 0 12px 20px;
+  list-style: disc;
+}
+
+.wm-compose {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.wm-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px solid #e3e9f1;
+}
+
+.wm-field span {
+  width: 60px;
+  color: #5a6472;
+}
+
+.wm-field input {
+  flex: 1;
+  height: 24px;
+  padding: 0 6px;
+  border: 1px solid #a9bdd3;
+  border-radius: 2px;
+  font: inherit;
+}
+
+.wm-field input[readonly] {
+  border-color: transparent;
+  background: #f3f7fc;
+}
+
+.wm-field input:focus,
+.wm-text:focus {
+  outline: none;
+  border-color: #3c7fb1;
+  box-shadow: 0 0 0 1px #9cc6ea;
+}
+
+.wm-text {
+  flex: 1;
+  min-height: 160px;
+  margin: 10px 12px;
+  padding: 8px;
+  border: 1px solid #a9bdd3;
+  border-radius: 2px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: none;
+}
+
+.wm-send {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px 12px;
+}
+
+.wm-contacts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 6px;
+  padding: 12px;
+}
