@@ -32,7 +32,7 @@ export const THEMES = {
 
 export const PACKS = [
   { id: "modern", label: THEMES.modern.label },
-  { id: "paper", label: "Paper", blurb: "Ruled report pages and an engineering notebook." },
+  { id: "paper", label: "Paper" },
   { id: "windows", label: "Windows", blurb: "A Vista-era desktop with windows you can drag.", desktopOnly: true },
 ];
 

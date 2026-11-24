@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import dynamic from "next/dynamic";
 import { setScrollRoot } from "@/lib/scroll";
 import { setPrefs, usePrefs } from "@/lib/prefs";
 import { APPS, DESKTOP, appFor } from "./apps";
@@ -11,6 +12,7 @@ import WinBoot from "./WinBoot";
 import { play, setSoundOn, wakeAudio } from "./sound";
 import { leaveTo, reloadClean } from "./leave";
 import { AppView, hasNative } from "./registry";
+import { ShellContext } from "./context";
 import "./win.css";
 
 const BAR = 40;
@@ -20,6 +22,7 @@ const CELL_W = 92;
 const CELL_H = 100;
 const ICONS_KEY = "omj-win-icons";
 const EDGES = ["n", "e", "s", "w", "ne", "nw", "se", "sw"];
+const ClockFlyout = dynamic(() => import("./ClockFlyout"), { ssr: false });
 
 let zTop = 10;
 let animTimer = 0;
@@ -374,7 +377,7 @@ function Desktop({ onOpen }) {
             onContextMenu={(e) => openMenu(e, id)}
           >
             <WinIcon name={app.icon} className="win-icon-img" />
-            <span className="win-icon-label">{app.title}</span>
+            <span className="win-icon-label">{app.label ?? app.title}</span>
           </button>
         );
       })}
@@ -386,23 +389,41 @@ function Desktop({ onOpen }) {
 
 function Clock() {
   const [now, setNow] = useState(() => new Date());
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 15000);
     return () => clearInterval(t);
   }, []);
   return (
-    <div className="win-clock" aria-label={now.toLocaleString()}>
-      <span>{now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}</span>
-      <span>{now.toLocaleDateString()}</span>
-    </div>
+    <>
+      <button type="button" className="win-clock" aria-label={`${now.toLocaleString()}. Show calendar`} aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+        <span>{now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}</span>
+        <span>{now.toLocaleDateString()}</span>
+      </button>
+      {open && <ClockFlyout onClose={() => setOpen(false)} />}
+    </>
   );
 }
 
 function Taskbar({ wins, focused, actions, startOpen, onStart }) {
   const { sound } = usePrefs();
+  const [menu, setMenu] = useState(null);
   const open = wins.filter((w) => !w.closed);
+  const onMenu = (e) => {
+    e.preventDefault();
+    setMenu({
+      x: e.clientX,
+      y: e.clientY,
+      host: e.currentTarget.parentElement,
+      items: [
+        { label: "Start Task Manager", onSelect: () => actions.open(APPS.taskmgr.path) },
+        "sep",
+        { label: "Show the desktop", onSelect: actions.showDesktop },
+      ],
+    });
+  };
   return (
-    <nav className="win-taskbar" aria-label="Taskbar">
+    <nav className="win-taskbar" aria-label="Taskbar" onContextMenu={onMenu}>
       <button type="button" className="win-orb" aria-label="Start" aria-expanded={startOpen} title="Start" onClick={onStart}>
         <Orb className="win-orb-img" />
       </button>
@@ -434,6 +455,7 @@ function Taskbar({ wins, focused, actions, startOpen, onStart }) {
         <Clock />
         <button type="button" className="win-peek" aria-label="Show desktop" title="Show desktop" onClick={actions.showDesktop} />
       </div>
+      {menu && createPortal(<ContextMenu {...menu} onClose={() => setMenu(null)} />, menu.host)}
     </nav>
   );
 }
@@ -599,8 +621,10 @@ export default function WinShell() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  const shell = useMemo(() => ({ wins, focused, actions: stable }), [wins, focused, stable]);
+
   return (
-    <>
+    <ShellContext.Provider value={shell}>
       <IconDefs />
       <div className="win-wall" aria-hidden />
       <Desktop onOpen={open} />
@@ -625,6 +649,6 @@ export default function WinShell() {
         />
       )}
       {booting && <WinBoot onDone={endBoot} />}
-    </>
+    </ShellContext.Provider>
   );
 }

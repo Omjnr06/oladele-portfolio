@@ -1,0 +1,148 @@
+.gm-stage {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 0;
+  padding: 14px;
+  background: linear-gradient(to bottom, #f4f8fc, #e3ebf5);
+}
+
+.gm-warn {
+  color: #b3261e;
+}
+
+.wa-cmd-btn:disabled {
+  color: #8d99a8;
+  pointer-events: none;
+}
+
+.sd {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  width: min(100%, 52vh, 396px);
+  aspect-ratio: 1;
+  border: 2px solid #1e395b;
+  background: #1e395b;
+  gap: 1px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+}
+
+.sd:focus-visible {
+  outline: 2px solid #3c7fd6;
+  outline-offset: 3px;
+}
+
+.sd-cell {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: #fff;
+  color: #1e5ab0;
+  font-size: clamp(14px, 3.2vh, 22px);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.sd-cell[data-c="2"],
+.sd-cell[data-c="5"] {
+  margin-right: 1px;
+}
+
+.sd-cell[data-r="2"],
+.sd-cell[data-r="5"] {
+  margin-bottom: 1px;
+}
+
+.sd-cell[data-given] {
+  color: #111;
+  font-weight: 600;
+}
+
+.sd-cell[data-peer] {
+  background: #eef4fb;
+}
+
+.sd-cell[data-same] {
+  background: #d6e6fa;
+}
+
+.sd-cell[aria-current="true"] {
+  background: #b9d4f6;
+}
+
+.sd-cell[data-bad] {
+  color: #b3261e;
+}
+
+.sd-cell[data-bad][data-given] {
+  background: #fbe3e1;
+}
+
+.sd-cell:hover {
+  background: #e1edfb;
+}
+
+.sd-pad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  width: min(100%, 52vh, 396px);
+}
+
+.sd-key {
+  min-width: 0;
+  height: 30px;
+  font-size: 14px;
+}
+
+.sn-stage {
+  background: #0b2413;
+}
+
+.sn-board {
+  position: relative;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px #2f8f3a, 0 6px 18px rgb(0 0 0 / 0.4);
+}
+
+.sn-board:focus-visible {
+  outline: 2px solid #9be27a;
+  outline-offset: 4px;
+}
+
+.sn-board canvas {
+  display: block;
+}
+
+.sn-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgb(6 20 10 / 0.62);
+  color: #e9f7e4;
+  font-size: 13px;
+  text-align: center;
+}
+
+.sn-overlay p {
+  margin: 0;
+}
+
+.sn-big {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.sn-hint {
+  color: #a9cfa0;
+  font-size: 12px;
+}

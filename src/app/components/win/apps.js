@@ -6,13 +6,20 @@ export const APPS = {
   music: { title: "Music", icon: "music", path: "/music" },
   gallery: { title: "Gallery", icon: "photo", path: "/?app=gallery", size: [980, 700] },
   contact: { title: "Contact", icon: "mail", path: "/?app=contact", size: [880, 580] },
-  grind: { title: "Grind", icon: "chart", path: "/grind" },
+  grind: { title: "Grind", icon: "chart", path: "/grind", size: [1100, 700] },
   home: { title: "About Oladele", icon: "user", path: "/", size: [820, 620] },
   personalize: { title: "Personalize", icon: "brush", path: "/?app=personalize", size: [820, 640] },
+  recruiter: { title: "recruiter.exe", icon: "exe", path: "/?app=recruiter", size: [900, 700] },
+  readme: { title: "readme.txt - Notepad", label: "readme.txt", icon: "notepad", path: "/?app=readme", size: [560, 560] },
+  taskmgr: { title: "Task Manager", icon: "taskmgr", path: "/?app=taskmgr", size: [520, 560] },
+  games: { title: "Games", icon: "games", path: "/?app=games", size: [640, 420] },
+  sudoku: { title: "Sudoku", icon: "sudoku", path: "/?app=sudoku", size: [460, 600] },
+  snake: { title: "Snake", icon: "snake", path: "/?app=snake", size: [560, 520] },
 };
 
-export const DESKTOP = ["resume", "projects", "music", "gallery", "contact", "grind", "home"];
-export const PINNED = ["resume", "projects", "music", "gallery", "contact", "grind"];
+export const DESKTOP = ["recruiter", "resume", "projects", "music", "gallery", "contact", "grind", "home", "readme", "games"];
+export const PINNED = ["recruiter", "resume", "projects", "music", "gallery", "contact", "grind"];
+export const GAMES = ["sudoku", "snake"];
 export const PLACES = ["home", "resume", "projects", "gallery", "music", "personalize"];
 
 export const STUDIES = caseStudies.map((c) => ({ id: `case-${c.slug}`, title: c.title, icon: "doc", path: `/projects/${c.slug}`, size: [1040, 760] }));
