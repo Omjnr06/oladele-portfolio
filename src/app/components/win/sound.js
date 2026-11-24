@@ -51,6 +51,12 @@ const SOUNDS = {
   close(c, out, t) {
     voice(c, out, { f: 520, to: 360, at: t, dur: 0.09, type: "triangle", peak: 0.04 });
   },
+  shutdown(c, out, t) {
+    [830.61, 659.25, 493.88, 415.3].forEach((f, i) => {
+      voice(c, out, { f, at: t + i * 0.14, dur: 1.2 - i * 0.12, peak: 0.06, attack: 0.03 });
+    });
+    voice(c, out, { f: 164.81, at: t + 0.2, dur: 1.4, type: "triangle", peak: 0.04, attack: 0.15 });
+  },
   error(c, out, t) {
     voice(c, out, { f: 466.16, at: t, dur: 0.18, type: "square", peak: 0.035 });
     voice(c, out, { f: 349.23, at: t + 0.16, dur: 0.28, type: "square", peak: 0.035 });

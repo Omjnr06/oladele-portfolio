@@ -150,6 +150,71 @@ test("desktop view sizes, sort, pinned taskbar and hidden tray icons", async ({ 
   await expect(page.locator('[data-task="taskmgr"]')).toHaveAttribute("data-running", "");
 });
 
+test("aero snap docks a window to the edges and shake clears the others", async ({ page }, info) => {
+  desktopOnly(info);
+  await ready(page, "/resume");
+  const resume = win(page, "Resume");
+  const bar = resume.locator(".win-bar");
+  const grab = async () => {
+    await expect(page.locator("html")).not.toHaveAttribute("data-win-anim", "");
+    const b = await bar.boundingBox();
+    await page.mouse.move(b.x + 120, b.y + 12);
+    await page.mouse.down();
+  };
+  await grab();
+  await page.mouse.move(400, 200, { steps: 4 });
+  await page.mouse.move(1, 300, { steps: 6 });
+  await expect(page.locator(".win-snap")).toBeVisible();
+  await page.mouse.up();
+  await expect(page.locator(".win-snap")).toHaveCount(0);
+  await expect(resume).toHaveAttribute("data-snap", "");
+  expect(Math.round((await resume.boundingBox()).width)).toBe(683);
+  await grab();
+  await page.mouse.move(600, 200, { steps: 6 });
+  await page.mouse.move(600, 0, { steps: 6 });
+  await page.mouse.up();
+  await expect(resume).toHaveAttribute("data-max", "");
+  await expect(resume).not.toHaveAttribute("data-snap", "");
+  await resume.getByRole("button", { name: "Restore Resume" }).click();
+  await expect(resume).not.toHaveAttribute("data-max", "");
+  await page.getByRole("navigation", { name: "Taskbar" }).getByRole("button", { name: "Gallery" }).click();
+  await expect(win(page, "Gallery")).toHaveAttribute("data-focused", "");
+  await grab();
+  for (const x of [300, 500, 300, 500, 300, 500]) await page.mouse.move(x, 200, { steps: 2 });
+  await page.mouse.up();
+  await expect(win(page, "Gallery")).toHaveAttribute("data-min", "");
+  await expect(resume).not.toHaveAttribute("data-min", "");
+});
+
+test("taskbar previews, peek and jump lists", async ({ page }, info) => {
+  desktopOnly(info);
+  await ready(page, "/resume");
+  const bar = page.getByRole("navigation", { name: "Taskbar" });
+  await bar.getByRole("button", { name: "Gallery" }).click();
+  await bar.getByRole("button", { name: "Resume" }).hover();
+  const shot = page.getByRole("button", { name: "Switch to Resume" });
+  await expect(shot).toBeVisible();
+  await expect(page.locator(".tt-stage > *")).toHaveCount(1);
+  await shot.hover();
+  await expect(page.locator("html")).toHaveAttribute("data-win-peek", "");
+  await expect(win(page, "Resume")).toHaveAttribute("data-peeked", "");
+  await shot.click();
+  await expect(page.locator(".win[data-focused]")).toHaveAttribute("aria-label", "Resume");
+  await expect(page.locator("html")).not.toHaveAttribute("data-win-peek", "");
+  await bar.getByRole("button", { name: "Resume" }).click({ button: "right" });
+  const jump = page.getByRole("menu", { name: "Resume jump list" });
+  await expect(jump.getByRole("menuitem", { name: "Open resume PDF" })).toBeVisible();
+  await jump.getByRole("menuitem", { name: "Close window" }).click();
+  await expect(win(page, "Resume")).toHaveCount(0);
+  await bar.getByRole("button", { name: "Music" }).click({ button: "right" });
+  await page.getByRole("menu", { name: "Music jump list" }).getByRole("menuitem", { name: "Unpin this program from taskbar" }).click();
+  await expect(page.locator('[data-task="music"]')).toHaveCount(0);
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-win-ready", "");
+  await expect(page.locator('[data-task="music"]')).toHaveCount(0);
+  await expect(page.locator('[data-task="gallery"]')).toHaveCount(1);
+});
+
 test("desktop right-click menu and drag-to-select", async ({ page }, info) => {
   desktopOnly(info);
   await ready(page, "/resume");
@@ -289,7 +354,7 @@ test("recruiter.exe shows the resume, contact and the three highlighted projects
 test("task manager opens from the taskbar, lists windows and ends tasks", async ({ page }, info) => {
   desktopOnly(info);
   await ready(page, "/resume");
-  await page.getByRole("navigation", { name: "Taskbar" }).click({ button: "right", position: { x: 600, y: 20 } });
+  await page.getByRole("navigation", { name: "Taskbar" }).click({ button: "right", position: { x: 900, y: 20 } });
   await page.getByRole("menuitem", { name: "Start Task Manager" }).click();
   const tm = win(page, "Task Manager");
   await expect(tm).toHaveAttribute("data-focused", "");
