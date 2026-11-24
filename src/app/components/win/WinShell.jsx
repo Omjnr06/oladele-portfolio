@@ -5,10 +5,11 @@ import dynamic from "next/dynamic";
 import { setScrollRoot } from "@/lib/scroll";
 import { setPrefs, usePrefs } from "@/lib/prefs";
 import { APPS, DESKTOP, HOT, PINNED, appFor } from "./apps";
+import { profile } from "@/content/profile";
 import WinIcon, { IconDefs, Orb } from "./icons";
 import StartMenu from "./StartMenu";
 import ContextMenu from "./ContextMenu";
-import WinBoot from "./WinBoot";
+import WinBoot, { WinLeave } from "./WinBoot";
 import { play, setSoundOn, wakeAudio } from "./sound";
 import { leaveTo, reloadClean } from "./leave";
 import { AppView, hasNative } from "./registry";
@@ -21,6 +22,8 @@ const MIN_H = 240;
 const SIZES = { lg: { w: 108, h: 124 }, md: { w: 92, h: 100 }, sm: { w: 80, h: 78 } };
 const ICONS_KEY = "omj-win-icons";
 const SIZE_KEY = "omj-win-iconsize";
+const PINS_KEY = "omj-win-pins";
+const TaskThumb = dynamic(() => import("./TaskThumb"), { ssr: false });
 const EDGES = ["n", "e", "s", "w", "ne", "nw", "se", "sw"];
 const ClockFlyout = dynamic(() => import("./ClockFlyout"), { ssr: false });
 
@@ -126,8 +129,19 @@ function minimizedTransform(win) {
   return `translate(${Math.round(r.left + r.width / 2 - (win.w * s) / 2)}px, ${Math.round(r.top + r.height / 2 - (win.h * s) / 2)}px) scale(${s})`;
 }
 
+function zoneRect(zone) {
+  const { w, h } = desk();
+  if (zone === "max") return { x: 0, y: 0, w, h };
+  const half = Math.ceil(w / 2);
+  return { x: zone === "left" ? 0 : w - half, y: 0, w: half, h };
+}
+
+function frameRect(win) {
+  return win.max ? zoneRect("max") : win.snap ? zoneRect(win.snap) : win;
+}
+
 function frameStyle(win) {
-  const g = win.max ? { x: 0, y: 0, ...desk() } : win;
+  const g = frameRect(win);
   return {
     width: `${g.w}px`,
     height: `${g.h}px`,
@@ -138,23 +152,60 @@ function frameStyle(win) {
 
 function Chrome({ win, actions }) {
   const drag = (e) => {
-    if (e.button !== 0 || e.target.closest("button") || win.max) return;
+    if (e.button !== 0 || e.target.closest("button")) return;
     e.preventDefault();
     const bar = e.currentTarget;
     bar.setPointerCapture(e.pointerId);
     document.documentElement.setAttribute("data-win-drag", "");
-    const start = { px: e.clientX, py: e.clientY, x: win.x, y: win.y };
+    const g0 = frameRect(win);
+    const home = { x: win.x, y: win.y };
+    let start = { px: e.clientX, py: e.clientY, x: g0.x, y: g0.y };
+    let free = !win.max && !win.snap;
+    let zone = null;
+    const shake = { dir: 0, from: e.clientX, flips: [], done: false };
     const move = (m) => {
       const { w: vw, h: vh } = desk();
+      if (!free) {
+        if (Math.hypot(m.clientX - e.clientX, m.clientY - e.clientY) < 6) return;
+        const x = Math.round(m.clientX - ((e.clientX - g0.x) / g0.w) * win.w);
+        const y = Math.max(0, m.clientY - 12);
+        actions.patch(win.id, { max: false, snap: null, x, y });
+        start = { px: m.clientX, py: m.clientY, x, y };
+        free = true;
+        return;
+      }
       const x = Math.min(vw - 120, Math.max(120 - win.w, start.x + m.clientX - start.px));
       const y = Math.min(vh - 30, Math.max(0, start.y + m.clientY - start.py));
       actions.patch(win.id, { x, y });
+      const next = m.clientY <= 2 ? "max" : m.clientX <= 2 ? "left" : m.clientX >= innerWidth - 3 ? "right" : null;
+      if (next !== zone) {
+        zone = next;
+        actions.preview(zone);
+      }
+      const dx = m.clientX - shake.from;
+      if (Math.abs(dx) < 18 || shake.done) return;
+      const dir = Math.sign(dx);
+      if (shake.dir && dir !== shake.dir) {
+        const now = performance.now();
+        shake.flips = [...shake.flips.filter((t) => now - t < 800), now];
+        if (shake.flips.length >= 4) {
+          shake.done = true;
+          actions.shake(win.id);
+        }
+      }
+      shake.dir = dir;
+      shake.from = m.clientX;
     };
     const up = () => {
       document.documentElement.removeAttribute("data-win-drag");
       bar.removeEventListener("pointermove", move);
       bar.removeEventListener("pointerup", up);
       bar.removeEventListener("pointercancel", up);
+      actions.preview(null);
+      if (!zone) return;
+      animate();
+      const back = free && !win.max && !win.snap ? { x: start.x, y: start.y } : home;
+      actions.patch(win.id, zone === "max" ? { ...back, max: true, snap: null } : { ...back, max: false, snap: zone });
     };
     bar.addEventListener("pointermove", move);
     bar.addEventListener("pointerup", up);
@@ -205,15 +256,15 @@ function Chrome({ win, actions }) {
           <button type="button" className="win-cap" aria-label={`Minimize ${win.title}`} onClick={() => actions.minimize(win.id)}>
             <svg viewBox="0 0 10 10" aria-hidden><path d="M2 7.5h6" /></svg>
           </button>
-          <button type="button" className="win-cap" aria-label={win.max ? `Restore ${win.title}` : `Maximize ${win.title}`} onClick={() => actions.toggleMax(win.id)}>
-            <svg viewBox="0 0 10 10" aria-hidden>{win.max ? <path d="M3 1.5h5.5V7M1.5 3h5.5v5.5H1.5z" /> : <path d="M1.5 1.5h7v7h-7z" />}</svg>
+          <button type="button" className="win-cap" aria-label={win.max || win.snap ? `Restore ${win.title}` : `Maximize ${win.title}`} onClick={() => actions.toggleMax(win.id)}>
+            <svg viewBox="0 0 10 10" aria-hidden>{win.max || win.snap ? <path d="M3 1.5h5.5V7M1.5 3h5.5v5.5H1.5z" /> : <path d="M1.5 1.5h7v7h-7z" />}</svg>
           </button>
           <button type="button" className="win-cap win-cap-x" aria-label={`Close ${win.title}`} onClick={() => actions.close(win.id)}>
             <svg viewBox="0 0 10 10" aria-hidden><path d="M2 2l6 6M8 2L2 8" /></svg>
           </button>
         </div>
       </div>
-      {!win.max && EDGES.map((d) => <div key={d} aria-hidden className={`win-rs win-rs-${d}`} onPointerDown={resize(d)} />)}
+      {!win.max && !win.snap && EDGES.map((d) => <div key={d} aria-hidden className={`win-rs win-rs-${d}`} onPointerDown={resize(d)} />)}
     </>
   );
 }
@@ -243,7 +294,9 @@ function PageWindow({ win, focused, actions, el }) {
     el.toggleAttribute("data-min", win.min);
     el.toggleAttribute("data-max", win.max);
     el.toggleAttribute("data-closed", win.closed);
+    el.toggleAttribute("data-snap", !!win.snap);
     el.setAttribute("aria-label", win.title);
+    el.setAttribute("data-win", win.id);
   });
 
   useEffect(() => {
@@ -255,7 +308,7 @@ function PageWindow({ win, focused, actions, el }) {
   useEffect(
     () => () => {
       el.removeAttribute("style");
-      ["data-focused", "data-min", "data-max", "data-closed", "aria-label"].forEach((a) => el.removeAttribute(a));
+      ["data-focused", "data-min", "data-max", "data-closed", "data-snap", "data-win", "aria-label"].forEach((a) => el.removeAttribute(a));
     },
     [el],
   );
@@ -268,6 +321,8 @@ function AppWindow({ win, focused, actions }) {
     <section
       className="win"
       aria-label={win.title}
+      data-win={win.id}
+      data-snap={win.snap ? "" : undefined}
       data-focused={focused ? "" : undefined}
       data-min={win.min ? "" : undefined}
       data-max={win.max ? "" : undefined}
@@ -494,11 +549,67 @@ function hot(e) {
   e.currentTarget.style.setProperty("--mx", `${Math.round(e.clientX - r.left)}px`);
 }
 
+function readPins() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(PINS_KEY));
+    if (Array.isArray(saved)) return saved.filter((id) => APPS[id]);
+  } catch {}
+  return PINNED;
+}
+
+const tab = (href) => window.open(href, "_blank", "noopener,noreferrer");
+
+function tasksFor(id, open) {
+  const go = (path) => () => open(path);
+  const list = {
+    recruiter: [
+      { label: "View resume", onSelect: go("/resume") },
+      { label: "Write a message", onSelect: go("/?app=contact") },
+    ],
+    resume: [
+      { label: "Open resume PDF", onSelect: () => tab(profile.resumePdf.href) },
+      { label: "Run recruiter.exe", onSelect: go(APPS.recruiter.path) },
+    ],
+    projects: [{ label: "Case studies", onSelect: go("/?app=projects") }],
+    grind: [{ label: "Open full board", onSelect: () => location.assign("/grind?theme=modern") }],
+    games: [
+      { label: "Sudoku", onSelect: go(APPS.sudoku.path) },
+      { label: "Snake", onSelect: go(APPS.snake.path) },
+    ],
+    home: [{ label: "Personalize", onSelect: go(APPS.personalize.path) }],
+  }[id];
+  return list ? [{ head: "Tasks" }, ...list, "sep"] : [];
+}
+
 function Taskbar({ wins, focused, actions, startOpen, onStart }) {
   const { sound } = usePrefs();
   const [menu, setMenu] = useState(null);
+  const [pins, setPins] = useState(readPins);
+  const [thumb, setThumb] = useState(null);
+  const timer = useRef(0);
+  const peekTimer = useRef(0);
   const open = wins.filter((w) => !w.closed);
-  const ids = [...PINNED, ...open.map((w) => w.id).filter((id) => !PINNED.includes(id))];
+  const ids = [...pins, ...open.map((w) => w.id).filter((id) => !pins.includes(id))];
+
+  const savePins = (next) => {
+    setPins(next);
+    try {
+      localStorage.setItem(PINS_KEY, JSON.stringify(next));
+    } catch {}
+  };
+
+  const showThumb = (id, el) => {
+    clearTimeout(timer.current);
+    if (!open.some((w) => w.id === id)) return setThumb(null);
+    const r = el.getBoundingClientRect();
+    const at = { id, x: r.left + r.width / 2 };
+    timer.current = setTimeout(() => setThumb(at), thumb ? 0 : 420);
+  };
+  const hideThumb = () => {
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setThumb(null), 260);
+  };
+
   const onMenu = (e) => {
     e.preventDefault();
     setMenu({
@@ -512,6 +623,38 @@ function Taskbar({ wins, focused, actions, startOpen, onStart }) {
       ],
     });
   };
+
+  const onJump = (e, id, w, app) => {
+    e.preventDefault();
+    e.stopPropagation();
+    clearTimeout(timer.current);
+    setThumb(null);
+    const r = e.currentTarget.getBoundingClientRect();
+    const pinned = pins.includes(id);
+    setMenu({
+      x: r.left + r.width / 2,
+      y: r.top,
+      above: true,
+      label: `${app.title} jump list`,
+      host: e.currentTarget.closest("nav").parentElement,
+      items: [
+        ...tasksFor(id, actions.open),
+        { label: app.label ?? app.title, strong: true, onSelect: () => (w ? actions.focus(id, { restore: true }) : actions.open(app.path)) },
+        APPS[id] && {
+          label: pinned ? "Unpin this program from taskbar" : "Pin this program to taskbar",
+          onSelect: () => savePins(pinned ? pins.filter((p) => p !== id) : [...pins, id]),
+        },
+        w && { label: "Close window", onSelect: () => actions.close(id) },
+      ].filter(Boolean),
+    });
+  };
+
+  const peekDesktop = (on) => {
+    clearTimeout(peekTimer.current);
+    if (!on) return actions.peek(null);
+    peekTimer.current = setTimeout(() => actions.peek("desktop"), 500);
+  };
+
   return (
     <nav className="win-taskbar" aria-label="Taskbar" onContextMenu={onMenu}>
       <button type="button" className="win-orb" aria-label="Start" aria-expanded={startOpen} title="Start" onClick={onStart}>
@@ -530,11 +673,19 @@ function Taskbar({ wins, focused, actions, startOpen, onStart }) {
               data-running={w ? "" : undefined}
               className="win-task"
               aria-label={app.title}
-              title={app.title}
+              title={w ? undefined : app.title}
               aria-pressed={w ? active : undefined}
               style={{ "--hot": HOT[app.icon] ?? HOT.doc }}
               onPointerMove={hot}
-              onClick={() => (!w ? actions.open(app.path) : active ? actions.minimize(id) : actions.focus(id, { restore: true }))}
+              onPointerEnter={(e) => showThumb(id, e.currentTarget)}
+              onPointerLeave={hideThumb}
+              onContextMenu={(e) => onJump(e, id, w, app)}
+              onClick={() => {
+                setThumb(null);
+                if (!w) actions.open(app.path);
+                else if (active) actions.minimize(id);
+                else actions.focus(id, { restore: true });
+              }}
             >
               <WinIcon name={app.icon} className="win-task-ico" />
             </button>
@@ -558,8 +709,29 @@ function Taskbar({ wins, focused, actions, startOpen, onStart }) {
           <WinIcon name={sound ? "speaker" : "mute"} className="win-tray-ico" />
         </button>
         <Clock />
-        <button type="button" className="win-peek" aria-label="Show desktop" title="Show desktop" onClick={actions.showDesktop} />
+        <button
+          type="button"
+          className="win-peek"
+          aria-label="Show desktop"
+          title="Show desktop"
+          onPointerEnter={() => peekDesktop(true)}
+          onPointerLeave={() => peekDesktop(false)}
+          onClick={() => {
+            peekDesktop(false);
+            actions.showDesktop();
+          }}
+        />
       </div>
+      {thumb && open.some((w) => w.id === thumb.id) && (
+        <TaskThumb
+          win={open.find((w) => w.id === thumb.id)}
+          x={thumb.x}
+          actions={actions}
+          onEnter={() => clearTimeout(timer.current)}
+          onLeave={hideThumb}
+          onDone={() => setThumb(null)}
+        />
+      )}
       {menu && createPortal(<ContextMenu {...menu} onClose={() => setMenu(null)} />, menu.host)}
     </nav>
   );
@@ -575,6 +747,9 @@ export default function WinShell() {
   const [focused, setFocused] = useState(() => appFor(here()).id);
   const [booting, setBooting] = useState(wantsBoot);
   const [startOpen, setStartOpen] = useState(false);
+  const [zone, setZone] = useState(null);
+  const [leaving, setLeaving] = useState(null);
+  const shaken = useRef([]);
   const { sound } = usePrefs();
   const winsRef = useRef(wins);
 
@@ -636,7 +811,28 @@ export default function WinShell() {
       },
       toggleMax: (id) => {
         animate();
-        setWins((ws) => ws.map((w) => (w.id === id ? { ...w, max: !w.max } : w)));
+        setWins((ws) => ws.map((w) => (w.id === id ? (w.snap ? { ...w, snap: null } : { ...w, max: !w.max }) : w)));
+      },
+      preview: setZone,
+      peek: (id) => {
+        const root = document.documentElement;
+        document.querySelectorAll(".win[data-peeked]").forEach((el) => el.removeAttribute("data-peeked"));
+        if (!id) return root.removeAttribute("data-win-peek");
+        root.setAttribute("data-win-peek", "");
+        if (id !== "desktop") document.querySelector(`.win[data-win="${CSS.escape(id)}"]`)?.setAttribute("data-peeked", "");
+      },
+      shake: (id) => {
+        animate();
+        const others = winsRef.current.filter((w) => w.id !== id && !w.closed && !w.min).map((w) => w.id);
+        if (others.length) {
+          shaken.current = others;
+          play("minimize");
+          setWins((ws) => ws.map((w) => (others.includes(w.id) ? { ...w, min: true } : w)));
+        } else {
+          const back = shaken.current;
+          shaken.current = [];
+          setWins((ws) => ws.map((w) => (back.includes(w.id) ? { ...w, min: false } : w)));
+        }
       },
       close: (id) => {
         play("close");
@@ -740,19 +936,34 @@ export default function WinShell() {
           <AppWindow key={w.id} win={w} focused={focused === w.id} actions={stable} />
         ),
       )}
+      {zone && <div aria-hidden className="win-snap" style={(({ x, y, w, h }) => ({ left: x, top: y, width: w, height: h }))(zoneRect(zone))} />}
       <Taskbar wins={wins} focused={focused} actions={stable} startOpen={startOpen} onStart={() => setStartOpen((o) => !o)} />
       {startOpen && (
         <StartMenu
           onOpen={open}
           onClose={closeStart}
-          onShutDown={() => leaveTo("modern", "cyan")}
-          onSwitchUser={() => leaveTo("paper", "cream")}
+          onShutDown={() => {
+            setStartOpen(false);
+            setLeaving({ text: "Shutting down...", sound: "shutdown", done: () => leaveTo("modern", "cyan") });
+          }}
+          onSwitchUser={() => {
+            setStartOpen(false);
+            setLeaving({ text: "Logging off...", done: () => leaveTo("paper", "cream") });
+          }}
           onRestart={() => {
             setStartOpen(false);
-            setBooting(true);
+            setLeaving({
+              text: "Restarting...",
+              sound: "shutdown",
+              done: () => {
+                setLeaving(null);
+                setBooting(true);
+              },
+            });
           }}
         />
       )}
+      {leaving && <WinLeave {...leaving} />}
       {booting && <WinBoot onDone={endBoot} />}
     </ShellContext.Provider>
   );

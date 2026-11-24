@@ -8,11 +8,38 @@ import { play } from "./sound";
 export const WIN_BOOT_MS = 2100;
 
 const TRAILS = [
-  { d: "M-40 70 C 90 60, 140 150, 200 200", c: "#59c6ff" },
-  { d: "M440 90 C 320 70, 260 150, 200 200", c: "#9be7ff" },
-  { d: "M-30 350 C 90 340, 150 260, 200 200", c: "#ffffff" },
-  { d: "M430 330 C 320 350, 250 270, 200 200", c: "#b9a4ff" },
+  { d: "M-40 60 C 140 -20, 330 70, 250 170 S 180 230, 200 200", c: "#ff5a36" },
+  { d: "M440 60 C 420 220, 260 330, 170 250 S 230 170, 200 200", c: "#7ad13a" },
+  { d: "M-30 350 C 40 170, 230 90, 260 210 S 190 230, 200 200", c: "#2fa4ff" },
+  { d: "M430 340 C 250 430, 90 300, 150 190 S 220 180, 200 200", c: "#ffc43a" },
 ];
+
+export function WinLeave({ text, sound, done }) {
+  const fn = useRef(done);
+
+  useEffect(() => {
+    fn.current = done;
+  });
+
+  useEffect(() => {
+    const quick = navigator.webdriver || matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (sound && !quick) play(sound);
+    const t = setTimeout(() => fn.current?.(), quick ? 0 : 1500);
+    return () => clearTimeout(t);
+  }, [sound]);
+
+  return (
+    <div className="wb wb--leave" role="status">
+      <div className="wb-welcome wb-logon">
+        <span className="wb-ring" />
+        <p className="wb-hello">{text}</p>
+        <p className="wb-brand" aria-hidden>
+          OMJ OS <span>7</span>
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export default function WinBoot({ onDone }) {
   const done = useRef(onDone);
@@ -61,8 +88,9 @@ export default function WinBoot({ onDone }) {
           <Orb className="wb-orb-img" />
         </div>
         <p className="wb-caption">Starting OMJ OS</p>
+        <p className="wb-copy">© {new Date().getFullYear()} {profile.firstName} {profile.lastName}</p>
       </div>
-      <div className="wb-welcome">
+      <div className="wb-welcome wb-logon">
         <figure className="wb-tile">
           <Image src="/assets/images/junior-headshot.JPG" alt="" width={180} height={180} sizes="180px" loading="eager" className="wb-tile-img" />
         </figure>
@@ -71,6 +99,9 @@ export default function WinBoot({ onDone }) {
           {profile.firstName} {profile.lastName}
         </p>
         <span className="wb-ring" />
+        <p className="wb-brand">
+          OMJ OS <span>7</span>
+        </p>
       </div>
     </div>
   );

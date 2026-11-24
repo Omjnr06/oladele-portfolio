@@ -15,6 +15,7 @@ function move(e, el) {
 function Items({ items, onClose, sub, setSub }) {
   return items.map((it, i) => {
     if (it === "sep") return <div key={i} className="cm-sep" role="separator" />;
+    if (it.head) return <p key={i} className="cm-head" role="presentation">{it.head}</p>;
     if (it.items) {
       const open = sub === it.label;
       return (
@@ -91,16 +92,17 @@ function SubMenu({ label, items, onClose, onBack }) {
   );
 }
 
-export default function ContextMenu({ x, y, items, onClose }) {
+export default function ContextMenu({ x, y, items, onClose, above = false, label }) {
   const ref = useRef(null);
   const [pos, setPos] = useState({ left: x, top: y });
   const [sub, setSub] = useState(null);
 
   useLayoutEffect(() => {
     const r = ref.current.getBoundingClientRect();
-    setPos({ left: Math.min(x, innerWidth - r.width - 4), top: Math.min(y, innerHeight - r.height - 4) });
+    if (above) setPos({ left: Math.min(Math.max(4, x - r.width / 2), innerWidth - r.width - 4), top: Math.max(4, y - r.height - 6) });
+    else setPos({ left: Math.min(x, innerWidth - r.width - 4), top: Math.min(y, innerHeight - r.height - 4) });
     ref.current.querySelector("button")?.focus({ preventScroll: true });
-  }, [x, y]);
+  }, [x, y, above]);
 
   useEffect(() => {
     const onDown = (e) => !ref.current?.contains(e.target) && onClose();
@@ -116,7 +118,7 @@ export default function ContextMenu({ x, y, items, onClose }) {
   }, [onClose]);
 
   return (
-    <div ref={ref} className="cm" role="menu" style={pos} onKeyDown={(e) => move(e, ref.current)} onContextMenu={(e) => e.preventDefault()}>
+    <div ref={ref} className={above ? "cm cm-jump" : "cm"} role="menu" aria-label={label} style={pos} onKeyDown={(e) => move(e, ref.current)} onContextMenu={(e) => e.preventDefault()}>
       <Items items={items} onClose={onClose} sub={sub} setSub={setSub} />
     </div>
   );
