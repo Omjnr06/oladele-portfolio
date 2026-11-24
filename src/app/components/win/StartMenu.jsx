@@ -55,7 +55,7 @@ export default function StartMenu({ onOpen, onClose, onShutDown, onRestart, onSw
           {list.map((app) => (
             <button key={app.id} type="button" className="sm-item" onClick={() => go(app.path)}>
               <WinIcon name={app.icon} className={all ? "sm-item-ico sm-item-ico--sm" : "sm-item-ico"} />
-              <span>{app.title}</span>
+              <span>{app.label ?? app.title}</span>
             </button>
           ))}
         </div>

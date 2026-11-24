@@ -1,0 +1,98 @@
+.np-menubar {
+  display: flex;
+  flex-shrink: 0;
+  height: 22px;
+  padding: 0 2px;
+  border-bottom: 1px solid #e3e3e3;
+  background: #fff;
+}
+
+.np-menu {
+  position: relative;
+}
+
+.np-top {
+  height: 22px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  background: none;
+  color: #000;
+  font-size: 12px;
+}
+
+.np-top:hover,
+.np-top[aria-expanded="true"] {
+  border-color: #aeccf1;
+  background: linear-gradient(to bottom, #f2f8fe, #d7e8fb);
+}
+
+.np-top:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -3px;
+}
+
+.np-drop.cm {
+  position: absolute;
+  top: 22px;
+  left: 0;
+}
+
+.np-check {
+  position: absolute;
+  left: 10px;
+}
+
+.np-drop .cm-item {
+  position: relative;
+}
+
+.np-page {
+  flex: 1;
+  min-height: 0;
+  padding: 4px 6px;
+  overflow: auto;
+  background: #fff;
+  color: #000;
+  font-family: Consolas, "Lucida Console", "Courier New", monospace;
+  line-height: 1.4;
+  white-space: pre;
+  cursor: text;
+}
+
+.np-page[data-wrap] {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.np-page:focus-visible {
+  outline: none;
+}
+
+.np-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #0b5cc1;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.np-link:hover {
+  color: #d9480f;
+}
+
+.np-link:focus-visible {
+  outline: 1px dotted #000;
+}
+
+.np-status {
+  justify-content: flex-end;
+  gap: 0;
+  padding: 0;
+}
+
+.np-status span {
+  padding: 0 14px;
+  border-left: 1px solid #d0d8e2;
+}
