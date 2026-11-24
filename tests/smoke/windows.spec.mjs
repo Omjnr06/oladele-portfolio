@@ -119,13 +119,44 @@ test("switch user goes to paper", async ({ page }, info) => {
   await expect(page.locator(".win-taskbar")).toHaveCount(0);
 });
 
+test("desktop view sizes, sort, pinned taskbar and hidden tray icons", async ({ page }, info) => {
+  desktopOnly(info);
+  await ready(page, "/resume");
+  await page.getByRole("button", { name: "Show desktop" }).click();
+  await page.mouse.click(900, 300, { button: "right" });
+  await page.getByRole("menuitem", { name: "View" }).hover();
+  const view = page.getByRole("menu", { name: "View" });
+  await expect(view.getByRole("menuitemradio", { name: "Medium icons" })).toHaveAttribute("aria-checked", "true");
+  await view.getByRole("menuitemradio", { name: "Large icons" }).click();
+  await expect(page.locator(".win-desktop")).toHaveAttribute("data-size", "lg");
+  await page.reload();
+  await expect(page.locator(".win-desktop")).toHaveAttribute("data-size", "lg");
+  await page.getByRole("button", { name: "Show desktop" }).click();
+  await page.mouse.click(900, 300, { button: "right" });
+  await page.getByRole("menuitem", { name: "Sort by" }).press("ArrowRight");
+  await expect(page.getByRole("menu", { name: "Sort by" }).getByRole("menuitem", { name: "Name" })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".win-icon", { hasText: "About Oladele" })).toHaveAttribute("style", /translate\(0px, 0px\)/);
+  const bar = page.getByRole("navigation", { name: "Taskbar" });
+  const snake = page.locator('[data-task="snake"]');
+  await expect(snake).toHaveCount(0);
+  await expect(bar.getByRole("button", { name: "Gallery" })).not.toHaveAttribute("data-running", "");
+  await bar.getByRole("button", { name: "Gallery" }).click();
+  await expect(page.locator(".win[data-focused]")).toHaveAttribute("aria-label", "Gallery");
+  await expect(bar.getByRole("button", { name: "Gallery" })).toHaveAttribute("aria-pressed", "true");
+  await bar.getByRole("button", { name: "Show hidden icons" }).click();
+  await page.getByRole("group", { name: "Hidden icons" }).getByRole("button", { name: "Task Manager" }).click();
+  await expect(page.locator(".win[data-focused]")).toHaveAttribute("aria-label", "Task Manager");
+  await expect(page.locator('[data-task="taskmgr"]')).toHaveAttribute("data-running", "");
+});
+
 test("desktop right-click menu and drag-to-select", async ({ page }, info) => {
   desktopOnly(info);
   await ready(page, "/resume");
   await page.getByRole("button", { name: "Show desktop" }).click();
   await page.mouse.click(900, 300, { button: "right" });
   const menu = page.getByRole("menu");
-  await expect(menu.getByRole("menuitem")).toHaveText(["Refresh", "Arrange icons", "Personalize", "About Oladele"]);
+  await expect(menu.getByRole("menuitem")).toHaveText(["View", "Sort by", "Refresh", "Personalize", "About Oladele"]);
   await menu.getByRole("menuitem", { name: "Personalize" }).click();
   await expect(page.locator(".win[data-focused]")).toHaveAttribute("aria-label", "Personalize");
   await page.getByRole("button", { name: "Show desktop" }).click();
