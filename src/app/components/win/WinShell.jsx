@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
 import { setScrollRoot } from "@/lib/scroll";
 import { setPrefs, usePrefs } from "@/lib/prefs";
-import { APPS, DESKTOP, appFor } from "./apps";
+import { APPS, DESKTOP, HOT, PINNED, appFor } from "./apps";
 import WinIcon, { IconDefs, Orb } from "./icons";
 import StartMenu from "./StartMenu";
 import ContextMenu from "./ContextMenu";
@@ -18,13 +18,19 @@ import "./win.css";
 const BAR = 40;
 const MIN_W = 360;
 const MIN_H = 240;
-const CELL_W = 92;
-const CELL_H = 100;
+const SIZES = { lg: { w: 108, h: 124 }, md: { w: 92, h: 100 }, sm: { w: 80, h: 78 } };
 const ICONS_KEY = "omj-win-icons";
+const SIZE_KEY = "omj-win-iconsize";
 const EDGES = ["n", "e", "s", "w", "ne", "nw", "se", "sw"];
 const ClockFlyout = dynamic(() => import("./ClockFlyout"), { ssr: false });
 
 let zTop = 10;
+let cell = SIZES.md;
+
+function applySize(id) {
+  cell = SIZES[id];
+  return id;
+}
 let animTimer = 0;
 
 function animate() {
@@ -54,8 +60,8 @@ const desk = () => ({ w: innerWidth, h: innerHeight - BAR });
 function geometry(app, count) {
   const { w: vw, h: vh } = desk();
   const max = app.kind === "page" && app.id === "music";
-  const rows = Math.max(1, Math.floor((vh - 16) / CELL_H));
-  const left = 8 + Math.ceil(DESKTOP.length / rows) * CELL_W + 12;
+  const rows = Math.max(1, Math.floor((vh - 16) / cell.h));
+  const left = 8 + Math.ceil(DESKTOP.length / rows) * cell.w + 12;
   const [sw, sh] = app.size ?? (app.kind === "page" ? [1180, vh - 56] : [760, 520]);
   const w = Math.min(sw, vw - left - 32);
   const step = (count % 8) * 28;
@@ -77,8 +83,23 @@ function readIcons() {
   return {};
 }
 
-function layoutIcons(saved) {
-  const rows = Math.max(1, Math.floor((desk().h - 16) / CELL_H));
+function readSize() {
+  try {
+    const s = localStorage.getItem(SIZE_KEY);
+    if (SIZES[s]) return s;
+  } catch {}
+  return "md";
+}
+
+const kind = (id) => (APPS[id].icon === "folder" || APPS[id].icon === "games" ? 0 : (APPS[id].label ?? APPS[id].title).includes(".") ? 1 : 2);
+
+const SORTS = {
+  name: (a, b) => (APPS[a].label ?? APPS[a].title).localeCompare(APPS[b].label ?? APPS[b].title),
+  type: (a, b) => kind(a) - kind(b) || SORTS.name(a, b),
+};
+
+function layoutIcons(saved, order = DESKTOP) {
+  const rows = Math.max(1, Math.floor((desk().h - 16) / cell.h));
   const taken = new Set();
   const out = {};
   for (const id of DESKTOP) {
@@ -89,7 +110,7 @@ function layoutIcons(saved) {
     }
   }
   let i = 0;
-  for (const id of DESKTOP) {
+  for (const id of order) {
     if (out[id]) continue;
     while (taken.has(`${Math.floor(i / rows)}:${i % rows}`)) i++;
     out[id] = { c: Math.floor(i / rows), r: i % rows };
@@ -121,6 +142,7 @@ function Chrome({ win, actions }) {
     e.preventDefault();
     const bar = e.currentTarget;
     bar.setPointerCapture(e.pointerId);
+    document.documentElement.setAttribute("data-win-drag", "");
     const start = { px: e.clientX, py: e.clientY, x: win.x, y: win.y };
     const move = (m) => {
       const { w: vw, h: vh } = desk();
@@ -129,6 +151,7 @@ function Chrome({ win, actions }) {
       actions.patch(win.id, { x, y });
     };
     const up = () => {
+      document.documentElement.removeAttribute("data-win-drag");
       bar.removeEventListener("pointermove", move);
       bar.removeEventListener("pointerup", up);
       bar.removeEventListener("pointercancel", up);
@@ -144,6 +167,7 @@ function Chrome({ win, actions }) {
     e.stopPropagation();
     const el = e.currentTarget;
     el.setPointerCapture(e.pointerId);
+    document.documentElement.setAttribute("data-win-drag", "");
     const s = { px: e.clientX, py: e.clientY, x: win.x, y: win.y, w: win.w, h: win.h };
     const move = (m) => {
       const dx = m.clientX - s.px;
@@ -162,6 +186,7 @@ function Chrome({ win, actions }) {
       actions.patch(win.id, next);
     };
     const up = () => {
+      document.documentElement.removeAttribute("data-win-drag");
       el.removeEventListener("pointermove", move);
       el.removeEventListener("pointerup", up);
       el.removeEventListener("pointercancel", up);
@@ -258,10 +283,11 @@ function AppWindow({ win, focused, actions }) {
 }
 
 function iconBox(p) {
-  return { left: 8 + p.c * CELL_W, top: 12 + p.r * CELL_H, right: 8 + p.c * CELL_W + 84, bottom: 12 + p.r * CELL_H + 92 };
+  return { left: 8 + p.c * cell.w, top: 12 + p.r * cell.h, right: 8 + p.c * cell.w + cell.w - 8, bottom: 12 + p.r * cell.h + cell.h - 8 };
 }
 
 function Desktop({ onOpen }) {
+  const [size, setSize] = useState(() => applySize(readSize()));
   const [pos, setPos] = useState(() => layoutIcons(readIcons()));
   const [sel, setSel] = useState([]);
   const [dragging, setDragging] = useState(null);
@@ -296,10 +322,10 @@ function Desktop({ onOpen }) {
       el.removeEventListener("pointercancel", up);
       setDragging(null);
       if (!moved) return;
-      const rows = Math.max(1, Math.floor((desk().h - 16) / CELL_H));
+      const rows = Math.max(1, Math.floor((desk().h - 16) / cell.h));
       const from = pos[id];
-      const c = Math.max(0, Math.round((from.c * CELL_W + u.clientX - start.px) / CELL_W));
-      const r = Math.min(rows - 1, Math.max(0, Math.round((from.r * CELL_H + u.clientY - start.py) / CELL_H)));
+      const c = Math.max(0, Math.round((from.c * cell.w + u.clientX - start.px) / cell.w));
+      const r = Math.min(rows - 1, Math.max(0, Math.round((from.r * cell.h + u.clientY - start.py) / cell.h)));
       const next = { ...pos };
       const other = Object.keys(next).find((k) => k !== id && next[k].c === c && next[k].r === r);
       if (other) next[other] = from;
@@ -339,7 +365,17 @@ function Desktop({ onOpen }) {
     el.addEventListener("pointercancel", up);
   };
 
-  const arrange = { label: "Arrange icons", onSelect: () => savePos(layoutIcons({})) };
+  const arrange = { label: "Auto arrange icons", onSelect: () => savePos(layoutIcons({})) };
+
+  const pickSize = (next) => {
+    setSize(applySize(next));
+    try {
+      localStorage.setItem(SIZE_KEY, next);
+    } catch {}
+    savePos(layoutIcons(pos));
+  };
+
+  const sizeItem = (id, label) => ({ label, checked: size === id, onSelect: () => pickSize(id) });
 
   const openMenu = (e, id) => {
     e.preventDefault();
@@ -347,8 +383,15 @@ function Desktop({ onOpen }) {
     const items = id
       ? [{ label: "Open", strong: true, onSelect: () => onOpen(APPS[id].path) }, "sep", arrange]
       : [
+          { label: "View", items: [sizeItem("lg", "Large icons"), sizeItem("md", "Medium icons"), sizeItem("sm", "Small icons"), "sep", arrange] },
+          {
+            label: "Sort by",
+            items: [
+              { label: "Name", onSelect: () => savePos(layoutIcons({}, [...DESKTOP].sort(SORTS.name))) },
+              { label: "Item type", onSelect: () => savePos(layoutIcons({}, [...DESKTOP].sort(SORTS.type))) },
+            ],
+          },
           { label: "Refresh", onSelect: () => setGen((g) => g + 1) },
-          arrange,
           "sep",
           { label: "Personalize", onSelect: () => onOpen(APPS.personalize.path) },
           { label: "About Oladele", onSelect: () => onOpen(APPS.home.path) },
@@ -357,7 +400,7 @@ function Desktop({ onOpen }) {
   };
 
   return (
-    <div className="win-desktop" onPointerDown={startBand} onContextMenu={(e) => e.target === e.currentTarget && openMenu(e, null)}>
+    <div className="win-desktop" data-size={size} onPointerDown={startBand} onContextMenu={(e) => e.target === e.currentTarget && openMenu(e, null)}>
       {DESKTOP.map((id, i) => {
         const app = APPS[id];
         const p = pos[id];
@@ -369,7 +412,7 @@ function Desktop({ onOpen }) {
             className="win-icon"
             data-selected={sel.includes(id) ? "" : undefined}
             data-dragging={d ? "" : undefined}
-            style={{ "--i": i, transform: `translate(${p.c * CELL_W + (d?.dx ?? 0)}px, ${p.r * CELL_H + (d?.dy ?? 0)}px)` }}
+            style={{ "--i": i, transform: `translate(${p.c * cell.w + (d?.dx ?? 0)}px, ${p.r * cell.h + (d?.dy ?? 0)}px)` }}
             onPointerDown={startDrag(id)}
             onFocus={() => setSel((cur) => (cur.includes(id) ? cur : [id]))}
             onDoubleClick={() => onOpen(app.path)}
@@ -405,10 +448,57 @@ function Clock() {
   );
 }
 
+function TrayMore({ onOpen }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e) => !ref.current?.contains(e.target) && setOpen(false);
+    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("pointerdown", onDown, true);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("pointerdown", onDown, true);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const go = (id) => {
+    setOpen(false);
+    onOpen(APPS[id].path);
+  };
+
+  return (
+    <div ref={ref} className="win-more">
+      <button type="button" className="win-tray-btn win-more-btn" aria-label="Show hidden icons" title="Show hidden icons" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+        <svg viewBox="0 0 10 10" aria-hidden><path d="M2 6.5l3-3 3 3" /></svg>
+      </button>
+      {open && (
+        <div className="win-more-pop" role="group" aria-label="Hidden icons">
+          {["personalize", "taskmgr", "games"].map((id) => (
+            <button key={id} type="button" className="win-tray-btn" aria-label={APPS[id].title} title={APPS[id].title} onClick={() => go(id)}>
+              <WinIcon name={APPS[id].icon} className="win-tray-ico" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+const NET_TIP = ["magbadelojr.com", "Internet access"].join("\n");
+
+function hot(e) {
+  const r = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty("--mx", `${Math.round(e.clientX - r.left)}px`);
+}
+
 function Taskbar({ wins, focused, actions, startOpen, onStart }) {
   const { sound } = usePrefs();
   const [menu, setMenu] = useState(null);
   const open = wins.filter((w) => !w.closed);
+  const ids = [...PINNED, ...open.map((w) => w.id).filter((id) => !PINNED.includes(id))];
   const onMenu = (e) => {
     e.preventDefault();
     setMenu({
@@ -428,21 +518,36 @@ function Taskbar({ wins, focused, actions, startOpen, onStart }) {
         <Orb className="win-orb-img" />
       </button>
       <div className="win-tasks">
-        {open.map((w) => (
-          <button
-            key={w.id}
-            type="button"
-            data-task={w.id}
-            className="win-task"
-            aria-pressed={focused === w.id && !w.min}
-            onClick={() => (focused === w.id && !w.min ? actions.minimize(w.id) : actions.focus(w.id, { restore: true }))}
-          >
-            <WinIcon name={w.icon} className="win-task-ico" />
-            <span>{w.title}</span>
-          </button>
-        ))}
+        {ids.map((id) => {
+          const w = open.find((x) => x.id === id);
+          const app = w ?? APPS[id];
+          const active = !!w && focused === id && !w.min;
+          return (
+            <button
+              key={id}
+              type="button"
+              data-task={id}
+              data-running={w ? "" : undefined}
+              className="win-task"
+              aria-label={app.title}
+              title={app.title}
+              aria-pressed={w ? active : undefined}
+              style={{ "--hot": HOT[app.icon] ?? HOT.doc }}
+              onPointerMove={hot}
+              onClick={() => (!w ? actions.open(app.path) : active ? actions.minimize(id) : actions.focus(id, { restore: true }))}
+            >
+              <WinIcon name={app.icon} className="win-task-ico" />
+            </button>
+          );
+        })}
       </div>
       <div className="win-tray">
+        <TrayMore onOpen={actions.open} />
+        <span className="win-tray-btn win-net" role="img" aria-label="Network: Internet access" title={NET_TIP}>
+          <svg viewBox="0 0 20 20" aria-hidden>
+            <path d="M3 17h2v-3H3zM7 17h2V11H7zM11 17h2V8h-2zM15 17h2V4h-2z" />
+          </svg>
+        </span>
         <button
           type="button"
           className="win-tray-btn"

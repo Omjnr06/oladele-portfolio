@@ -20,11 +20,7 @@ html[data-pack="windows"] .win-host {
 .win-wall {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(120% 80% at 50% 125%, #3aa8ff 0%, rgb(58 168 255 / 0) 55%),
-    radial-gradient(60% 55% at 12% -5%, rgb(120 205 255 / 0.4), transparent 70%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900' preserveAspectRatio='none'%3E%3Cdefs%3E%3Cfilter id='b' x='-10%25' y='-50%25' width='120%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='16'/%3E%3C/filter%3E%3ClinearGradient id='g' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%23fff' stop-opacity='0'/%3E%3Cstop offset='.55' stop-color='%23c8ecff' stop-opacity='.95'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='none' stroke='url(%23g)'%3E%3Cpath filter='url(%23b)' d='M-100 660C300 430 720 830 1700 390' stroke-width='70' opacity='.45'/%3E%3Cpath filter='url(%23b)' d='M-100 740C420 520 920 900 1700 480' stroke-width='28' opacity='.6'/%3E%3Cpath d='M-100 600C520 400 1000 720 1700 320' stroke-width='3' opacity='.85'/%3E%3Cpath d='M-100 690C380 470 860 860 1700 430' stroke-width='1.5' opacity='.7'/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat,
-    linear-gradient(165deg, #061f48 0%, #0b4a8e 50%, #0a2f63 100%);
+  background: #0d4aa6 url("/assets/win/wall.svg") center / cover no-repeat;
 }
 
 .win-desktop {
@@ -52,13 +48,33 @@ html[data-pack="windows"] .win-host {
 }
 
 .win-icon:hover {
-  border-color: rgb(190 225 255 / 0.35);
-  background: rgb(150 200 255 / 0.14);
+  border-color: rgb(200 230 255 / 0.4);
+  background: linear-gradient(to bottom, rgb(210 235 255 / 0.22), rgb(150 200 255 / 0.12));
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12);
 }
 
 .win-icon[data-selected] {
-  border-color: rgb(200 230 255 / 0.7);
-  background: rgb(120 180 250 / 0.32);
+  border-color: rgb(210 235 255 / 0.75);
+  background: linear-gradient(to bottom, rgb(190 225 255 / 0.45), rgb(120 180 250 / 0.3));
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
+}
+
+.win-desktop[data-size="lg"] .win-icon {
+  width: 100px;
+}
+
+.win-desktop[data-size="lg"] .win-icon-img {
+  width: 64px;
+  height: 64px;
+}
+
+.win-desktop[data-size="sm"] .win-icon {
+  width: 72px;
+}
+
+.win-desktop[data-size="sm"] .win-icon-img {
+  width: 32px;
+  height: 32px;
 }
 
 .win-icon[data-dragging] {
@@ -86,31 +102,37 @@ html[data-pack="windows"] .win-host {
 }
 
 html[data-pack="windows"] .win {
+  --glass: rgb(196 214 236 / 0.92);
   position: absolute;
   top: 0;
   left: 0;
   display: block;
   transform-origin: 0 0;
-  border-radius: 8px 8px 5px 5px;
+  border-radius: 7px 7px 4px 4px;
   background:
-    linear-gradient(to bottom, rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.12) 30px, rgb(255 255 255 / 0.08)),
-    rgb(165 196 228 / 0.72);
+    linear-gradient(112deg, transparent 0 18%, rgb(255 255 255 / 0.2) 19% 23%, transparent 24% 46%, rgb(255 255 255 / 0.14) 47% 56%, transparent 57% 80%, rgb(255 255 255 / 0.12) 81% 84%, transparent 85%),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.18) 28px, rgb(255 255 255 / 0.1)),
+    var(--glass);
   box-shadow:
-    0 0 0 1px rgb(10 30 60 / 0.55),
-    inset 0 0 0 1px rgb(255 255 255 / 0.55),
-    0 14px 34px rgb(0 0 0 / 0.38);
+    0 0 0 1px rgb(30 50 80 / 0.55),
+    inset 0 0 0 1px rgb(255 255 255 / 0.6),
+    0 8px 22px rgb(0 0 0 / 0.3);
   animation: win-open 0.16s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 html[data-pack="windows"] .win[data-focused] {
-  background:
-    linear-gradient(to bottom, rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.15) 30px, rgb(255 255 255 / 0.1)),
-    rgb(110 160 215 / 0.6);
-  backdrop-filter: blur(10px) saturate(1.3);
+  --glass: rgb(116 164 220 / 0.5);
+  backdrop-filter: blur(8px) saturate(1.5);
   box-shadow:
-    0 0 0 1px rgb(5 20 45 / 0.7),
-    inset 0 0 0 1px rgb(255 255 255 / 0.6),
-    0 22px 60px rgb(0 0 0 / 0.55);
+    0 0 0 1px rgb(8 22 48 / 0.75),
+    inset 0 0 0 1px rgb(255 255 255 / 0.65),
+    0 0 18px rgb(0 0 0 / 0.45),
+    0 18px 50px rgb(0 0 0 / 0.4);
+}
+
+html[data-win-drag] .win[data-focused] {
+  --glass: rgb(130 172 224 / 0.82);
+  backdrop-filter: none;
 }
 
 html[data-pack="windows"] .win[data-max] {
@@ -145,11 +167,12 @@ html[data-win-anim] .win {
 
 html[data-pack="windows"] .win > .win-client {
   position: absolute;
-  inset: 30px 7px 7px;
+  inset: 30px 8px 8px;
   display: block;
   overflow: auto;
   overscroll-behavior: contain;
-  border: 1px solid rgb(20 40 70 / 0.55);
+  border: 1px solid rgb(20 40 70 / 0.6);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.45);
   background: var(--color-ink);
   user-select: text;
   cursor: auto;
@@ -183,55 +206,72 @@ html[data-pack="windows"] .win[data-max] > .win-client {
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  color: #0a1626;
-  font-size: 13px;
+  color: #000;
+  font-size: 12px;
   line-height: 16px;
   white-space: nowrap;
   text-overflow: ellipsis;
-  text-shadow: 0 0 10px #fff, 0 0 4px #fff, 0 0 2px #fff;
+  text-shadow: 0 0 12px #fff, 0 0 6px #fff, 0 0 3px #fff, 0 0 1px #fff;
+}
+
+.win:not([data-focused]) .win-title {
+  color: #3a4656;
 }
 
 .win-caps {
   display: flex;
-  margin: -7px 0 0;
+  margin: -7px -1px 0 0;
   overflow: hidden;
-  border: 1px solid rgb(10 30 60 / 0.6);
+  border: 1px solid rgb(30 50 80 / 0.7);
   border-top: 0;
   border-radius: 0 0 5px 5px;
-  box-shadow: 0 1px 0 rgb(255 255 255 / 0.5);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.55), inset 0 -1px 0 rgb(255 255 255 / 0.4);
 }
 
 .win-cap {
   display: grid;
   place-items: center;
-  width: 27px;
-  height: 20px;
+  width: 26px;
+  height: 19px;
   border: 0;
-  border-right: 1px solid rgb(10 30 60 / 0.45);
-  background: linear-gradient(to bottom, rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.2) 50%, rgb(170 200 235 / 0.35) 51%, rgb(200 225 250 / 0.45));
+  border-right: 1px solid rgb(30 50 80 / 0.55);
+  background: linear-gradient(to bottom, rgb(255 255 255 / 0.6), rgb(255 255 255 / 0.25) 45%, rgb(150 180 215 / 0.35) 46%, rgb(200 222 245 / 0.55));
   color: #fff;
 }
 
 .win-cap:hover {
-  background: linear-gradient(to bottom, #d6efff, #9fd2ff 50%, #4aa3f0 51%, #8fd0ff);
+  background:
+    radial-gradient(70% 70% at 50% 100%, rgb(110 230 255 / 0.95), transparent 75%),
+    linear-gradient(to bottom, #cfeaff, #8cc4f2 45%, #3f8ad4 46%, #5aa9ea);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.5);
 }
 
 .win-cap:active {
-  background: linear-gradient(to bottom, #9cc9ef, #5d9bd6 50%, #2a6fb8 51%, #5aa2e0);
+  background:
+    radial-gradient(70% 70% at 50% 100%, rgb(80 200 255 / 0.9), transparent 75%),
+    linear-gradient(to bottom, #8fbbe3, #4a86c4 45%, #1d5aa3 46%, #3b80c9);
 }
 
 .win-cap-x {
-  width: 46px;
+  width: 45px;
   border-right: 0;
-  background: linear-gradient(to bottom, #f0a89c, #d9604d 50%, #c33522 51%, #e0715a);
 }
 
-.win-cap-x:hover {
-  background: linear-gradient(to bottom, #ffc2b5, #f0705a 50%, #e03e22 51%, #ff8a6b);
+.win[data-focused] .win-cap-x {
+  background: linear-gradient(to bottom, #e9a99a, #d0604a 45%, #b73320 46%, #d26a4f);
 }
 
-.win-cap-x:active {
-  background: linear-gradient(to bottom, #d98f82, #b8432f 50%, #9a2412 51%, #c0503a);
+.win-cap-x:hover,
+.win[data-focused] .win-cap-x:hover {
+  background:
+    radial-gradient(70% 80% at 50% 100%, rgb(255 190 120 / 0.95), transparent 75%),
+    linear-gradient(to bottom, #f6b9aa, #ea6f55 45%, #d23a1c 46%, #e8613d);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.45);
+}
+
+.win-cap-x:active,
+.win[data-focused] .win-cap-x:active {
+  background: linear-gradient(to bottom, #d88c7d, #b5432d 45%, #921f0c 46%, #b84a30);
 }
 
 .win-cap:focus-visible {
@@ -320,37 +360,42 @@ html[data-pack="windows"] .win[data-max] > .win-client {
   z-index: 9000;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 2px;
   height: 40px;
-  padding: 0 8px 0 4px;
-  border-top: 1px solid rgb(255 255 255 / 0.32);
+  padding: 0 0 0 2px;
+  border-top: 1px solid rgb(0 0 0 / 0.55);
   background:
-    linear-gradient(to bottom, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0.05) 50%, rgb(0 0 0 / 0.12)),
-    rgb(18 38 66 / 0.62);
-  backdrop-filter: blur(12px) saturate(1.4);
-  box-shadow: inset 0 1px 0 rgb(0 0 0 / 0.4);
+    linear-gradient(to bottom, rgb(255 255 255 / 0.32), rgb(255 255 255 / 0.1) 46%, rgb(255 255 255 / 0) 54%, rgb(255 255 255 / 0.08)),
+    rgb(26 52 88 / 0.55);
+  backdrop-filter: blur(10px) saturate(1.5);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.4);
 }
 
 .win-orb {
   position: relative;
   display: grid;
   place-items: center;
-  width: 52px;
-  height: 46px;
-  margin-top: -8px;
+  width: 58px;
+  height: 56px;
+  margin: -16px 2px 0 0;
   border: 0;
+  border-radius: 50%;
   background: none;
 }
 
 .win-orb-img {
-  width: 44px;
-  height: 44px;
-  filter: drop-shadow(0 0 6px rgb(120 200 255 / 0.5));
-  transition: filter 0.15s ease;
+  width: 52px;
+  height: 52px;
+  filter: drop-shadow(0 0 5px rgb(80 170 255 / 0.7)) drop-shadow(0 2px 3px rgb(0 0 0 / 0.5));
+  transition: filter 0.2s ease;
 }
 
 .win-orb:hover .win-orb-img {
-  filter: drop-shadow(0 0 10px rgb(160 220 255 / 0.95)) brightness(1.12);
+  filter: drop-shadow(0 0 10px rgb(130 220 255 / 0.95)) brightness(1.25) saturate(1.2);
+}
+
+.win-orb:active .win-orb-img {
+  filter: drop-shadow(0 0 6px rgb(90 190 255 / 0.9)) brightness(0.92);
 }
 
 .win-orb:focus-visible {
@@ -360,42 +405,50 @@ html[data-pack="windows"] .win[data-max] > .win-client {
 .win-tasks {
   display: flex;
   flex: 1;
-  gap: 4px;
+  gap: 2px;
   min-width: 0;
   height: 100%;
-  padding: 3px 0;
+  padding: 1px 0;
 }
 
 .win-task {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 168px;
-  min-width: 48px;
-  padding: 0 10px;
-  border: 1px solid rgb(255 255 255 / 0.22);
+  --hot: #3d8ff0;
+  --mx: 50%;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  min-width: 40px;
+  flex-shrink: 1;
+  border: 1px solid transparent;
   border-radius: 3px;
-  background: linear-gradient(to bottom, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.04));
-  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.25);
-  color: #fff;
-  font-size: 12px;
-  text-align: left;
-  text-shadow: 0 1px 2px #000;
+  background: none;
 }
 
-.win-task span {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.win-task[data-running] {
+  border-color: rgb(255 255 255 / 0.3);
+  background: linear-gradient(to bottom, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0.06) 50%, rgb(255 255 255 / 0.02) 51%, rgb(255 255 255 / 0.1));
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.35);
 }
 
 .win-task:hover {
-  background: linear-gradient(to bottom, rgb(255 255 255 / 0.3), rgb(255 255 255 / 0.1));
+  border-color: rgb(255 255 255 / 0.45);
+  background:
+    radial-gradient(60px 46px at var(--mx) 110%, color-mix(in srgb, var(--hot) 85%, #fff), transparent 75%),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.28), rgb(255 255 255 / 0.08) 50%, rgb(255 255 255 / 0.04) 51%, rgb(255 255 255 / 0.14));
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.35);
 }
 
 .win-task[aria-pressed="true"] {
-  border-color: rgb(255 255 255 / 0.45);
-  background: radial-gradient(80% 120% at 50% 100%, rgb(120 200 255 / 0.55), transparent 70%), linear-gradient(to bottom, rgb(255 255 255 / 0.28), rgb(255 255 255 / 0.1));
+  border-color: rgb(255 255 255 / 0.5);
+  background:
+    radial-gradient(70% 80% at 50% 100%, color-mix(in srgb, var(--hot) 55%, transparent), transparent 80%),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.36), rgb(255 255 255 / 0.14) 50%, rgb(255 255 255 / 0.08) 51%, rgb(255 255 255 / 0.2));
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.4), inset 0 1px 2px rgb(0 0 0 / 0.25);
+}
+
+.win-task:active {
+  background-color: rgb(0 0 0 / 0.12);
 }
 
 .win-task:focus-visible,
@@ -405,25 +458,24 @@ html[data-pack="windows"] .win[data-max] > .win-client {
 }
 
 .win-task-ico {
-  width: 22px;
-  height: 22px;
+  width: 30px;
+  height: 30px;
   flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.45));
 }
 
 .win-tray {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 2px;
   height: 100%;
-  padding-left: 10px;
-  border-left: 1px solid rgb(0 0 0 / 0.35);
-  box-shadow: -1px 0 0 rgb(255 255 255 / 0.15);
+  padding-left: 6px;
 }
 
 .win-tray-btn {
   display: grid;
   place-items: center;
-  width: 32px;
+  width: 26px;
   height: 32px;
   border: 1px solid transparent;
   border-radius: 3px;
@@ -439,6 +491,58 @@ html[data-pack="windows"] .win[data-max] > .win-client {
 .win-tray-ico {
   width: 18px;
   height: 18px;
+}
+
+.win-net svg {
+  width: 16px;
+  height: 16px;
+  fill: #fff;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.6));
+}
+
+span.win-tray-btn:hover {
+  border-color: transparent;
+  background: none;
+}
+
+.win-more {
+  position: relative;
+}
+
+.win-more-btn svg {
+  width: 10px;
+  height: 10px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.6;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.6));
+}
+
+.win-more-pop {
+  position: absolute;
+  bottom: 44px;
+  left: 50%;
+  z-index: 9500;
+  display: grid;
+  grid-template-columns: repeat(3, 32px);
+  gap: 4px;
+  padding: 8px;
+  translate: -50% 0;
+  border: 1px solid rgb(8 22 48 / 0.75);
+  border-radius: 5px;
+  background: linear-gradient(to bottom, rgb(255 255 255 / 0.3), rgb(255 255 255 / 0.08)), rgb(40 70 110 / 0.75);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4), 0 6px 18px rgb(0 0 0 / 0.45);
+  backdrop-filter: blur(10px);
+  animation: sm-in 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.win-more-pop .win-tray-btn {
+  width: 32px;
+}
+
+.win-more-pop .win-tray-ico {
+  width: 22px;
+  height: 22px;
 }
 
 .win-clock {
@@ -612,6 +716,10 @@ html[data-pack="windows"] .win[data-max] > .win-client {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html[data-pack="windows"] .win[data-focused] {
+    --glass: rgb(130 172 224 / 0.82);
+    backdrop-filter: none;
+  }
   html[data-pack="windows"] .win {
     animation: none;
   }
@@ -641,15 +749,16 @@ html[data-win-busy] .win-host * {
 
 .win-peek {
   align-self: stretch;
-  width: 14px;
-  margin: 0 -8px 0 4px;
+  width: 15px;
+  margin-left: 6px;
   border: 0;
-  border-left: 1px solid rgb(255 255 255 / 0.25);
-  background: linear-gradient(to bottom, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.04));
+  border-left: 1px solid rgb(0 0 0 / 0.45);
+  box-shadow: inset 1px 0 0 rgb(255 255 255 / 0.35);
+  background: linear-gradient(to bottom, rgb(255 255 255 / 0.24), rgb(255 255 255 / 0.06) 50%, rgb(255 255 255 / 0.02) 51%, rgb(255 255 255 / 0.1));
 }
 
 .win-peek:hover {
-  background: linear-gradient(to bottom, rgb(255 255 255 / 0.35), rgb(255 255 255 / 0.12));
+  background: linear-gradient(to bottom, rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.25) 50%, rgb(255 255 255 / 0.18) 51%, rgb(255 255 255 / 0.35));
 }
 
 .win-peek:focus-visible {
@@ -672,8 +781,10 @@ html[data-win-busy] .win-host * {
   padding: 8px 6px 6px;
   border-radius: 8px 8px 0 0;
   background:
-    linear-gradient(to bottom, rgb(255 255 255 / 0.22), rgb(255 255 255 / 0.06) 40%, rgb(0 0 0 / 0.1)),
-    rgb(22 48 82 / 0.985);
+    linear-gradient(112deg, transparent 0 30%, rgb(255 255 255 / 0.12) 31% 38%, transparent 39% 70%, rgb(255 255 255 / 0.08) 71% 76%, transparent 77%),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.28), rgb(255 255 255 / 0.06) 40%, rgb(0 0 0 / 0.1)),
+    rgb(28 58 98 / 0.82);
+  backdrop-filter: blur(10px) saturate(1.4);
   box-shadow:
     0 0 0 1px rgb(5 20 45 / 0.85),
     inset 0 0 0 1px rgb(255 255 255 / 0.35),
@@ -740,6 +851,12 @@ html[data-win-busy] .win-host * {
   height: 20px;
 }
 
+.sm-sep {
+  height: 1px;
+  margin: 6px 8px;
+  background: linear-gradient(to right, transparent, #d6e0eb 20%, #d6e0eb 80%, transparent);
+}
+
 .sm-all {
   display: flex;
   align-items: center;
@@ -769,17 +886,32 @@ html[data-win-busy] .win-host * {
 }
 
 .sm-search {
+  position: relative;
   padding: 8px 10px;
   border-top: 1px solid #d6e0eb;
   background: linear-gradient(to bottom, #e9eff6, #dbe4ee);
 }
 
+.sm-mag {
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  width: 14px;
+  height: 14px;
+  translate: 0 -50%;
+  fill: none;
+  stroke: #4c607a;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
 .sm-search input {
   width: 100%;
   height: 26px;
-  padding: 0 8px;
+  padding: 0 28px 0 8px;
   border: 1px solid #a9bdd3;
-  border-radius: 3px;
+  border-radius: 13px;
   background: #fff;
   color: #111;
   font: inherit;
@@ -825,6 +957,33 @@ html[data-win-busy] .win-host * {
   height: 100%;
   border-radius: 4px;
   object-fit: cover;
+  transition: opacity 0.18s ease;
+}
+
+.sm-user[data-peek] .sm-user-img {
+  opacity: 0;
+}
+
+.sm-user-ico {
+  position: absolute;
+  inset: 12px;
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
+  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 0.4));
+  animation: sm-peek 0.18s ease-out;
+}
+
+@keyframes sm-peek {
+  from {
+    opacity: 0;
+  }
+}
+
+.sm-group + .sm-group {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgb(0 0 0 / 0.3);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18);
 }
 
 .sm-places {
@@ -947,6 +1106,48 @@ html[data-win-busy] .win-host * {
 
 .cm-item--strong {
   font-weight: 700;
+}
+
+.cm-has,
+.cm-item {
+  position: relative;
+}
+
+.cm-item--parent[aria-expanded="true"] {
+  border-color: #aeccf1;
+  background: linear-gradient(to bottom, #f2f8fe, #d7e8fb);
+}
+
+.cm-caret {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  translate: 0 -50%;
+  fill: #000;
+}
+
+.cm-sub {
+  position: absolute;
+  top: -3px;
+  left: calc(100% - 2px);
+}
+
+.cm-sub[data-flip] {
+  left: auto;
+  right: calc(100% - 2px);
+}
+
+.cm-dot {
+  position: absolute;
+  top: 50%;
+  left: 11px;
+  width: 6px;
+  height: 6px;
+  translate: 0 -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #8ab4e8, #0d3c87);
 }
 
 .cm-sep {

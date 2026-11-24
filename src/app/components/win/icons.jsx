@@ -30,11 +30,25 @@ export function IconDefs() {
           <stop offset="0" stopColor="#ffc07a" />
           <stop offset="1" stopColor="#e0601c" />
         </linearGradient>
-        <radialGradient id="wi-orb" cx="0.5" cy="0.35" r="0.65">
-          <stop offset="0" stopColor="#bfe6ff" />
-          <stop offset="0.45" stopColor="#2f8fe0" />
-          <stop offset="1" stopColor="#0b3c86" />
+        <radialGradient id="wi-orb" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stopColor="#0e3a78" />
+          <stop offset="0.7" stopColor="#0a2a5c" />
+          <stop offset="1" stopColor="#06193a" />
         </radialGradient>
+        <radialGradient id="wi-orb-glow" cx="0.5" cy="0.92" r="0.7">
+          <stop offset="0" stopColor="#a6f0ff" />
+          <stop offset="0.5" stopColor="#3aa8f5" stopOpacity=".7" />
+          <stop offset="1" stopColor="#2a9df0" stopOpacity="0" />
+        </radialGradient>
+        <linearGradient id="wi-orb-shine" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#fff" stopOpacity=".85" />
+          <stop offset="1" stopColor="#fff" stopOpacity=".05" />
+        </linearGradient>
+        <linearGradient id="wi-orb-rim" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#9fc8f0" />
+          <stop offset="0.5" stopColor="#1d3f6e" />
+          <stop offset="1" stopColor="#6fc3ff" />
+        </linearGradient>
       </defs>
     </svg>
   );
@@ -192,9 +206,13 @@ export default function WinIcon({ name, className = "" }) {
 export function Orb({ className = "" }) {
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden>
-      <circle cx="24" cy="24" r="22" fill="url(#wi-orb)" stroke="#06244f" strokeWidth="1.5" />
-      <ellipse cx="24" cy="15" rx="15" ry="8" fill="#fff" opacity=".35" />
-      <text x="24" y="29" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="12" fontWeight="700" fill="#fff" letterSpacing=".5">OMJ</text>
+      <circle cx="24" cy="24" r="22.5" fill="#020b1c" opacity=".55" />
+      <circle cx="24" cy="24" r="21.5" fill="url(#wi-orb)" stroke="url(#wi-orb-rim)" strokeWidth="1.2" />
+      <circle cx="24" cy="24" r="21" fill="url(#wi-orb-glow)" />
+      <text x="24" y="28.5" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="12" fontWeight="700" fill="#fff" letterSpacing=".4" style={{ filter: "drop-shadow(0 0 2px rgb(120 210 255 / .9))" }}>
+        OMJ
+      </text>
+      <path d="M6.5 21C7.5 11 15 4.5 24 4.5S40.5 11 41.5 21C36 18 30.5 17 24 17S12 18 6.5 21z" fill="url(#wi-orb-shine)" />
     </svg>
   );
 }

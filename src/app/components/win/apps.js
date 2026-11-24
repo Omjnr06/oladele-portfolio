@@ -20,7 +20,28 @@ export const APPS = {
 export const DESKTOP = ["recruiter", "resume", "projects", "music", "gallery", "contact", "grind", "home", "readme", "games"];
 export const PINNED = ["recruiter", "resume", "projects", "music", "gallery", "contact", "grind"];
 export const GAMES = ["sudoku", "snake"];
-export const PLACES = ["home", "resume", "projects", "gallery", "music", "personalize"];
+export const PLACES = [
+  ["home", "resume", "projects"],
+  ["gallery", "music", "games"],
+  ["personalize", "taskmgr"],
+];
+
+export const HOT = {
+  doc: "#3d8ff0",
+  folder: "#f2b632",
+  music: "#9a6cff",
+  photo: "#3fa6ff",
+  mail: "#3d8ff0",
+  chart: "#4cc25d",
+  user: "#ff8a3a",
+  brush: "#3d8ff0",
+  exe: "#ff9b3a",
+  notepad: "#5fb0ff",
+  taskmgr: "#4cc25d",
+  games: "#f2b632",
+  sudoku: "#3d8ff0",
+  snake: "#4cc25d",
+};
 
 export const STUDIES = caseStudies.map((c) => ({ id: `case-${c.slug}`, title: c.title, icon: "doc", path: `/projects/${c.slug}`, size: [1040, 760] }));
 

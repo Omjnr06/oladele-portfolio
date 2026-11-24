@@ -38,6 +38,7 @@ export default function AboutApp({ open }) {
               <div>
                 <p>{profile.title.replace(" // ", " and ").toLowerCase().replace(/^\w/, (c) => c.toUpperCase())}</p>
                 <p className="wa-dim">Copyright © {new Date().getFullYear()} {profile.firstName} {profile.lastName}. All rights reserved.</p>
+                <p className="wa-dim">A tribute to Windows 7 and the Microsoft team behind it, which shaped so much of my computing journey. Hand drawn, not affiliated with Microsoft.</p>
               </div>
               <Orb className="ws-orb" />
             </div>
