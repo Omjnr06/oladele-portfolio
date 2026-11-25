@@ -57,13 +57,13 @@ test("opening, back and forward move between windows with no server requests", a
 
 test("links inside the page window open windows instead of navigating", async ({ page }, info) => {
   desktopOnly(info);
-  await page.goto("/music?preview=windows&theme=windows-aero");
+  await page.goto("/lab?preview=windows&theme=windows-aero");
   await expect(page.locator("html")).toHaveAttribute("data-win-ready", "");
   await page.waitForLoadState("networkidle");
   const rsc = rscCounter(page);
   await page.locator('#win-client a[href="/resume"]').first().dispatchEvent("click");
   await expect(page.locator(".win[data-focused]")).toHaveAttribute("aria-label", "Resume");
-  await expect(win(page, "Music")).toHaveCount(1);
+  await expect(page.locator('.win[data-win="page-/lab"]')).toHaveCount(1);
   expect(rsc.n).toBe(0);
 });
 
@@ -115,7 +115,7 @@ test("switch user goes to paper", async ({ page }, info) => {
   await page.getByRole("button", { name: "Start" }).click();
   await page.getByRole("button", { name: "More shut down options" }).click();
   await page.getByRole("menuitem", { name: /Switch user/ }).click();
-  await expect.poll(() => page.evaluate(() => document.documentElement.dataset.pack)).toBe("paper");
+  await expect.poll(() => page.evaluate(() => document.documentElement.dataset.pack).catch(() => null)).toBe("paper");
   await expect(page.locator(".win-taskbar")).toHaveCount(0);
 });
 
@@ -303,7 +303,7 @@ test("personalize lists every pack and can leave windows", async ({ page }, info
   const panel = win(page, "Personalize");
   await expect(panel.getByRole("button", { name: "Aero" })).toHaveAttribute("aria-pressed", "true");
   await panel.getByRole("button", { name: "Kraft" }).click();
-  await expect.poll(() => page.evaluate(() => document.documentElement.dataset.pack)).toBe("paper");
+  await expect.poll(() => page.evaluate(() => document.documentElement.dataset.pack).catch(() => null)).toBe("paper");
   expect(await page.evaluate(() => document.documentElement.dataset.theme)).toBe("kraft");
 });
 
@@ -409,7 +409,7 @@ test("grind opens as a native list with filters", async ({ page }, info) => {
   await expect(page.locator("#win-page")).toBeHidden();
   const list = g.getByRole("listbox", { name: "Open roles" });
   const failed = g.getByText(/feed didn't load/);
-  await expect(list.or(failed)).toBeVisible();
+  await expect(list.or(failed)).toBeVisible({ timeout: 25000 });
   if (await failed.isVisible()) return;
   await g.getByRole("button", { name: /^PM/ }).click();
   await expect(g.getByRole("button", { name: /^PM/ })).toHaveAttribute("aria-pressed", "true");
@@ -418,4 +418,166 @@ test("grind opens as a native list with filters", async ({ page }, info) => {
     await first.click();
     await expect(g.getByRole("button", { name: "Open posting" })).toBeVisible();
   }
+});
+
+const player = (page) => page.locator('.win[data-win="player"]');
+const serveClips = (page) =>
+  page.route(/supabase\.co\/.*\.(mp4|mov|m4a|mp3)/, (route) => route.fulfill({ path: "public/assets/music/generated/piano-01.mp4", contentType: "video/mp4" }));
+
+test("music opens as an explorer library with instrument folders and a playlist", async ({ page }, info) => {
+  desktopOnly(info);
+  await ready(page, "/resume");
+  await page.locator(".win-icon", { hasText: "Music" }).dblclick();
+  const music = win(page, "Music");
+  await expect(music).toHaveAttribute("data-focused", "");
+  await expect(music.locator(".mv-board")).toHaveCount(0);
+  const nav = music.getByRole("navigation", { name: "Music folders" });
+  await nav.getByRole("button", { name: "Piano Covers" }).click();
+  const files = music.getByRole("listbox", { name: "Piano Covers" }).getByRole("option");
+  await expect(files).toHaveCount(5);
+  await expect(files.first()).toContainText("Liebestraum No. 3 Cover.mp4");
+  await expect(music.locator(".wa-details")).toContainText("Franz Liszt");
+  await nav.getByRole("button", { name: "My Playlist" }).click();
+  await expect(music.getByRole("listbox", { name: "My Playlist" }).getByRole("option")).toHaveCount(5);
+  await expect(music.getByRole("link", { name: "Open in Spotify" })).toHaveAttribute("href", /open\.spotify\.com\/track\//);
+});
+
+test("clips play in VLC media player, keep playing when minimised and stop on close", async ({ page }, info) => {
+  desktopOnly(info);
+  await serveClips(page);
+  await ready(page, "/music");
+  const music = win(page, "Music");
+  await music.getByRole("button", { name: "Piano Covers" }).click();
+  await music.getByRole("option", { name: /Liebestraum/ }).dblclick();
+  const vp = player(page);
+  await expect(vp).toHaveAttribute("aria-label", /Liebestraum No\. 3 Cover - VLC media player/);
+  await expect(vp.getByRole("listbox", { name: "Playlist" }).getByRole("option")).not.toHaveCount(0);
+  await expect.poll(() => vp.locator("video").evaluate((v) => !v.paused)).toBe(true);
+  await vp.getByRole("button", { name: /Minimize/ }).click();
+  await expect(vp).toHaveAttribute("data-min", "");
+  await page.waitForTimeout(500);
+  expect(await vp.locator("video").evaluate((v) => !v.paused && v.currentTime > 0)).toBe(true);
+  await page.locator('[data-task="player"]').click();
+  await vp.locator(".vp").focus();
+  await page.keyboard.press("m");
+  await expect(vp.getByRole("button", { name: "Unmute" })).toHaveAttribute("aria-pressed", "true");
+  await page.keyboard.press("ArrowDown");
+  await expect(vp.locator(".vp-pct")).toHaveText("0%");
+  await page.keyboard.press("m");
+  await expect(vp.locator(".vp-pct")).toHaveText("75%");
+  await page.keyboard.press("n");
+  await expect(vp).not.toHaveAttribute("aria-label", /Liebestraum/);
+  await vp.getByRole("menuitem", { name: "Help" }).click();
+  await vp.getByRole("menuitem", { name: "About" }).click();
+  await expect(vp.getByRole("dialog", { name: "About VLC media player" })).toContainText("VideoLAN");
+  await vp.getByRole("button", { name: "OK" }).click();
+  await vp.getByRole("button", { name: /^Close / }).click();
+  await expect(player(page)).toHaveCount(0);
+});
+
+test("a music deep link opens the library and plays the clip", async ({ page }, info) => {
+  desktopOnly(info);
+  await serveClips(page);
+  await ready(page, "/music?track=piano 01");
+  await expect(win(page, "Music")).toHaveCount(1);
+  await expect(player(page)).toHaveAttribute("aria-label", /Liebestraum No\. 3 Cover/);
+  await expect(win(page, "Music").getByRole("option", { name: /Liebestraum/ })).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator(".mv-cp-overlay")).toHaveCount(0);
+});
+
+test("explorer views select like windows: ctrl, shift, ctrl+a, right-click", async ({ page }, info) => {
+  desktopOnly(info);
+  await ready(page, "/?app=projects");
+  const ex = win(page, "Projects");
+  const files = ex.getByRole("listbox", { name: "Projects" }).getByRole("option");
+  const status = ex.locator(".wa-status");
+  await files.nth(0).click();
+  await expect(status).toContainText("1 item selected");
+  await files.nth(1).click({ modifiers: ["Control"] });
+  await expect(status).toContainText("2 items selected");
+  await expect(ex.locator(".wa-details")).toContainText("2 items selected");
+  await files.nth(3).click({ modifiers: ["Shift"] });
+  await expect(status).toContainText("3 items selected");
+  await page.keyboard.press("Control+a");
+  await expect(status).toContainText(`${await files.count()} items selected`);
+  await page.keyboard.press("Escape");
+  await expect(status).not.toContainText("selected");
+  await files.nth(2).click({ button: "right" });
+  await expect(page.getByRole("menuitem", { name: "Open" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(status).toContainText("1 item selected");
+});
+
+test("selected clips play together in vlc", async ({ page }, info) => {
+  desktopOnly(info);
+  await serveClips(page);
+  await ready(page, "/music");
+  const music = win(page, "Music");
+  await music.getByRole("button", { name: "Piano Covers" }).click();
+  const files = music.getByRole("option");
+  await files.nth(0).click();
+  await files.nth(2).click({ modifiers: ["Control"] });
+  await expect(music.locator(".wa-status")).toContainText("2 items selected");
+  await expect(music.getByRole("button", { name: "Open the interactive canvas" })).toHaveCount(0);
+  await music.getByRole("button", { name: "Play selected" }).click();
+  await expect(player(page).getByRole("listbox", { name: "Playlist" }).getByRole("option")).toHaveCount(2);
+});
+
+test("grind in windows: public view hides top companies, owner signs in and tracks applications", async ({ page }, info) => {
+  desktopOnly(info);
+  let owner = false;
+  const now = Date.now();
+  const rows = [
+    ["A", "swe", "Stripe", "Software Engineer Intern", "San Francisco, CA", ["Bay Area"], "Summer 2027", "simplify", "https://example.com/stripe", now - 36e5],
+    ["B", "pm", "Acme", "Product Manager Intern", "Toronto, ON", ["Toronto"], "Summer 2027", "simplify", "https://example.com/acme", now - 72e5],
+  ];
+  const applied = [{ id: "n1", company: "Stripe", role: "Software Engineer Intern", location: "San Francisco, CA", link: "https://example.com/stripe", status: "Applied", dateApplied: "2026-11-20" }];
+  await page.route("**/api/grind/feed", (r) => r.fulfill({ json: { generatedAt: new Date(now).toISOString(), rows, error: null, owner } }));
+  await page.route("**/api/grind/unlock", async (r) => {
+    const key = r.request().postDataJSON()?.key;
+    if (key !== "right") return r.fulfill({ status: 401, json: { error: "That key doesn't match." } });
+    owner = true;
+    return r.fulfill({ json: { ok: true } });
+  });
+  await page.route("**/api/applied**", (r) => {
+    const m = r.request().method();
+    if (m === "GET") return r.fulfill({ json: { rows: applied } });
+    if (m === "POST") return r.fulfill({ json: { id: "n2", dateApplied: "2026-11-25" } });
+    return r.fulfill({ json: { ok: true } });
+  });
+  await ready(page, "/grind");
+  const g = win(page, "Grind");
+  const list = g.getByRole("listbox", { name: "Open roles" });
+  await expect(list.getByRole("option")).toHaveCount(2, { timeout: 25000 });
+  await expect(g.getByRole("button", { name: "Top companies" })).toHaveCount(0);
+  await expect(g.locator(".gr-top")).toHaveCount(0);
+  await expect(g.getByRole("tab")).toHaveCount(0);
+
+  await expect(g.getByRole("button", { name: /Sign in/ })).toHaveCount(0);
+  const search = g.getByRole("searchbox", { name: "Search roles" });
+  await search.fill("runas");
+  await search.press("Enter");
+  await expect(search).toHaveValue("");
+  const dlg = g.getByRole("dialog");
+  await dlg.getByPlaceholder("Owner key").fill("wrong");
+  await dlg.getByRole("button", { name: "OK" }).click();
+  await expect(dlg.getByRole("alert")).toHaveText("That key doesn't match.");
+  await dlg.getByPlaceholder("Owner key").fill("right");
+  await dlg.getByRole("button", { name: "OK" }).click();
+  await expect(g.getByRole("tab", { name: "My applications" })).toBeVisible();
+  await expect(g.getByRole("button", { name: "Top companies" })).toBeVisible();
+  await expect(g.locator(".gr-top")).toHaveCount(1);
+
+  await list.getByRole("option", { name: /Acme/ }).click({ button: "right" });
+  await page.getByRole("menuitem", { name: "Mark applied" }).click();
+  await expect(g.getByRole("status")).toContainText("Marked Acme as applied.");
+  await expect(g.getByRole("button", { name: "Undo" })).toBeVisible();
+
+  await g.getByRole("tab", { name: "My applications" }).click();
+  const apps = g.getByRole("listbox", { name: "Your applications" });
+  await expect(apps.locator(".wl-row")).toHaveCount(2);
+  await apps.getByRole("combobox", { name: "Status for Stripe" }).selectOption("Interviewing");
+  await expect(g.getByRole("status")).toContainText("Stripe moved to Interviewing.");
+  await expect(g.locator(".ga-stats")).toContainText("Interviewing1");
+  await expect(g.locator(".wa-status")).toContainText("2 applications, 2 active");
 });

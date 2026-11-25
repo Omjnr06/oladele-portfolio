@@ -1,12 +1,16 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import ContextMenu from "../ContextMenu";
 import "./list.css";
 
-export default function DetailsList({ label, columns, rows, rowKey, selected, onSelect, onOpen, sort, onSort, footer, empty }) {
+export default function DetailsList({ label, columns, rows, rowKey, selected, onSelect, onOpen, sort, onSort, footer, empty, menuFor }) {
   const box = useRef(null);
+  const [menu, setMenu] = useState(null);
   const tmpl = columns.map((c) => c.width ?? "minmax(0, 1fr)").join(" ");
 
   const onKeys = (e) => {
+    if (e.target.matches("select, input, button, textarea")) return;
     const i = rows.findIndex((r) => rowKey(r) === selected);
     const step = { ArrowDown: 1, ArrowUp: -1, PageDown: 10, PageUp: -10, Home: -Infinity, End: Infinity }[e.key];
     if (step !== undefined) {
@@ -63,6 +67,15 @@ export default function DetailsList({ label, columns, rows, rowKey, selected, on
               className="wl-row"
               onClick={() => onSelect(k)}
               onDoubleClick={() => onOpen?.(r)}
+              onContextMenu={
+                menuFor &&
+                ((e) => {
+                  e.preventDefault();
+                  onSelect(k);
+                  const items = menuFor(r);
+                  if (items?.length) setMenu({ x: e.clientX, y: e.clientY, items });
+                })
+              }
             >
               {columns.map((c) => (
                 <span key={c.key} className="wl-td" data-align={c.align}>
@@ -74,6 +87,7 @@ export default function DetailsList({ label, columns, rows, rowKey, selected, on
         })}
         {footer}
       </div>
+      {menu && createPortal(<ContextMenu {...menu} onClose={() => setMenu(null)} />, document.body)}
     </div>
   );
 }

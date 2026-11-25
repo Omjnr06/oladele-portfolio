@@ -243,7 +243,14 @@ export default function TaskManagerApp({ open }) {
       <div className="tm-panel" role="tabpanel" aria-label={tab}>
         {tab === "Applications" && (
           <>
-            <DetailsList label="Running applications" columns={COLUMNS} rows={running} rowKey={(w) => w.id} selected={picked?.id ?? null} onSelect={setSel} onOpen={(w) => actions.focus(w.id, { restore: true })} />
+            <DetailsList label="Running applications" columns={COLUMNS} rows={running} rowKey={(w) => w.id} selected={picked?.id ?? null} onSelect={setSel} onOpen={(w) => actions.focus(w.id, { restore: true })}
+              menuFor={(w) => [
+                { label: "Switch To", strong: true, onSelect: () => actions.focus(w.id, { restore: true }) },
+                { label: w.max ? "Restore" : "Maximize", onSelect: () => actions.toggleMax(w.id) },
+                "sep",
+                { label: "End Task", onSelect: () => actions.close(w.id) },
+              ]}
+            />
             <div className="tm-actions">
               <button type="button" className="wa-btn" disabled={!picked} onClick={() => actions.close(picked.id)}>
                 End Task

@@ -62,7 +62,6 @@ const desk = () => ({ w: innerWidth, h: innerHeight - BAR });
 
 function geometry(app, count) {
   const { w: vw, h: vh } = desk();
-  const max = app.kind === "page" && app.id === "music";
   const rows = Math.max(1, Math.floor((vh - 16) / cell.h));
   const left = 8 + Math.ceil(DESKTOP.length / rows) * cell.w + 12;
   const [sw, sh] = app.size ?? (app.kind === "page" ? [1180, vh - 56] : [760, 520]);
@@ -70,7 +69,7 @@ function geometry(app, count) {
   const step = (count % 8) * 28;
   const y = 20 + step;
   const h = Math.max(MIN_H, Math.min(sh, vh - y - 16));
-  return { x: Math.min(Math.max(left, Math.round((vw - w) / 2)) + step, Math.max(left, vw - w - 16)), y: Math.min(y, vh - h - 8), w, h, max };
+  return { x: Math.min(Math.max(left, Math.round((vw - w) / 2)) + step, Math.max(left, vw - w - 16)), y: Math.min(y, vh - h - 8), w, h, max: false };
 }
 
 function makeWin(app, kind, count) {
@@ -572,6 +571,12 @@ function tasksFor(id, open) {
     ],
     projects: [{ label: "Case studies", onSelect: go("/?app=projects") }],
     grind: [{ label: "Open full board", onSelect: () => location.assign("/grind?theme=modern") }],
+    music: [{ label: "Open VLC media player", onSelect: go(APPS.player.path) }],
+    player: [
+      { label: "Play / Pause", onSelect: () => window.dispatchEvent(new CustomEvent("omj-player", { detail: "toggle" })) },
+      { label: "Next", onSelect: () => window.dispatchEvent(new CustomEvent("omj-player", { detail: "next" })) },
+      { label: "Previous", onSelect: () => window.dispatchEvent(new CustomEvent("omj-player", { detail: "prev" })) },
+    ],
     games: [
       { label: "Sudoku", onSelect: go(APPS.sudoku.path) },
       { label: "Snake", onSelect: go(APPS.snake.path) },
@@ -749,6 +754,7 @@ export default function WinShell() {
   const [startOpen, setStartOpen] = useState(false);
   const [zone, setZone] = useState(null);
   const [leaving, setLeaving] = useState(null);
+  const [media, setMedia] = useState(null);
   const shaken = useRef([]);
   const { sound } = usePrefs();
   const winsRef = useRef(wins);
@@ -864,7 +870,13 @@ export default function WinShell() {
   }, []);
 
   useEffect(() => {
-    window.__omjWin = { open };
+    window.__omjWin = {
+      open,
+      play: (id, ids) => {
+        setMedia({ id, ids, n: performance.now() });
+        open(APPS.player.path, { push: false });
+      },
+    };
     const onPop = () => open(here(), { push: false });
     const onClick = (e) => {
       if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -922,7 +934,7 @@ export default function WinShell() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  const shell = useMemo(() => ({ wins, focused, actions: stable }), [wins, focused, stable]);
+  const shell = useMemo(() => ({ wins, focused, actions: stable, media }), [wins, focused, stable, media]);
 
   return (
     <ShellContext.Provider value={shell}>

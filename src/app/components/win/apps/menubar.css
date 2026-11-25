@@ -1,0 +1,54 @@
+.mb {
+  display: flex;
+  flex-shrink: 0;
+  height: 22px;
+  padding: 0 2px;
+  border-bottom: 1px solid #e3e3e3;
+  background: #fff;
+}
+
+.mb-menu {
+  position: relative;
+}
+
+.mb-top {
+  height: 22px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  background: none;
+  color: #000;
+  font-size: 12px;
+}
+
+.mb-top:hover,
+.mb-top[aria-expanded="true"] {
+  border-color: #aeccf1;
+  background: linear-gradient(to bottom, #f2f8fe, #d7e8fb);
+}
+
+.mb-top:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -3px;
+}
+
+.mb-drop.cm {
+  position: absolute;
+  top: 22px;
+  left: 0;
+  z-index: 20;
+}
+
+.mb-drop .cm-item {
+  position: relative;
+}
+
+.mb-check {
+  position: absolute;
+  left: 10px;
+}
+
+.mb-keys {
+  float: right;
+  margin-left: 24px;
+  color: #6d6d6d;
+}

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import FileView, { selectedText, useSelection } from "./FileView";
 import { APPS, GAMES } from "../apps";
 import WinIcon from "../icons";
 import "./apps.css";
@@ -10,19 +10,8 @@ const ABOUT = {
 };
 
 export default function GamesApp({ open }) {
-  const [sel, setSel] = useState(GAMES[0]);
-
-  const onKeys = (e) => {
-    const i = GAMES.indexOf(sel);
-    const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-    if (step) {
-      e.preventDefault();
-      const next = GAMES[(i + step + GAMES.length) % GAMES.length];
-      setSel(next);
-      e.currentTarget.querySelector(`[data-file="${next}"]`)?.focus();
-    }
-    if (e.key === "Enter") open(APPS[sel].path);
-  };
+  const selection = useSelection(GAMES[0]);
+  const sel = selection.sel;
 
   return (
     <div className="wa">
@@ -35,40 +24,44 @@ export default function GamesApp({ open }) {
         </div>
       </div>
       <div className="wa-cmd">
-        <button type="button" className="wa-cmd-btn" onClick={() => open(APPS[sel].path)}>
+        <button type="button" className="wa-cmd-btn" disabled={!sel.length} onClick={() => sel.forEach((id) => open(APPS[id].path))}>
           Play
         </button>
       </div>
       <div className="wa-row">
         <div className="wa-main">
-          <div className="wa-files" role="listbox" aria-label="Games" onKeyDown={onKeys}>
-            {GAMES.map((id) => (
-              <button
-                key={id}
-                type="button"
-                role="option"
-                data-file={id}
-                aria-selected={sel === id}
-                className="wa-file"
-                onClick={() => setSel(id)}
-                onDoubleClick={() => open(APPS[id].path)}
-              >
+          <FileView
+            label="Games"
+            items={GAMES}
+            idOf={(id) => id}
+            selection={selection}
+            onOpen={(ids) => ids.forEach((id) => open(APPS[id].path))}
+            menuFor={(ids) => (ids.length ? [{ label: "Play", strong: true, onSelect: () => ids.forEach((id) => open(APPS[id].path)) }] : [])}
+            renderItem={(id) => (
+              <>
                 <WinIcon name={APPS[id].icon} className="wa-thumb-ico" />
                 <span>{APPS[id].title}</span>
-              </button>
-            ))}
-          </div>
+              </>
+            )}
+          />
         </div>
       </div>
       <div className="wa-details">
-        <WinIcon name={APPS[sel].icon} className="wa-thumb-ico" />
-        <div>
-          <h3>{APPS[sel].title}</h3>
-          <p>{ABOUT[sel]}</p>
-        </div>
+        {sel.length === 1 ? (
+          <>
+            <WinIcon name={APPS[sel[0]].icon} className="wa-thumb-ico" />
+            <div>
+              <h3>{APPS[sel[0]].title}</h3>
+              <p>{ABOUT[sel[0]]}</p>
+            </div>
+          </>
+        ) : (
+          <p className="wa-dim">{sel.length ? selectedText(sel.length) : `${GAMES.length} items`}</p>
+        )}
       </div>
       <div className="wa-status">
         <span>{GAMES.length} items</span>
+        {sel.length > 0 && <span>{selectedText(sel.length)}</span>}
       </div>
     </div>
   );

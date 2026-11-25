@@ -468,3 +468,42 @@
 .wa-case h2 > span:first-child {
   display: none;
 }
+
+.wa-files {
+  position: relative;
+  min-height: 100%;
+  user-select: none;
+  outline: none;
+}
+
+.wa-band {
+  position: absolute;
+  z-index: 2;
+  border: 1px solid #3399ff;
+  background: rgb(51 153 255 / 0.22);
+  pointer-events: none;
+}
+
+.wa-file[aria-selected="true"]:hover {
+  border-color: #7da2ce;
+  background: linear-gradient(to bottom, #dcebfc, #c1dbfc);
+}
+
+.wa-file[data-lead]:focus {
+  outline: 1px dotted #6d8fbd;
+  outline-offset: -3px;
+}
+
+.wa-stack {
+  position: relative;
+  flex-shrink: 0;
+  width: 132px;
+  height: 92px;
+}
+
+.wa-stack-i {
+  position: absolute;
+  top: calc(var(--n) * 5px);
+  left: calc(var(--n) * 9px);
+  z-index: calc(3 - var(--n));
+}

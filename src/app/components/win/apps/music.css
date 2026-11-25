@@ -1,0 +1,41 @@
+.wm-thumb {
+  background: #11151b;
+}
+
+.wm-thumb[data-audio],
+.wm-song:not(:has(img)) {
+  background: linear-gradient(to bottom, #fdfdfd, #e6ecf3);
+}
+
+.wm-song {
+  width: 80px;
+}
+
+.wm-film {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 8px;
+  background: repeating-linear-gradient(to bottom, #111 0 3px, #e8e8e8 3px 6px, #111 6px 8px);
+  border-right: 1px solid #000;
+}
+
+.wm-props {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 2px 12px;
+  margin: 4px 0 0;
+  font-size: 12px;
+}
+
+.wm-props dt {
+  color: #5a6472;
+}
+
+.wm-props dd {
+  margin: 0;
+  color: #1e1e1e;
+}
+
+.wm .wa-details p {
+  max-width: 80ch;
+}

@@ -1,5 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
+import FileView, { Stack, selectedText, useSelection } from "./FileView";
 import { projects, projectCategories, caseStudyHref } from "@/content/projects";
 import WinIcon from "../icons";
 import "./apps.css";
@@ -18,7 +19,7 @@ function Thumb({ p }) {
 
 export default function ProjectsApp({ open }) {
   const [cat, setCat] = useState("ALL");
-  const [sel, setSel] = useState(projects[0]?.id ?? null);
+  const selection = useSelection(projects[0]?.id ?? null);
 
   const list = useMemo(() => {
     if (cat === "ALL") return projects;
@@ -26,29 +27,26 @@ export default function ProjectsApp({ open }) {
     return projects.filter((p) => p.categories.includes(cat));
   }, [cat]);
 
-  const picked = list.find((p) => p.id === sel) ?? null;
+  const chosen = list.filter((p) => selection.sel.includes(p.id));
+  const picked = chosen.length === 1 ? chosen[0] : null;
 
   const launch = (p) => {
     const site = p.links?.live || p.links?.github;
     if (p.caseStudy) open(caseStudyHref(p.caseStudy));
     else if (site?.startsWith("/")) open(site);
     else if (site) window.open(site, "_blank", "noopener,noreferrer");
-    else setSel(p.id);
+    else selection.only(p.id);
   };
 
-  const onKeys = (e) => {
-    const i = list.findIndex((p) => p.id === sel);
-    const cols = Math.max(1, Math.floor(e.currentTarget.clientWidth / 138));
-    const step = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: cols, ArrowUp: -cols }[e.key];
-    if (step) {
-      e.preventDefault();
-      const next = list[Math.min(list.length - 1, Math.max(0, i + step))];
-      if (next) {
-        setSel(next.id);
-        e.currentTarget.querySelector(`[data-file="${next.id}"]`)?.focus();
-      }
-    }
-    if (e.key === "Enter" && picked) launch(picked);
+  const menuFor = (items) => {
+    if (!items.length) return [{ label: "Select all", onSelect: () => selection.set({ sel: list.map((p) => p.id) }) }];
+    if (items.length > 1) return [{ label: "Open", strong: true, onSelect: () => items.forEach(launch) }];
+    const p = items[0];
+    return [
+      { label: "Open", strong: true, onSelect: () => launch(p) },
+      ...(p.links?.live && p.caseStudy ? [{ label: "Live site", onSelect: () => window.open(p.links.live, "_blank", "noopener,noreferrer") }] : []),
+      ...(p.links?.github ? [{ label: "GitHub", onSelect: () => window.open(p.links.github, "_blank", "noopener,noreferrer") }] : []),
+    ];
   };
 
   return (
@@ -82,23 +80,21 @@ export default function ProjectsApp({ open }) {
           ))}
         </nav>
         <div className="wa-main">
-          <div className="wa-files" role="listbox" aria-label="Projects" tabIndex={-1} onKeyDown={onKeys}>
-            {list.map((p) => (
-              <button
-                key={p.id}
-                type="button"
-                role="option"
-                data-file={p.id}
-                aria-selected={sel === p.id}
-                className="wa-file"
-                onClick={() => setSel(p.id)}
-                onDoubleClick={() => launch(p)}
-              >
+          <FileView
+            key={cat}
+            label="Projects"
+            items={list}
+            idOf={(p) => p.id}
+            selection={selection}
+            onOpen={(items) => items.forEach(launch)}
+            menuFor={menuFor}
+            renderItem={(p) => (
+              <>
                 <Thumb p={p} />
                 <span>{p.title}</span>
-              </button>
-            ))}
-          </div>
+              </>
+            )}
+          />
         </div>
       </div>
       <div className="wa-details">
@@ -137,13 +133,15 @@ export default function ProjectsApp({ open }) {
               </div>
             </div>
           </>
+        ) : chosen.length ? (
+          <Stack thumbs={chosen.map((p) => <Thumb key={p.id} p={p} />)} count={chosen.length} />
         ) : (
           <p className="wa-dim">{list.length} items</p>
         )}
       </div>
       <div className="wa-status">
         <span>{list.length} items</span>
-        {picked && <span>1 item selected</span>}
+        {chosen.length > 0 && <span>{selectedText(chosen.length)}</span>}
       </div>
     </div>
   );

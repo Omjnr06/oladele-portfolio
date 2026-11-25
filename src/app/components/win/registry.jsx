@@ -18,8 +18,10 @@ const Games = lazy(() => import("./apps/GamesApp"));
 const Sudoku = lazy(() => import("./apps/SudokuApp"));
 const Snake = lazy(() => import("./apps/SnakeApp"));
 const Grind = lazy(() => import("./apps/GrindApp"));
+const Music = lazy(() => import("./apps/MusicApp"));
+const Player = lazy(() => import("./apps/PlayerApp"));
 
-const NATIVE = new Set(["resume", "projects", "gallery", "contact", "home", "personalize", "recruiter", "readme", "taskmgr", "games", "sudoku", "snake", "grind"]);
+const NATIVE = new Set(["resume", "projects", "gallery", "contact", "home", "personalize", "recruiter", "readme", "taskmgr", "games", "sudoku", "snake", "grind", "music", "player"]);
 
 export const hasNative = (id) => id.startsWith("case-") || NATIVE.has(id);
 
@@ -52,6 +54,10 @@ export function AppView({ win, open, fallback }) {
       return <Snake win={win} open={open} />;
     case "grind":
       return <Grind win={win} open={open} />;
+    case "music":
+      return <Music win={win} open={open} />;
+    case "player":
+      return <Player win={win} open={open} />;
     default:
       return fallback;
   }
