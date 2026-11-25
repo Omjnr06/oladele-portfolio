@@ -30,6 +30,11 @@ export function IconDefs() {
           <stop offset="0" stopColor="#ffc07a" />
           <stop offset="1" stopColor="#e0601c" />
         </linearGradient>
+        <linearGradient id="wi-cone" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#ffb24a" />
+          <stop offset=".55" stopColor="#ff8a1a" />
+          <stop offset="1" stopColor="#d9580f" />
+        </linearGradient>
         <radialGradient id="wi-orb" cx="0.5" cy="0.5" r="0.5">
           <stop offset="0" stopColor="#0e3a78" />
           <stop offset="0.7" stopColor="#0a2a5c" />
@@ -173,6 +178,14 @@ const ICONS = {
       <path d="M12 34h12v-8h-9v-8h20" fill="none" stroke="#fff" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
       <circle cx="35" cy="18" r="1" fill="#23702d" />
       <circle cx="35" cy="33" r="3" fill="#ffd25a" />
+    </>
+  ),
+  cone: (
+    <>
+      <path d="M6 38.5h36l2.5 4.5h-41z" fill="url(#wi-cone)" stroke="#a5440f" strokeLinejoin="round" />
+      <path d="M21.5 5.5h5L36 38.5H12z" fill="url(#wi-cone)" stroke="#a5440f" strokeLinejoin="round" />
+      <path d="M19.2 15h9.6l1.5 5H17.7zM15.8 26h16.4l1.5 5H14.3z" fill="#fff" />
+      <path d="M22 7.5h1.6L16 36h-2z" fill="#fff" opacity=".35" />
     </>
   ),
   speaker: (

@@ -93,3 +93,255 @@
   background: none;
   font-size: 12px;
 }
+
+.gr {
+  position: relative;
+}
+
+.gr .wa-info button + button {
+  margin-left: 0;
+}
+
+.gr-dlg {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 0.3);
+}
+
+.gr-dlg-box {
+  width: min(400px, calc(100% - 32px));
+  overflow: hidden;
+  border: 1px solid #6d7c8f;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.45);
+}
+
+.gr-dlg-head {
+  margin: 0;
+  padding: 6px 12px;
+  background: linear-gradient(to bottom, #dbe9f8, #bcd4ef);
+  color: #1e395b;
+  font-size: 12px;
+}
+
+.gr-dlg-body {
+  padding: 16px 20px 8px;
+}
+
+.gr-dlg-body h2 {
+  margin: 0 0 4px;
+  color: #1e395b;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.gr-dlg-body > p {
+  margin: 0 0 12px;
+}
+
+.gr-dlg-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border: 1px solid #aecbec;
+  border-radius: 3px;
+  background: linear-gradient(to bottom, #f5faff, #e3effc);
+}
+
+.gr-dlg-ico {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.gr-dlg-field {
+  flex: 1;
+}
+
+.gr-dlg-field input {
+  width: 100%;
+  height: 24px;
+  padding: 0 6px;
+  border: 1px solid #a9bdd3;
+  border-radius: 2px;
+  background: #fff;
+  color: #1e1e1e;
+  font: inherit;
+}
+
+.gr-dlg-field input:focus-visible {
+  outline: 1px solid #3c7fd6;
+}
+
+.gr-dlg-err {
+  margin: 8px 0 0;
+  color: #b3261e;
+}
+
+.gr-dlg-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid #dfdfdf;
+  background: #f0f0f0;
+}
+
+.ga {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  background: #fff;
+}
+
+.ga-top {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(220px, 1.2fr) auto;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #f0f0f0;
+}
+
+.ga-stats {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 12px;
+  margin: 4px 0 0;
+}
+
+.ga-stats dt {
+  color: #5a6472;
+}
+
+.ga-stats dd {
+  margin: 0;
+  color: #1e1e1e;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.ga-bar {
+  display: flex;
+  gap: 1px;
+  height: 14px;
+  margin-top: 6px;
+  overflow: hidden;
+  border: 1px solid #8a96a3;
+  background: #fff;
+}
+
+.ga-bar span {
+  min-width: 6px;
+  flex-basis: 0;
+  transition: opacity 150ms;
+}
+
+.ga-bar span[data-dim] {
+  opacity: 0.3;
+}
+
+.ga-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 4px;
+  margin-top: 6px;
+}
+
+.ga-legend button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  padding: 0 6px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: none;
+  color: #1e1e1e;
+  font-size: 12px;
+}
+
+.ga-legend button:hover:enabled,
+.ga-legend button[aria-pressed="true"] {
+  border-color: #a7bcd6;
+  background: linear-gradient(to bottom, #fdfeff, #e6eef8);
+}
+
+.ga-legend button:disabled {
+  opacity: 0.45;
+}
+
+.ga-legend button:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -3px;
+}
+
+.ga-legend button > span:first-child {
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgb(0 0 0 / 0.25);
+}
+
+.ga-heat {
+  display: grid;
+  grid-auto-columns: 9px;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 9px);
+  gap: 2px;
+  margin-top: 6px;
+}
+
+.ga-heat span {
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 1px rgb(30 57 91 / 0.12);
+}
+
+.ga-heat span[data-future] {
+  visibility: hidden;
+}
+
+.ga-heat-sum {
+  margin: 6px 0 0;
+  color: #3c4a5c;
+  font-size: 12px;
+}
+
+.ga-cmd {
+  border-top: 1px solid #a0afc3;
+}
+
+.ga-list {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.ga-status {
+  width: 100%;
+  height: 22px;
+  padding: 0 4px 0 18px;
+  border: 1px solid #a9bdd3;
+  border-radius: 2px;
+  background: linear-gradient(var(--c), var(--c)) 5px 50% / 8px 8px no-repeat, #fff;
+  color: #1e1e1e;
+  font: inherit;
+}
+
+.ga-status:focus-visible {
+  outline: 1px solid #3c7fd6;
+}
+
+@media (max-width: 900px) {
+  .ga-top {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ga-top > :last-child {
+    grid-column: 1 / -1;
+  }
+}

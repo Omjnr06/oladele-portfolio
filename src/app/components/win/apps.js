@@ -3,7 +3,7 @@ import { caseStudies } from "@/content/caseStudies";
 export const APPS = {
   resume: { title: "Resume", icon: "doc", path: "/resume", size: [940, 760] },
   projects: { title: "Projects", icon: "folder", path: "/?app=projects", size: [960, 640] },
-  music: { title: "Music", icon: "music", path: "/music" },
+  music: { title: "Music", icon: "music", path: "/music", size: [1000, 660] },
   gallery: { title: "Gallery", icon: "photo", path: "/?app=gallery", size: [980, 700] },
   contact: { title: "Contact", icon: "mail", path: "/?app=contact", size: [880, 580] },
   grind: { title: "Grind", icon: "chart", path: "/grind", size: [1100, 700] },
@@ -15,6 +15,7 @@ export const APPS = {
   games: { title: "Games", icon: "games", path: "/?app=games", size: [640, 420] },
   sudoku: { title: "Sudoku", icon: "sudoku", path: "/?app=sudoku", size: [460, 600] },
   snake: { title: "Snake", icon: "snake", path: "/?app=snake", size: [560, 520] },
+  player: { title: "VLC media player", icon: "cone", path: "/?app=player", size: [860, 560] },
 };
 
 export const DESKTOP = ["recruiter", "resume", "projects", "music", "gallery", "contact", "grind", "home", "readme", "games"];
@@ -41,6 +42,7 @@ export const HOT = {
   games: "#f2b632",
   sudoku: "#3d8ff0",
   snake: "#4cc25d",
+  cone: "#ff8a1a",
 };
 
 export const STUDIES = caseStudies.map((c) => ({ id: `case-${c.slug}`, title: c.title, icon: "doc", path: `/projects/${c.slug}`, size: [1040, 760] }));
