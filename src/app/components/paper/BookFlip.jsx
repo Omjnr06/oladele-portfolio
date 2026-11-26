@@ -6,6 +6,9 @@ import { PAGE_EVENT } from "@/lib/events";
 import { usePrefs } from "@/lib/prefs";
 import { place } from "@/lib/places";
 import NotebookCover from "./NotebookCover";
+import { runPageTurn } from "./pageTurn";
+
+const TURN_MS = 800;
 
 function waitForPage(path) {
   return new Promise((resolve) => {
@@ -20,6 +23,14 @@ function waitForPage(path) {
   });
 }
 
+const ORDER = ["/", "/projects", "/resume", "/music", "/grind", "/stats", "/lab"];
+const rank = (path) => {
+  const i = ORDER.indexOf(path);
+  if (i >= 0) return i;
+  if (path.startsWith("/projects/")) return 1.5;
+  return ORDER.length;
+};
+
 export default function BookFlip() {
   const router = useRouter();
   const { pack } = usePrefs();
@@ -30,20 +41,28 @@ export default function BookFlip() {
     const can = () => root.dataset.pack === "paper" && !!document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches;
     const flip = (url) => {
       const href = url.pathname + url.search + url.hash;
+      const book = url.pathname === "/";
+      const dir = rank(url.pathname) >= rank(location.pathname) ? "next" : "prev";
       window.__omjBookFlip = true;
-      flushSync(() => setDest(place(url.pathname)));
+      if (book) flushSync(() => setDest(place(url.pathname)));
+      else root.setAttribute("data-page-turn", dir);
       const t = document.startViewTransition(async () => {
-        root.setAttribute("data-book-flip", "");
+        if (book) root.setAttribute("data-book-flip", "");
+        else root.setAttribute("data-page-turn-live", "");
         router.push(href);
         await waitForPage(url.pathname);
       });
-      t.ready.catch(() => {});
+      let stop = null;
+      t.ready.then(() => !book && (stop = runPageTurn(dir, TURN_MS))).catch(() => {});
       t.updateCallbackDone.catch(() => {});
       t.finished
         .catch(() => {})
         .finally(() => {
+          stop?.();
           window.__omjBookFlip = false;
           root.removeAttribute("data-book-flip");
+          root.removeAttribute("data-page-turn");
+          root.removeAttribute("data-page-turn-live");
         });
     };
     const onClick = (e) => {
@@ -85,6 +104,8 @@ export default function BookFlip() {
         </div>
       </div>
       <NotebookCover photo={pack === "paper"} className="book-front" />
+      <div aria-hidden className="pt-flap" />
+      <div aria-hidden className="pt-shade" />
     </>
   );
 }
