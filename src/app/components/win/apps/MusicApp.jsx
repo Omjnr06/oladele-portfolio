@@ -4,6 +4,7 @@ import { clipItems } from "@/app/music/data/boardItems";
 import { musicLibrary } from "@/app/music/data/musicLibrary";
 import useDeepLink from "@/app/music/hooks/useDeepLink";
 import useTopTracks, { spotifyUrl, useSong } from "@/app/music/hooks/useTopTracks";
+import { setNowPlaying } from "../nowPlaying";
 import WinIcon from "../icons";
 import FileView, { Stack, selectedText, useSelection } from "./FileView";
 import "./apps.css";
@@ -31,6 +32,12 @@ function play(clips) {
 }
 
 const openSong = (s) => window.open(spotify(s.song), "_blank", "noopener,noreferrer");
+
+const listen = (s) => {
+  if (!s) return;
+  setNowPlaying(s.track);
+  window.__omjWin?.open("/?app=spotify", { push: false });
+};
 
 const copy = (text) => navigator.clipboard?.writeText(text).catch(() => {});
 
@@ -68,7 +75,10 @@ function SongDetails({ s, live }) {
         {meta?.artist && <p>{meta.artist}</p>}
         <p className="wa-dim">{live ? `No. ${s.track.rank + 1} in Oladele's top 10 this month` : "In Oladele's playlist on Spotify"}</p>
         <div className="wa-details-actions">
-          <a className="wa-btn wa-btn--default" href={spotify(s.song)} target="_blank" rel="noopener noreferrer">
+          <button type="button" className="wa-btn wa-btn--default" onClick={() => listen(s)}>
+            Play
+          </button>
+          <a className="wa-btn" href={spotify(s.song)} target="_blank" rel="noopener noreferrer">
             Open in Spotify
           </a>
         </div>
@@ -136,14 +146,15 @@ export default function MusicApp() {
   const open = (items) => {
     const clips = items.filter((it) => !it.song);
     if (clips.length) play(clips);
-    items.filter((it) => it.song).forEach(openSong);
+    listen(items.find((it) => it.song));
   };
 
   const menuFor = (items) => {
     if (!items.length) return [{ label: "Select all", onSelect: () => selection.set((s) => ({ ...s, sel: list.map(idOf) })) }];
     if (items[0].song)
       return [
-        { label: "Open in Spotify", strong: true, onSelect: () => items.forEach(openSong) },
+        { label: "Play", strong: true, onSelect: () => listen(items[0]) },
+        { label: "Open in Spotify", onSelect: () => items.forEach(openSong) },
         { label: items.length > 1 ? "Copy links" : "Copy link", onSelect: () => copy(items.map((s) => spotify(s.song)).join("\n")) },
       ];
     return [
@@ -174,9 +185,15 @@ export default function MusicApp() {
       </div>
       <div className="wa-cmd">
         {songs ? (
-          <button type="button" className="wa-cmd-btn" disabled={!picked.length} onClick={() => picked.forEach(openSong)}>
-            Open in Spotify
-          </button>
+          <>
+            <button type="button" className="wa-cmd-btn" disabled={!picked.length} onClick={() => listen(picked[0])}>
+              <WinIcon name="spotify" className="wa-nav-ico" />
+              Play
+            </button>
+            <button type="button" className="wa-cmd-btn" disabled={!picked.length} onClick={() => picked.forEach(openSong)}>
+              Open in Spotify
+            </button>
+          </>
         ) : (
           <>
             <button type="button" className="wa-cmd-btn" onClick={() => play(list)}>

@@ -507,3 +507,33 @@
   left: calc(var(--n) * 9px);
   z-index: calc(3 - var(--n));
 }
+
+.wsp {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  background: #181818;
+}
+
+.wsp-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #b3b3b3;
+}
+
+.wsp-foot .wa-dim {
+  color: #b3b3b3;
+}
+
+.wsp-empty {
+  display: grid;
+  height: 100%;
+  place-content: center;
+  gap: 4px;
+  padding: 24px;
+  text-align: center;
+}

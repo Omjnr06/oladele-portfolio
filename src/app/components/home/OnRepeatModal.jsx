@@ -1,21 +1,22 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import useTopTracks, { spotifyUrl, useSong } from "@/app/music/hooks/useTopTracks";
+import SpotifyEmbed from "@/app/music/components/SpotifyEmbed";
 import { SpotifyGlyph } from "./OnRepeat";
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
-function Row({ track, live }) {
+function Row({ track, live, playing, onPlay }) {
   const s = useSong(track);
   return (
     <li>
-      <a
-        href={spotifyUrl(track.id)}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`flex min-h-12 items-center gap-3 rounded-lg px-2 py-1.5 transition-colors duration-150 hover:bg-bright/5 ${focus}`}
+      <button
+        type="button"
+        aria-pressed={playing}
+        onClick={() => onPlay(track.id)}
+        className={`flex min-h-12 w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition-colors duration-150 hover:bg-bright/5 ${playing ? "bg-accent/10" : ""} ${focus}`}
       >
         {live && <span className="w-5 shrink-0 text-right font-mono text-[11px] tabular-nums text-muted">{track.rank + 1}</span>}
         <span className="relative size-10 shrink-0 overflow-hidden rounded-md bg-panel-2 paper:rounded-none paper:shadow-[0_1px_2px_rgb(0_0_0/0.2)]">
@@ -25,7 +26,8 @@ function Row({ track, live }) {
           <span className="block truncate text-sm font-medium text-fg">{s?.title || "Spotify track"}</span>
           {s?.artist && <span className="block truncate text-xs text-muted">{s.artist}</span>}
         </span>
-      </a>
+        {playing && <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.12em] text-accent">Playing</span>}
+      </button>
     </li>
   );
 }
@@ -35,6 +37,8 @@ export default function OnRepeatModal({ onClose }) {
   const reduce = useReducedMotion();
   const panel = useRef(null);
   const close = useRef(onClose);
+  const [playing, setPlaying] = useState(null);
+  const now = top?.tracks.find((t) => t.id === playing);
 
   useEffect(() => {
     close.current = onClose;
@@ -73,7 +77,7 @@ export default function OnRepeatModal({ onClose }) {
             <h2 id="on-repeat-title" className="text-base font-semibold text-fg paper:font-hand paper:text-2xl paper:font-normal paper:leading-none">
               On repeat
             </h2>
-            <p className="mt-1 text-xs text-muted">{!top ? "Loading…" : live ? "My top 10 on Spotify, last 4 weeks" : "A few songs from my playlist"}</p>
+            <p className="mt-1 text-xs text-muted">{!top ? "Loading…" : live ? "My top 10 on Spotify, last 4 weeks. Tap one to play it here." : "A few songs from my playlist. Tap one to play it here."}</p>
           </div>
           <button
             type="button"
@@ -86,9 +90,17 @@ export default function OnRepeatModal({ onClose }) {
             </svg>
           </button>
         </div>
+        {now && (
+          <div className="px-4 pb-2">
+            <SpotifyEmbed id={now.id} title={now.title} height={152} />
+            <a href={spotifyUrl(now.id)} target="_blank" rel="noopener noreferrer" className={`mt-1 inline-flex h-8 items-center text-xs text-muted transition-colors duration-150 hover:text-accent ${focus}`}>
+              Open in Spotify
+            </a>
+          </div>
+        )}
         <ol className="min-h-0 overflow-y-auto px-2 pb-3">
           {top?.tracks.map((t) => (
-            <Row key={t.id} track={t} live={live} />
+            <Row key={t.id} track={t} live={live} playing={t.id === playing} onPlay={setPlaying} />
           ))}
         </ol>
       </motion.div>

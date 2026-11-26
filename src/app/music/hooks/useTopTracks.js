@@ -12,7 +12,7 @@ export function loadTopTracks() {
   if (cached) return Promise.resolve(cached);
   pending ??= fetch("/api/spotify/top")
     .then((r) => (r.ok ? r.json() : null))
-    .then((d) => (d?.tracks?.length ? { live: true, tracks: d.tracks.slice(0, TOP_SLOTS).map((t, rank) => ({ ...t, rank })) } : FALLBACK))
+    .then((d) => (d?.tracks?.length ? { live: true, tracks: d.tracks.slice(0, TOP_SLOTS).map((t, rank) => ({ ...t, rank, live: true })) } : FALLBACK))
     .catch(() => FALLBACK)
     .then((v) => (cached = v));
   return pending;
