@@ -843,6 +843,107 @@ html[data-book-flip]::view-transition-new(book-cover) {
   animation: bk-cover 1.8s linear both;
 }
 
+html[data-page-turn] [data-site-nav] {
+  view-transition-name: paper-tabs;
+}
+
+.pt-flap,
+.pt-shade {
+  display: none;
+}
+
+html[data-page-turn-live] .pt-flap,
+html[data-page-turn-live] .pt-shade {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: block;
+  pointer-events: none;
+}
+
+html[data-page-turn-live] .pt-flap {
+  width: 100vw;
+  height: 100vh;
+  view-transition-name: pt-flap;
+  background-color: var(--color-ink);
+  background-image:
+    linear-gradient(to left, rgb(60 42 18 / 0.2), rgb(60 42 18 / 0.06) 18%, rgb(255 255 255 / 0) 42%),
+    repeating-linear-gradient(to bottom, transparent 0 31px, color-mix(in srgb, var(--paper-rule) 45%, transparent) 31px 32px);
+  background-position: 0 0, 0 var(--rule-top, 96px);
+}
+
+html[data-page-turn-live] .pt-shade {
+  width: 100vw;
+  height: 300vh;
+  view-transition-name: pt-shade;
+  background: linear-gradient(to right, rgb(40 28 12 / 0.34), rgb(40 28 12 / 0.12) 48px, rgb(40 28 12 / 0) 180px);
+}
+
+html[data-page-turn]::view-transition-group(root),
+html[data-page-turn]::view-transition-group(paper-tabs),
+html[data-page-turn]::view-transition-group(pt-flap),
+html[data-page-turn]::view-transition-group(pt-shade),
+html[data-page-turn]::view-transition-new(pt-flap),
+html[data-page-turn]::view-transition-new(pt-shade) {
+  animation: none;
+  transform-origin: 0 0;
+}
+
+html[data-page-turn]::view-transition-old(paper-tabs),
+html[data-page-turn]::view-transition-new(paper-tabs) {
+  animation-duration: 0.3s;
+}
+
+html[data-page-turn]::view-transition-group(root) {
+  z-index: 1;
+}
+
+html[data-page-turn]::view-transition-group(pt-shade) {
+  z-index: 2;
+}
+
+html[data-page-turn]::view-transition-group(pt-flap) {
+  z-index: 3;
+}
+
+html[data-page-turn]::view-transition-group(paper-tabs) {
+  z-index: 4;
+}
+
+html[data-page-turn]::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
+html[data-page-turn]::view-transition-old(root),
+html[data-page-turn]::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: none;
+}
+
+html[data-page-turn="next"]::view-transition-old(root),
+html[data-page-turn="prev"]::view-transition-new(root) {
+  z-index: 2;
+}
+
+html[data-page-turn="next"]::view-transition-new(root) {
+  z-index: 1;
+  animation: pt-light 0.8s cubic-bezier(0.3, 0, 0.3, 1) both;
+}
+
+html[data-page-turn="prev"]::view-transition-old(root) {
+  z-index: 1;
+  animation: pt-light 0.8s cubic-bezier(0.3, 0, 0.3, 1) reverse both;
+}
+
+@keyframes pt-light {
+  0% {
+    filter: brightness(0.9);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
 @keyframes bk-leave {
   to {
     opacity: 0;

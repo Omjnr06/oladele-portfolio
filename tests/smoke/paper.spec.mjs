@@ -29,8 +29,8 @@ test("modern hides paper extras and never downloads the handwriting font", async
 test("notebook tabs sit on the left edge on desktop", async ({ page }, info) => {
   test.skip(info.project.name !== "smoke-desktop", "desktop layout");
   await page.goto("/resume?preview=paper&theme=paper-cream");
+  await expect.poll(async () => (await nav(page).boundingBox()).x).toBeLessThan(1);
   const box = await nav(page).boundingBox();
-  expect(box.x).toBeLessThan(1);
   expect(box.width).toBeLessThanOrEqual(88);
 });
 
@@ -67,21 +67,30 @@ test("back button in paper returns without the old sheet turn", async ({ page })
   await expect(page.locator("h1").first()).toBeVisible();
 });
 
-test("palette cd in paper uses the notebook cover flip", async ({ page }, info) => {
-  test.skip(info.project.name !== "smoke-desktop", "palette shortcut");
-  await page.goto("/resume?preview=paper&theme=paper-cream");
+test("inner pages in paper turn a single page, only home gets the notebook", async ({ page }, info) => {
+  test.skip(info.project.name !== "smoke-desktop", "desktop tabs");
+  await page.goto("/resume?theme=paper-cream");
   await page.waitForLoadState("networkidle");
   await page.evaluate(() => {
-    window.__sawBook = false;
+    window.__seen = [];
     new MutationObserver(() => {
-      if (document.documentElement.hasAttribute("data-book-flip")) window.__sawBook = true;
-    }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-book-flip"] });
+      const d = document.documentElement;
+      if (d.hasAttribute("data-book-flip")) window.__seen.push("book");
+      if (d.hasAttribute("data-page-turn")) window.__seen.push(`turn-${d.dataset.pageTurn}`);
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-book-flip", "data-page-turn"] });
   });
-  const ok = await page.evaluate(() => window.__omjBookGo?.("/projects"));
-  expect(ok).toBe(true);
+  expect(await page.evaluate(() => window.__omjBookGo?.("/projects"))).toBe(true);
   await expect(page).toHaveURL(/\/projects$/);
-  await expect.poll(() => page.evaluate(() => window.__sawBook)).toBe(true);
-  await expect(page.locator(".flip-sheet")).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => document.documentElement.hasAttribute("data-page-turn"))).toBe(false);
+  expect(await page.evaluate(() => [...new Set(window.__seen)])).toEqual(["turn-prev"]);
+  await expect(page.locator(".book-stage")).toBeHidden();
+  await page.evaluate(() => (window.__seen = []));
+  await nav(page).getByRole("link", { name: "Resume" }).click();
+  await expect(page).toHaveURL(/\/resume(\?|$)/);
+  await expect.poll(() => page.evaluate(() => document.documentElement.hasAttribute("data-page-turn"))).toBe(false);
+  expect(await page.evaluate(() => [...new Set(window.__seen)])).toEqual(["turn-next"]);
+  await expect(page.locator("h1").first()).toBeVisible();
+  expect(await page.evaluate(() => document.getAnimations().filter((x) => x.effect?.pseudoElement).length)).toBe(0);
 });
 
 test("paper back-to-top is the handwritten note", async ({ page }) => {
