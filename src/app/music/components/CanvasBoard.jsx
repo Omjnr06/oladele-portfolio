@@ -9,6 +9,7 @@ import PhotoNode from "./Nodes/PhotoNode";
 import SymbolNode from "./Nodes/SymbolNode";
 import SongNode from "./Nodes/SongNode";
 import SongModal from "./Modals/SongModal";
+import useTopTracks from "../hooks/useTopTracks";
 import PhotoModal from "./Modals/PhotoModal";
 import ClipPlayer from "./ClipPlayer";
 import MusicTitle from "./MusicTitle";
@@ -35,6 +36,8 @@ export default function CanvasBoard() {
   const [hoveredClip, setHoveredClip] = useState(null);
   const [selectedClip, setSelectedClip] = useState(null);
   const [selectedSong, setSelectedSong] = useState(null);
+  const top = useTopTracks();
+  const songCount = top?.tracks.length ?? 0;
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [focusMode, setFocusMode] = useState(null);
   const raf = useRef(0);
@@ -155,14 +158,14 @@ export default function CanvasBoard() {
   }, [centerOn]);
 
   const enterCollection = useCallback((kind) => {
-    const layout = focusCollection(kind);
+    const layout = focusCollection(kind, songCount);
     setFocusMode({ ...layout, type: "collection" });
     const vw = window.innerWidth, vh = window.innerHeight;
     const fitH = (vh - 150) / layout.bounds.height;
     const fitW = (vw - 120) / layout.bounds.width;
     const scale = Math.max(MIN_SCALE, Math.min(0.55, fitH, fitW));
     centerOn(CENTER, CENTER + layout.bounds.top + layout.bounds.height / 2, scale, 650);
-  }, [centerOn]);
+  }, [centerOn, songCount]);
 
   const handleInstrumentClick = useCallback((categoryId) => {
     enterFocus(categoryId);
@@ -243,7 +246,7 @@ export default function CanvasBoard() {
                     const slot = inColl ? focusMode.slots.find((sl) => sl.id === it.id) : null;
                     const slotIdx = inColl ? focusMode.slots.findIndex((sl) => sl.id === it.id) : 0;
                     const dimmed = focusMode?.type === "collection" && focusMode.kind !== "songs";
-                    return <SongNode key={it.id} item={it} onOpen={setSelectedSong} focusX={slot ? slot.x : it.x} focusY={slot ? slot.y : it.y} dimmed={dimmed} delay={inColl ? slotIdx * 0.035 : 0} />;
+                    return <SongNode key={it.id} item={it} track={top?.tracks[it.rank]} live={top?.live} onOpen={setSelectedSong} focusX={slot ? slot.x : it.x} focusY={slot ? slot.y : it.y} dimmed={dimmed} delay={inColl ? slotIdx * 0.035 : 0} />;
                   }
                   if (it.type === "clip") {
                     if (focusMode?.type === "collection") return null;
@@ -296,7 +299,7 @@ export default function CanvasBoard() {
       ) : null}
 
       {selectedSong ? (
-        <SongModal song={selectedSong} onClose={() => setSelectedSong(null)} />
+        <SongModal song={selectedSong} live={top?.live} onClose={() => setSelectedSong(null)} />
       ) : null}
 
       {selectedPhoto ? (

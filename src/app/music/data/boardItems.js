@@ -1,4 +1,5 @@
 import { musicLibrary } from "./musicLibrary";
+import { SONGS, TOP_SLOTS } from "./songs";
 
 export const CANVAS_SIZE = 6000;
 export const CENTER = CANVAS_SIZE / 2;
@@ -135,13 +136,7 @@ export function focusLayout(categoryId) {
   };
 }
 
-export const SONGS = [
-  { spotifyTrackId: "7IVukH71OXfAu3KudrrizN" },
-  { spotifyTrackId: "7FwgafuJFYX2M5CrEVfN4M" },
-  { spotifyTrackId: "7IAzRTQQz6Aoywj0R1Qce5" },
-  { spotifyTrackId: "24f3lQnwL9vL2GUu8sdoBP" },
-  { spotifyTrackId: "1Vk4yRsz0iBzDiZEoFMQyv" },
-];
+export { SONGS };
 
 export const SYMBOLS = [
   { symbol: "treble" }, { symbol: "bassclef" }, { symbol: "sheet" }, { symbol: "vinyl" },
@@ -204,14 +199,14 @@ export const symbolItems = scatterItems(SYMBOLS, [...scatterBase, ...photoItems]
   seed: 4202, size: 220, pad: 200, minRadius: 800, maxRadius: 3400,
 }).map((s, i) => ({ id: `symbol-${i + 1}`, type: "symbol", size: 220, ...s }));
 
-export const songItems = scatterItems(SONGS, [...scatterBase, ...photoItems, ...symbolItems], {
+export const songItems = scatterItems(Array.from({ length: TOP_SLOTS }, () => ({})), [...scatterBase, ...photoItems, ...symbolItems], {
   seed: 9303, size: 300, pad: 180, minRadius: 950, maxRadius: 3000,
-}).map((s, i) => ({ id: `song-${i + 1}`, type: "song", size: 300, ...s }));
+}).map((s, i) => ({ id: `song-${i + 1}`, type: "song", size: 300, rank: i, ...s }));
 
 boardItems.push(...photoItems, ...symbolItems, ...songItems);
 
-export function focusCollection(kind) {
-  const items = kind === "photos" ? photoItems : songItems;
+export function focusCollection(kind, count) {
+  const items = kind === "photos" ? photoItems : songItems.slice(0, count ?? songItems.length);
   const n = items.length;
   const perRowMax = 5;
   const rows = Math.ceil(n / perRowMax);

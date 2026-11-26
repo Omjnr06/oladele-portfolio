@@ -115,13 +115,12 @@ hand-place.
    (Extensions are case-sensitive on Vercel — match exactly, e.g. `.JPG` vs `.jpg`.)
    It auto-scatters into an empty gap. Add optional `x`/`y` to hand-place.
 
-### Add a SONG (Spotify)
-1. Get the track's share link → the part after `/track/` and before `?` is the ID.
-2. Add to the `SONGS` array in `data/boardItems.js`:
-   ```js
-   { spotifyTrackId: "7IVukH71OXfAu3KudrrizN" }
-   ```
-   Album art + title are fetched automatically. Auto-scatters.
+### SONGS (Spotify top 10)
+The playlist is my live Spotify top 10 (last 4 weeks), served by `/api/spotify/top` and cached
+for a day. Ten song slots are pre-placed on the board; only filled ones show.
+Until `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET` and `SPOTIFY_REFRESH_TOKEN` are set in Vercel,
+it falls back to the `SONGS` array in `data/songs.js` (`{ spotifyTrackId: "..." }`, art and title
+fetched via oEmbed). Get the refresh token once with `npm run spotify:auth`.
 
 ### Add a SYMBOL (decorative)
 Add to the `SYMBOLS` array in `data/boardItems.js`, e.g. `{ symbol: "vinyl" }`.
