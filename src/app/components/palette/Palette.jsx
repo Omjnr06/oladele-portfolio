@@ -7,7 +7,7 @@ import { THEMES, packOpen } from "@/lib/themes";
 import { switchTheme } from "@/lib/packSwitch";
 import { setPrefs } from "@/lib/prefs";
 import { track } from "@/lib/track";
-import { CONTACT_EVENT } from "@/lib/events";
+import { CHOOSER_EVENT, CONTACT_EVENT } from "@/lib/events";
 
 const RECENT_KEY = "omj-palette-recent";
 const GROUPS = {
@@ -53,6 +53,7 @@ function clientActions() {
     { id: "action-nav-rail", type: "action", title: "Nav: side rail", sub: "Show the navigation as a side rail", act: "nav", value: "rail", keys: ["nav", "rail", "sidebar", "layout"] },
     { id: "action-nav-pill", type: "action", title: "Nav: top bar", sub: "Show the navigation as a floating top bar", act: "nav", value: "pill", keys: ["nav", "pill", "top", "bar", "layout"] },
   );
+  out.push({ id: "action-versions", type: "action", title: "Compare versions", sub: "See Default, Paper and Windows side by side", act: "chooser", keys: ["theme", "version", "pack", "look", "compare", "windows", "paper"] });
   for (const [pack, t] of Object.entries(THEMES)) {
     if (!packOpen(pack)) continue;
     for (const v of t.variants) {
@@ -212,6 +213,7 @@ export default function Palette({ onClose, initialQuery = "" }) {
       track("variant_selected", item.value.variant);
       switchTheme(null, item.value);
     } else if (item.act === "nav") setPrefs({ navMode: item.value });
+    else if (item.act === "chooser") window.dispatchEvent(new Event(CHOOSER_EVENT));
     else if (item.external) window.open(item.href, "_blank", "noopener,noreferrer");
     else if (item.href) go(item.href);
   };

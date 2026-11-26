@@ -6,6 +6,7 @@ import { setPrefs, usePrefs } from "@/lib/prefs";
 import { switchTheme } from "@/lib/packSwitch";
 import { isHandheld } from "@/lib/device";
 import { track } from "@/lib/track";
+import { CHOOSER_EVENT } from "@/lib/events";
 
 const WIDTH = 320;
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
@@ -169,6 +170,16 @@ export default function ThemeMenu({ anchor, triggerRef, onClose }) {
           );
         })}
       </ul>
+      <button
+        type="button"
+        onClick={() => {
+          onClose();
+          window.dispatchEvent(new Event(CHOOSER_EVENT));
+        }}
+        className={`mt-1 flex min-h-10 w-full items-center rounded-lg px-3 text-left text-sm text-muted transition-[background-color,color,transform] duration-150 hover:bg-bright/5 hover:text-fg active:scale-[0.98] ${focus}`}
+      >
+        Compare all versions
+      </button>
 
       <div className={`mt-2 border-t border-line px-2 pb-1 pt-3 max-md:hidden ${prefs.pack === "paper" ? "hidden" : ""}`}>
         <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">Navigation</p>

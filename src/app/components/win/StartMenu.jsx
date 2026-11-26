@@ -146,7 +146,7 @@ export default function StartMenu({ onOpen, onClose, onShutDown, onRestart, onSw
               </button>
               <button type="button" role="menuitem" onClick={onRestart}>
                 Restart
-                <small>Replay the boot</small>
+                <small>Choose a version</small>
               </button>
             </div>
           )}

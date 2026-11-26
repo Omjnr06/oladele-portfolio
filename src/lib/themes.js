@@ -24,7 +24,6 @@ export const THEMES = {
   },
   windows: {
     label: "Windows",
-    preview: true,
     desktopOnly: true,
     variants: [{ id: "aero", label: "Aero", light: true, swatch: ["#0D4F8F", "#1F5FBF", "#D9480F"] }],
   },
@@ -33,7 +32,7 @@ export const THEMES = {
 export const PACKS = [
   { id: "modern", label: THEMES.modern.label },
   { id: "paper", label: "Paper" },
-  { id: "windows", label: "Windows", blurb: "A Vista-era desktop with windows you can drag.", desktopOnly: true },
+  { id: "windows", label: "Windows", blurb: "A Windows 7 desktop with windows you can drag.", desktopOnly: true },
 ];
 
 export const DEFAULT_THEME = { pack: "modern", variant: "cyan" };

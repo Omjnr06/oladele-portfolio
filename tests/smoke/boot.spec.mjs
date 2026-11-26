@@ -3,6 +3,9 @@ import { test, expect } from "@playwright/test";
 const human = (page) =>
   page.addInitScript(() => {
     Object.defineProperty(navigator, "webdriver", { get: () => false });
+    try {
+      if (!localStorage.getItem("omj-prefs")) localStorage.setItem("omj-prefs", JSON.stringify({ pack: "modern", variant: "cyan" }));
+    } catch {}
     new MutationObserver(() => {
       if (document.documentElement.hasAttribute("data-boot")) window.__sawBoot = true;
     }).observe(document, { attributes: true, subtree: true, attributeFilter: ["data-boot"] });

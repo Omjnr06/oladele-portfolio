@@ -282,6 +282,68 @@ html[data-boot] .boot[data-auto] {
   animation: boot-failsafe 0.2s calc(var(--boot) + 4s) forwards;
 }
 
+html[data-boot-menu] .boot[data-auto] {
+  animation-delay: calc(var(--boot) + 12s);
+}
+
+html[data-boot-live] .boot[data-auto] {
+  animation: none;
+}
+
+.boot-menu {
+  display: none;
+}
+
+html[data-boot-menu] .boot-menu {
+  display: block;
+}
+
+html[data-boot-menu] .boot-track {
+  display: none;
+}
+
+.boot-opt {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 32px;
+  margin-left: -12px;
+  padding: 0 12px;
+  border-radius: 6px;
+  text-align: left;
+  color: color-mix(in srgb, var(--color-fg) 82%, transparent);
+  transition: background-color 120ms, color 120ms;
+}
+
+.boot-opt[data-active] {
+  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 9%, transparent);
+}
+
+.boot-opt:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.boot-opt:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.boot-arrow {
+  visibility: hidden;
+}
+
+.boot-opt[data-active] .boot-arrow {
+  visibility: visible;
+}
+
+@media (max-width: 767px) {
+  .boot-opt {
+    min-height: 40px;
+  }
+}
+
 .boot-cmd {
   display: inline-block;
   width: 0;
