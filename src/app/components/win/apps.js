@@ -16,6 +16,7 @@ export const APPS = {
   sudoku: { title: "Sudoku", icon: "sudoku", path: "/?app=sudoku", size: [460, 600] },
   snake: { title: "Snake", icon: "snake", path: "/?app=snake", size: [560, 520] },
   player: { title: "VLC media player", icon: "cone", path: "/?app=player", size: [860, 560] },
+  spotify: { title: "Spotify", icon: "spotify", path: "/?app=spotify", size: [440, 470] },
 };
 
 export const DESKTOP = ["recruiter", "resume", "projects", "music", "gallery", "contact", "grind", "home", "readme", "games"];
@@ -43,6 +44,7 @@ export const HOT = {
   sudoku: "#3d8ff0",
   snake: "#4cc25d",
   cone: "#ff8a1a",
+  spotify: "#1db954",
 };
 
 export const STUDIES = caseStudies.map((c) => ({ id: `case-${c.slug}`, title: c.title, icon: "doc", path: `/projects/${c.slug}`, size: [1040, 760] }));

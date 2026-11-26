@@ -13,6 +13,7 @@
     "test:visual": "playwright test --project=visual",
     "test:visual:baseline": "playwright test --project=visual --update-snapshots",
     "perf": "node scripts/perf.mjs",
+    "spotify:auth": "node --env-file-if-exists=.env.local scripts/spotify-auth.mjs",
     "check-content": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-content.mjs",
     "check-contrast": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-contrast.mjs",
     "build-themes": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-themes.mjs",

@@ -188,6 +188,12 @@ const ICONS = {
       <path d="M22 7.5h1.6L16 36h-2z" fill="#fff" opacity=".35" />
     </>
   ),
+  spotify: (
+    <>
+      <circle cx="24" cy="24" r="19" fill="#1db954" stroke="#128a3e" strokeWidth="1.2" />
+      <path d="M13.5 18.5c7.5-2.2 15.5-1.6 21.5 1.8M15 25c6-1.6 12.4-1.1 17.3 1.6M16.5 31c4.6-1.1 9.4-.7 13.2 1.3" fill="none" stroke="#fff" strokeWidth="2.8" strokeLinecap="round" />
+    </>
+  ),
   speaker: (
     <>
       <path d="M8 19h7l9-8v26l-9-8H8z" fill="currentColor" />

@@ -13,6 +13,7 @@ import Tagline from "./components/home/Tagline";
 import BackToTop from "./components/BackToTop";
 import Gallery from "./components/home/Gallery";
 import MusicSpotlight from "./components/home/MusicSpotlight";
+import OnRepeat from "./components/home/OnRepeat";
 import DotGlow from "./components/home/DotGlow";
 import MarginNote from "./components/paper/MarginNote";
 import PenSquiggle from "./components/paper/PenSquiggle";
@@ -92,7 +93,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex min-h-0 flex-col lg:col-span-8">
-              <SectionLabel note="spotlight" caption>Music</SectionLabel>
+              <SectionLabel note="spotlight" caption action={<OnRepeat />}>Music</SectionLabel>
               <div className="min-h-0 flex-1 paper-taped paper-tilt-r">
                 <MusicSpotlight tracks={featuredTracks()} role={musicRole} />
               </div>

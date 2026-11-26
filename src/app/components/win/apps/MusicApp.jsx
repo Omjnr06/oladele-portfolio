@@ -1,9 +1,10 @@
 "use client";
 import { useCallback, useMemo, useState } from "react";
-import { clipItems, SONGS } from "@/app/music/data/boardItems";
+import { clipItems } from "@/app/music/data/boardItems";
 import { musicLibrary } from "@/app/music/data/musicLibrary";
 import useDeepLink from "@/app/music/hooks/useDeepLink";
-import useSpotifyMeta from "@/app/music/hooks/useSpotifyMeta";
+import useTopTracks, { spotifyUrl, useSong } from "@/app/music/hooks/useTopTracks";
+import { setNowPlaying } from "../nowPlaying";
 import WinIcon from "../icons";
 import FileView, { Stack, selectedText, useSelection } from "./FileView";
 import "./apps.css";
@@ -11,19 +12,17 @@ import "./music.css";
 
 const ALL = "ALL";
 const PLAYLIST = "PLAYLIST";
-const FOLDERS = [
+const foldersFor = (live) => [
   { id: ALL, label: "All music" },
   ...musicLibrary.map((m) => ({ id: m.id, label: m.label })),
-  { id: PLAYLIST, label: "My Playlist" },
+  { id: PLAYLIST, label: live ? "Top 10" : "My Playlist" },
 ];
-const SONG_ITEMS = SONGS.map((s) => ({ id: `song-${s.spotifyTrackId}`, song: s.spotifyTrackId }));
-const spotify = (id) => `https://open.spotify.com/track/${id}`;
-const folderOf = (id) => FOLDERS.find((f) => f.id === id)?.label ?? "";
+const spotify = spotifyUrl;
 const fileName = (c) => `${c.title}.${c.audioOnly ? "mp3" : "mp4"}`;
 const idOf = (c) => c.id;
 
-function listFor(folder) {
-  if (folder === PLAYLIST) return SONG_ITEMS;
+function listFor(folder, songs) {
+  if (folder === PLAYLIST) return songs;
   if (folder === ALL) return clipItems;
   return clipItems.filter((c) => c.categoryId === folder);
 }
@@ -33,6 +32,12 @@ function play(clips) {
 }
 
 const openSong = (s) => window.open(spotify(s.song), "_blank", "noopener,noreferrer");
+
+const listen = (s) => {
+  if (!s) return;
+  setNowPlaying(s.track);
+  window.__omjWin?.open("/?app=spotify", { push: false });
+};
 
 const copy = (text) => navigator.clipboard?.writeText(text).catch(() => {});
 
@@ -46,7 +51,7 @@ function ClipThumb({ c }) {
 }
 
 function SongThumb({ s }) {
-  const meta = useSpotifyMeta(s.song);
+  const meta = useSong(s.track);
   return (
     <span className="wa-thumb wm-thumb wm-song">
       {meta?.thumb ? <img src={meta.thumb} alt="" loading="lazy" draggable="false" /> : <WinIcon name="music" className="wa-thumb-ico" />}
@@ -54,21 +59,26 @@ function SongThumb({ s }) {
   );
 }
 
-function SongName({ s }) {
-  const meta = useSpotifyMeta(s.song);
-  return <span>{meta?.title || "Spotify track"}</span>;
+function SongName({ s, live }) {
+  const meta = useSong(s.track);
+  const title = meta?.title || "Spotify track";
+  return <span>{live ? `${String(s.track.rank + 1).padStart(2, "0")}. ${title}` : title}</span>;
 }
 
-function SongDetails({ s }) {
-  const meta = useSpotifyMeta(s.song);
+function SongDetails({ s, live }) {
+  const meta = useSong(s.track);
   return (
     <>
       <SongThumb s={s} />
       <div>
         <h3>{meta?.title || "Spotify track"}</h3>
-        <p className="wa-dim">In Oladele&apos;s playlist on Spotify</p>
+        {meta?.artist && <p>{meta.artist}</p>}
+        <p className="wa-dim">{live ? `No. ${s.track.rank + 1} in Oladele's top 10 this month` : "In Oladele's playlist on Spotify"}</p>
         <div className="wa-details-actions">
-          <a className="wa-btn wa-btn--default" href={spotify(s.song)} target="_blank" rel="noopener noreferrer">
+          <button type="button" className="wa-btn wa-btn--default" onClick={() => listen(s)}>
+            Play
+          </button>
+          <a className="wa-btn" href={spotify(s.song)} target="_blank" rel="noopener noreferrer">
             Open in Spotify
           </a>
         </div>
@@ -107,14 +117,19 @@ const thumbOf = (it) => (it.song ? <SongThumb s={it} /> : <ClipThumb c={it} />);
 export default function MusicApp() {
   const selection = useSelection(clipItems[0]?.id ?? null);
   const [folder, setFolder] = useState(ALL);
-  const list = useMemo(() => listFor(folder), [folder]);
+  const top = useTopTracks();
+  const live = !!top?.live;
+  const folders = foldersFor(live);
+  const folderOf = (id) => folders.find((f) => f.id === id)?.label ?? "";
+  const songItems = useMemo(() => (top?.tracks ?? []).map((t) => ({ id: `song-${t.id}`, song: t.id, track: t })), [top]);
+  const list = useMemo(() => listFor(folder, songItems), [folder, songItems]);
   const songs = folder === PLAYLIST;
   const picked = list.filter((c) => selection.sel.includes(c.id));
   const one = picked.length === 1 ? picked[0] : null;
 
   const go = (f) => {
     setFolder(f);
-    selection.only(listFor(f)[0]?.id ?? null);
+    selection.only(listFor(f, songItems)[0]?.id ?? null);
   };
 
   const { only } = selection;
@@ -131,14 +146,15 @@ export default function MusicApp() {
   const open = (items) => {
     const clips = items.filter((it) => !it.song);
     if (clips.length) play(clips);
-    items.filter((it) => it.song).forEach(openSong);
+    listen(items.find((it) => it.song));
   };
 
   const menuFor = (items) => {
     if (!items.length) return [{ label: "Select all", onSelect: () => selection.set((s) => ({ ...s, sel: list.map(idOf) })) }];
     if (items[0].song)
       return [
-        { label: "Open in Spotify", strong: true, onSelect: () => items.forEach(openSong) },
+        { label: "Play", strong: true, onSelect: () => listen(items[0]) },
+        { label: "Open in Spotify", onSelect: () => items.forEach(openSong) },
         { label: items.length > 1 ? "Copy links" : "Copy link", onSelect: () => copy(items.map((s) => spotify(s.song)).join("\n")) },
       ];
     return [
@@ -169,9 +185,15 @@ export default function MusicApp() {
       </div>
       <div className="wa-cmd">
         {songs ? (
-          <button type="button" className="wa-cmd-btn" disabled={!picked.length} onClick={() => picked.forEach(openSong)}>
-            Open in Spotify
-          </button>
+          <>
+            <button type="button" className="wa-cmd-btn" disabled={!picked.length} onClick={() => listen(picked[0])}>
+              <WinIcon name="spotify" className="wa-nav-ico" />
+              Play
+            </button>
+            <button type="button" className="wa-cmd-btn" disabled={!picked.length} onClick={() => picked.forEach(openSong)}>
+              Open in Spotify
+            </button>
+          </>
         ) : (
           <>
             <button type="button" className="wa-cmd-btn" onClick={() => play(list)}>
@@ -189,7 +211,7 @@ export default function MusicApp() {
       <div className="wa-row">
         <nav className="wa-nav" aria-label="Music folders">
           <p className="wa-nav-head">Music</p>
-          {FOLDERS.map((f) => (
+          {folders.map((f) => (
             <button key={f.id} type="button" className="wa-nav-item" aria-pressed={folder === f.id} onClick={() => go(f.id)}>
               <WinIcon name={f.id === ALL ? "music" : "folder"} className="wa-nav-ico" />
               {f.label}
@@ -209,7 +231,7 @@ export default function MusicApp() {
               it.song ? (
                 <>
                   <SongThumb s={it} />
-                  <SongName s={it} />
+                  <SongName s={it} live={live} />
                 </>
               ) : (
                 <>
@@ -223,7 +245,7 @@ export default function MusicApp() {
       </div>
       <div className="wa-details">
         {one ? (
-          one.song ? <SongDetails s={one} /> : <ClipDetails c={one} />
+          one.song ? <SongDetails s={one} live={live} /> : <ClipDetails c={one} />
         ) : picked.length ? (
           <Stack thumbs={picked.map(thumbOf)} count={picked.length} />
         ) : (

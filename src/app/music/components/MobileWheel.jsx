@@ -3,12 +3,12 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { CONTACT_EVENT } from "@/lib/events";
-import { instrumentItems, clipItemsForCategory, photoItems, songItems } from "../data/boardItems";
+import { instrumentItems, clipItemsForCategory, photoItems } from "../data/boardItems";
 import { INSTRUMENT_ICONS } from "./icons/Instruments";
 import ClipPlayer from "./ClipPlayer";
 import SongModal from "./Modals/SongModal";
 import PhotoModal from "./Modals/PhotoModal";
-import useSpotifyMeta from "../hooks/useSpotifyMeta";
+import useTopTracks, { useSong } from "../hooks/useTopTracks";
 
 const TABS = [
   ...instrumentItems.map((it) => ({ key: it.categoryId, kind: "instrument", label: it.label, instrumentId: it.instrumentId })),
@@ -16,13 +16,13 @@ const TABS = [
   { key: "SONGS", kind: "songs", label: "In My Playlist" },
 ];
 
-function SongCard({ item, onOpen }) {
-  const meta = useSpotifyMeta(item.spotifyTrackId);
+function SongCard({ track, live, onOpen }) {
+  const meta = useSong(track);
   return (
-    <button className="mvm-card mvm-card--song" onClick={() => onOpen(item)}>
+    <button className="mvm-card mvm-card--song" onClick={() => onOpen(meta)}>
       {meta?.thumb ? <img src={meta.thumb} alt={meta.title} className="mvm-card-img" /> : <div className="mvm-card-img mvm-card-song-fallback" />}
       <div className="mvm-card-cap">
-        <span className="mvm-card-kicker">In Playlist</span>
+        <span className="mvm-card-kicker">{live ? `No. ${meta.rank + 1} this month` : "In Playlist"}</span>
         {meta?.title ? <span className="mvm-card-title">{meta.title}</span> : null}
       </div>
     </button>
@@ -47,6 +47,7 @@ export default function MobileWheel() {
   const [drawer, setDrawer] = useState(false);
   const [clip, setClip] = useState(null);
   const [song, setSong] = useState(null);
+  const top = useTopTracks();
   const [photo, setPhoto] = useState(null);
   const tabRefs = useRef({});
 
@@ -135,8 +136,8 @@ export default function MobileWheel() {
               </button>
             ))}
 
-            {active?.kind === "songs" && songItems.map((sg) => (
-              <SongCard key={sg.id} item={sg} onOpen={setSong} />
+            {active?.kind === "songs" && top?.tracks.map((t) => (
+              <SongCard key={t.id} track={t} live={top.live} onOpen={setSong} />
             ))}
           </motion.div>
         </AnimatePresence>
@@ -160,7 +161,7 @@ export default function MobileWheel() {
       </AnimatePresence>
 
       {clip ? <ClipPlayer clip={clip} onClose={() => setClip(null)} /> : null}
-      {song ? <SongModal song={song} onClose={() => setSong(null)} /> : null}
+      {song ? <SongModal song={song} live={top?.live} onClose={() => setSong(null)} /> : null}
       {photo ? <PhotoModal photo={photo} onClose={() => setPhoto(null)} /> : null}
     </main>
   );
