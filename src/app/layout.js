@@ -10,6 +10,7 @@ import BookFlip from "./components/paper/BookFlip";
 import RuleSnap from "./components/paper/RuleSnap";
 import WinFrame from "./components/win/WinFrame";
 import PackBoot from "./components/boot/PackBoot";
+import ChooserHost from "./components/chooser/ChooserHost";
 import ContactHost from "./components/contact/ContactHost";
 import ReplayHost from "./components/ReplayHost";
 
@@ -56,6 +57,7 @@ export default function RootLayout({ children }) {
         <BookFlip />
         <RuleSnap />
         <PackBoot />
+        <ChooserHost />
         <Analytics />
         <SpeedInsights/>
       </body>

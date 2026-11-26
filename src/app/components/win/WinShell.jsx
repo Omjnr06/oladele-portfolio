@@ -11,7 +11,7 @@ import StartMenu from "./StartMenu";
 import ContextMenu from "./ContextMenu";
 import WinBoot, { WinLeave } from "./WinBoot";
 import { play, setSoundOn, wakeAudio } from "./sound";
-import { leaveTo, reloadClean } from "./leave";
+import { leaveTo, reloadClean, restartToMenu } from "./leave";
 import { AppView, hasNative } from "./registry";
 import { ShellContext } from "./context";
 import "./win.css";
@@ -968,6 +968,7 @@ export default function WinShell() {
               text: "Restarting...",
               sound: "shutdown",
               done: () => {
+                if (!navigator.webdriver && !matchMedia("(prefers-reduced-motion: reduce)").matches) return restartToMenu();
                 setLeaving(null);
                 setBooting(true);
               },

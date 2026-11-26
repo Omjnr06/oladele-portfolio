@@ -1,4 +1,4 @@
-import { setPrefs } from "@/lib/prefs";
+import { savePrefs } from "@/lib/prefs";
 
 export function reloadClean() {
   const url = new URL(location.href);
@@ -8,6 +8,14 @@ export function reloadClean() {
 }
 
 export function leaveTo(pack, variant) {
-  setPrefs({ pack, variant });
+  savePrefs({ pack, variant });
   reloadClean();
+}
+
+export function restartToMenu() {
+  try {
+    sessionStorage.setItem("omj-boot-menu", "windows");
+    sessionStorage.removeItem("omj-win-booted");
+  } catch {}
+  location.replace("/");
 }

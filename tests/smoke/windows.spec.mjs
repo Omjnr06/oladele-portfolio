@@ -11,12 +11,6 @@ const rscCounter = (page) => {
 };
 const win = (page, title) => page.locator(`.win[aria-label="${title}"]`);
 
-test("windows stays private without the preview flag", async ({ page }) => {
-  await page.goto("/?theme=windows-aero");
-  expect(await page.evaluate(() => document.documentElement.dataset.pack)).toBe("modern");
-  await expect(page.locator(".win-taskbar")).toHaveCount(0);
-});
-
 test("phones fall back to modern even with the flag", async ({ page }, info) => {
   test.skip(info.project.name !== "smoke-phone", "phone only");
   await page.goto("/?preview=windows&theme=windows-aero");
@@ -77,6 +71,59 @@ test("shut down hands back the modern page for the current address", async ({ pa
   await page.getByRole("dialog", { name: "Start menu" }).getByRole("button", { name: "Shut down", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Open roles" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.dataset.pack)).toBe("modern");
+  await expect(page.locator(".win-taskbar")).toHaveCount(0);
+});
+
+test("shut down keeps its screen up until the modern page loads", async ({ page }, info) => {
+  desktopOnly(info);
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "webdriver", { get: () => false });
+    new MutationObserver(() => {
+      if (document.querySelector(".wb--leave") && document.documentElement.dataset.pack !== "windows") sessionStorage.setItem("flash", "1");
+    }).observe(document, { attributes: true, childList: true, subtree: true });
+  });
+  await page.goto("/resume?theme=windows-aero");
+  await expect(page.locator("html")).toHaveAttribute("data-win-ready", "", { timeout: 15000 });
+  await expect(page.locator(".wb")).toHaveCount(0, { timeout: 10000 });
+  await page.getByRole("button", { name: "Start" }).click();
+  await page.getByRole("dialog", { name: "Start menu" }).getByRole("button", { name: "Shut down", exact: true }).click();
+  await expect(page.locator(".win-taskbar")).toHaveCount(0, { timeout: 10000 });
+  await expect(page.getByRole("heading", { name: "Project Manager" }).first()).toBeVisible();
+  expect(await page.evaluate(() => [document.documentElement.dataset.pack, sessionStorage.getItem("flash"), document.documentElement.hasAttribute("data-boot")])).toEqual(["modern", null, false]);
+});
+
+test("restart goes back to the version menu and boots windows by default", async ({ page }, info) => {
+  desktopOnly(info);
+  await page.addInitScript(() => Object.defineProperty(navigator, "webdriver", { get: () => false }));
+  await page.goto("/resume?theme=windows-aero");
+  await expect(page.locator("html")).toHaveAttribute("data-win-ready", "", { timeout: 15000 });
+  await expect(page.locator(".wb")).toHaveCount(0, { timeout: 10000 });
+  await page.getByRole("button", { name: "Start" }).click();
+  await page.getByRole("button", { name: "More shut down options" }).click();
+  await page.getByRole("menuitem", { name: /Restart/ }).click();
+  const menu = page.getByRole("group", { name: "Choose a version" });
+  await expect(menu.getByText(/booting windows in \d/)).toBeVisible({ timeout: 10000 });
+  await expect(page).toHaveURL(/localhost:\d+\/$/);
+  await expect(menu.getByRole("button", { name: /windows/ })).toHaveAttribute("data-active");
+  await expect(page.locator(".wb:not(.wb--leave)")).toHaveCount(1, { timeout: 12000 });
+  expect(await page.evaluate(() => document.documentElement.dataset.pack)).toBe("windows");
+  await expect(page.locator(".win-taskbar")).toBeVisible({ timeout: 10000 });
+});
+
+test("restart menu can switch to paper instead", async ({ page }, info) => {
+  desktopOnly(info);
+  await page.addInitScript(() => Object.defineProperty(navigator, "webdriver", { get: () => false }));
+  await page.goto("/resume?theme=windows-aero");
+  await expect(page.locator("html")).toHaveAttribute("data-win-ready", "", { timeout: 15000 });
+  await expect(page.locator(".wb")).toHaveCount(0, { timeout: 10000 });
+  await page.getByRole("button", { name: "Start" }).click();
+  await page.getByRole("button", { name: "More shut down options" }).click();
+  await page.getByRole("menuitem", { name: /Restart/ }).click();
+  await expect(page.getByRole("group", { name: "Choose a version" }).getByText(/booting windows in \d/)).toBeVisible({ timeout: 10000 });
+  await page.keyboard.press("2");
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("omj-prefs")).pack)).toBe("paper");
+  await expect(page.locator(".boot:not([data-auto])")).toHaveCount(0, { timeout: 8000 });
+  expect(await page.evaluate(() => document.documentElement.dataset.pack)).toBe("paper");
   await expect(page.locator(".win-taskbar")).toHaveCount(0);
 });
 

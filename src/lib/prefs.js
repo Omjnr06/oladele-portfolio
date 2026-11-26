@@ -77,6 +77,11 @@ export function getPrefs() {
   return cache;
 }
 
+export function savePrefs(patch) {
+  write("localStorage", PREFS_KEY, JSON.stringify(sanitize({ ...readSaved(), ...patch })));
+  if ("pack" in patch || "variant" in patch) write("sessionStorage", OVERRIDE_KEY, null);
+}
+
 export function setPrefs(patch) {
   const next = sanitize({ ...readSaved(), ...patch });
   write("localStorage", PREFS_KEY, JSON.stringify(next));
